@@ -16,9 +16,10 @@
  *
  * Because β = ¾β' is matched to the full-ODE cubic 3β', BOTH models settle to the
  * SAME limit cycle |V|² = α/β = 4α/(3β'). The student can therefore overlay them
- * and see SVA is excellent for α ≪ ω and breaks down (spiking) for α ≳ ω — the
- * full 2nd-order ODE overshoots and undergoes relaxation oscillations, which the
- * monotonic 1-D envelope flow cannot reproduce.
+ * and see SVA is excellent for α ≪ ω and begins to break down (overshoot) for
+ * α ≳ ω, with pronounced relaxation spiking only for α ≫ ω — the full 2nd-order
+ * ODE overshoots and undergoes relaxation oscillations, which the monotonic 1-D
+ * envelope flow cannot reproduce.
  *
  * Panels:
  *   • status badge — measured √(α/β) vs analytic, regime label, LOCKED/UNLOCKED.
@@ -147,15 +148,27 @@ export default function Ch04Sim() {
   const l = 0.5 * nu * (V0 / Vlock); // locking coefficient
   const driven = V0 > 1e-6;
   const locked = driven && Math.abs(d) <= Math.abs(l) + 1e-12;
-  const psiStar = locked && l !== 0 ? Math.asin(Math.max(-1, Math.min(1, -d / l))) : NaN;
+  // stable locked phase: π − arcsin(−d/l), wrapped into (−π, π]. The bare
+  // arcsin root lies in [−π/2, π/2] where cosΨ*≥0 (l>0) and is UNSTABLE.
+  const psiStar = (() => {
+    if (!locked || l === 0) return NaN;
+    const a = Math.asin(Math.max(-1, Math.min(1, -d / l)));
+    const s = Math.PI - a;
+    return s > Math.PI ? s - TWO_PI : s;
+  })();
   // beat period when unlocked: T_beat = 2π / √(d² − l²)
   const beatPeriod = driven && !locked ? TWO_PI / Math.sqrt(Math.max(d * d - l * l, 1e-9)) : Infinity;
 
-  // regime: smooth limit cycle (α ≪ ω) vs relaxation spiking (α ≳ ω)
+  // regime bands: pronounced spiking needs α ≫ ω (Lamb p78), not merely α ≳ ω.
+  // α/ω ≥ 1 is where SVA overshoot begins (relaxation onset / strongly distorted
+  // limit cycle); true sawtooth-like relaxation spiking appears for α/ω ≳ 3–4.
   const ratio = alpha / omega;
-  const spiking = ratio >= 1;
+  const spiking = ratio >= 3.5; // top tier: pronounced relaxation spiking (α ≫ ω)
+  const relaxOnset = !spiking && ratio >= 1; // overshoot / strongly distorted limit cycle
   const regimeLabel = spiking
     ? "relaxation oscillations (spiking)"
+    : relaxOnset
+    ? "relaxation onset — strongly distorted limit cycle"
     : ratio > 0.35
     ? "soft excitation — distorted limit cycle"
     : "soft excitation — sinusoidal limit cycle";
@@ -370,8 +383,10 @@ export default function Ch04Sim() {
     const ms: { x?: number; y?: number; color?: string; dashed?: boolean }[] = [{ y: 0, color: "#cbd5e1", dashed: false }];
     if (locked && l !== 0) {
       const a = Math.asin(Math.max(-1, Math.min(1, -d / l)));
-      ms.push({ x: a, color: "#16a34a" }); // stable fixed point
-      ms.push({ x: Math.PI - a > Math.PI ? Math.PI - a - TWO_PI : Math.PI - a, color: "#94a3b8", dashed: true });
+      // stable root: π − arcsin(−d/l) (cosΨ*≤0 for l>0), wrapped into (−π, π]
+      ms.push({ x: Math.PI - a > Math.PI ? Math.PI - a - TWO_PI : Math.PI - a, color: "#16a34a" });
+      // unstable root: arcsin(−d/l) (cosΨ*≥0)
+      ms.push({ x: a, color: "#94a3b8", dashed: true });
     }
     return ms;
   }, [d, l, locked]);
@@ -388,11 +403,11 @@ export default function Ch04Sim() {
           padding: "0.5rem 0.75rem",
           marginBottom: "0.5rem",
           borderRadius: 8,
-          background: spiking ? "#fef3c7" : "#e0e7ff",
-          border: `1px solid ${spiking ? "#d97706" : "#4f46e5"}`,
+          background: spiking ? "#fee2e2" : relaxOnset ? "#fef3c7" : "#e0e7ff",
+          border: `1px solid ${spiking ? "#dc2626" : relaxOnset ? "#d97706" : "#4f46e5"}`,
         }}
       >
-        <span style={{ fontWeight: 700, color: spiking ? "#b45309" : "#3730a3", letterSpacing: "0.01em" }}>
+        <span style={{ fontWeight: 700, color: spiking ? "#b91c1c" : relaxOnset ? "#b45309" : "#3730a3", letterSpacing: "0.01em" }}>
           {regimeLabel} &nbsp;(α/ω = {ratio.toFixed(2)})
         </span>
         {driven ? (
@@ -507,7 +522,7 @@ export default function Ch04Sim() {
         <Readout label={String.raw`d=\omega-\nu\ \text{(detuning)}`} tex value={d.toFixed(3)} />
         <Readout label={String.raw`l=\tfrac{1}{2}\nu V_0/V\ \text{(locking)}`} tex value={l.toFixed(3)} />
         <Readout
-          label={String.raw`\Psi^* = \arcsin(-d/l)`}
+          label={String.raw`\Psi^* = \pi - \arcsin(-d/l)`}
           tex
           value={locked ? `${psiStar.toFixed(2)} rad` : "—"}
         />

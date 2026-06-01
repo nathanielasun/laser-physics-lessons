@@ -201,11 +201,11 @@ export default function Page() {
         <EqBlock label="6">{String.raw`\psi(x,t) = 2^{-1/2}\big[\,u_s(x)\,e^{-i\omega_s t} + u_a(x)\,e^{-i\omega_a t}\,\big]`}</EqBlock>
         <p>
           At <Tex>{String.raw`t=0`}</Tex> the two pieces add in phase and the nitrogen is localized in the{" "}
-          <em>right</em> well; half a period later they are out of phase and it sits in the <em>left</em> well — the
+          <em>left</em> well; half a period later they are out of phase and it sits in the <em>right</em> well — the
           probability has sloshed all the way across:
         </p>
-        <EqBlock label="7">{String.raw`\psi(x,0) = \psi_R(x) = 2^{-1/2}\,[\,u_s + u_a\,]`}</EqBlock>
-        <EqBlock label="8">{String.raw`\psi\!\left(x,\tfrac{\pi}{\omega_0}\right) = -\,\psi_L(x) = -2^{-1/2}\,[\,u_s - u_a\,]`}</EqBlock>
+        <EqBlock label="7">{String.raw`\psi(x,0) = \psi_L(x) = 2^{-1/2}\,[\,u_s + u_a\,]`}</EqBlock>
+        <EqBlock label="8">{String.raw`\psi\!\left(x,\tfrac{\pi}{\omega_0}\right) = -\,\psi_R(x) = 2^{-1/2}\,[\,-u_a + u_s\,]`}</EqBlock>
         <p>
           A &ldquo;left&rdquo; or &ldquo;right&rdquo; localized state is therefore just a snapshot of the
           superposition, not a stationary state. The charge oscillates at <Tex>{String.raw`\omega_0`}</Tex> — the
@@ -417,8 +417,9 @@ export default function Page() {
       <Section title="Maser oscillation: gain equals loss and the cavity Q">
         <Intuition>
           The inverted beam streams into a microwave cavity tuned near <Tex>{String.raw`\omega_0`}</Tex>. Each
-          molecule, prepared in the upper state, Rabi-flops against the cavity field and on average deposits energy into
-          it — that is the <strong>gain</strong>. The cavity leaks (wall resistance, output coupling) — that is the{" "}
+          molecule, prepared in the upper state, Rabi-flops against the cavity field and gives up its quantum only to
+          the extent it has dropped <em>down</em> to the lower level by the time it exits — that is the{" "}
+          <strong>gain</strong>. The cavity leaks (wall resistance, output coupling) — that is the{" "}
           <strong>loss</strong>, measured by the quality factor <Tex>{String.raw`Q`}</Tex>. Steady oscillation demands
           an exact balance: the power the beam pumps in equals the power the cavity dissipates. Setting (saturated)
           gain&nbsp;=&nbsp;loss fixes the operating field amplitude. This is the maser&rsquo;s version of the laser
@@ -440,11 +441,11 @@ export default function Page() {
           note="High Q = low loss = easier oscillation and a larger field; it is the key knob of the tuning curves."
         />
         <p>The stored energy is the field energy integrated over the mode volume, which for a standing wave reduces to</p>
-        <EqBlock label="20">{String.raw`\text{Energy stored} = \tfrac{1}{2}\int(\varepsilon_0 E^2 + \mu_0 H^2)\,dV = \tfrac{1}{4}\,\varepsilon_0 E_0^2 V`}</EqBlock>
+        <EqBlock label="20">{String.raw`\text{Energy stored} = \tfrac{1}{2}\int(\varepsilon_0 E^2 + \mu_0 H^2)\,dV = \tfrac{1}{8}\,\varepsilon_0 E_0^2 V`}</EqBlock>
         <p>so the power dissipated is <Tex>{String.raw`\Omega/Q`}</Tex> times the stored energy:</p>
         <KeyResult
           number="21"
-          eq={String.raw`\text{Loss} = \frac{1}{Q}\,\Omega\,\tfrac{1}{4}\,\varepsilon_0 E_0^2 V`}
+          eq={String.raw`\text{Loss} = \frac{1}{Q}\,\Omega\,\tfrac{1}{8}\,\varepsilon_0 E_0^2 V`}
           label="Cavity loss rate"
           note="It grows with field amplitude squared and falls with Q."
         />
@@ -452,18 +453,21 @@ export default function Page() {
         <p>
           The gain side. With <Tex>{String.raw`N`}</Tex> molecules in the cavity, each spending the collision-free
           transit time <Tex>{String.raw`t_0=L/v`}</Tex> inside, the flux delivering energy is{" "}
-          <Tex>{String.raw`N/t_0`}</Tex>; each upper-state molecule can give up to one quantum{" "}
-          <Tex>{String.raw`\hbar\Omega`}</Tex>, weighted by the upper-state occupation{" "}
-          <Tex>{String.raw`|C_a|^2`}</Tex> it carries out after Rabi flopping:
+          <Tex>{String.raw`N/t_0`}</Tex>; each molecule enters in the upper state and gives the field one quantum{" "}
+          <Tex>{String.raw`\hbar\Omega`}</Tex> with probability <Tex>{String.raw`|C_s|^2`}</Tex> — the lower-state exit
+          occupation, the probability it has Rabi-flopped <em>down</em> to the lower level during transit:
         </p>
         <KeyResult
           number="22"
-          eq={String.raw`\text{saturated gain} = \frac{N\nu}{t_0}\,|C_a|^2\,\hbar\Omega`}
+          eq={String.raw`\text{saturated gain} = \frac{N v}{l_z}\,|C_s|^2\,\hbar\Omega`}
           label="Beam (saturated) gain"
           note={
             <>
-              Equating this to the loss, Eq.&nbsp;(21), with <Tex>{String.raw`|C_a|^2`}</Tex> itself depending on{" "}
-              <Tex>{String.raw`E_0`}</Tex>, fixes the operating amplitude.
+              <Tex>{String.raw`|C_s|^2`}</Tex> is the lower-state exit occupation — the probability the molecule has
+              dropped to the lower level and given up <Tex>{String.raw`\hbar\Omega`}</Tex> (book:{" "}
+              <Tex>{String.raw`|C_b|^2`}</Tex>). Equating this to the loss, Eq.&nbsp;(21), with{" "}
+              <Tex>{String.raw`|C_s|^2`}</Tex> itself depending on <Tex>{String.raw`E_0`}</Tex>, fixes the operating
+              amplitude.
             </>
           }
         />
@@ -472,19 +476,19 @@ export default function Page() {
           <Step title="Quantify cavity loss via Q">
             From the <Tex>{String.raw`Q`}</Tex> definition Eq.&nbsp;(19), energy lost per second{" "}
             <Tex>{String.raw`=(\Omega/Q)\times`}</Tex> energy stored. Compute the stored energy by integrating the EM
-            energy density (Eq.&nbsp;20), giving <Tex>{String.raw`\tfrac14\varepsilon_0 E_0^2 V`}</Tex>. Multiply by{" "}
+            energy density (Eq.&nbsp;20), giving <Tex>{String.raw`\tfrac18\varepsilon_0 E_0^2 V`}</Tex>. Multiply by{" "}
             <Tex>{String.raw`\Omega/Q`}</Tex> to get the loss, Eq.&nbsp;(21).
           </Step>
           <Step title="Quantify beam gain via transit and Rabi occupation">
             <Tex>{String.raw`N`}</Tex> molecules occupy the cavity at once; each spends transit time{" "}
-            <Tex>{String.raw`t_0=L/v`}</Tex>. The flux is <Tex>{String.raw`N/t_0=N v/L`}</Tex>. Each upper-state
-            molecule can give up to one photon <Tex>{String.raw`\hbar\Omega`}</Tex>, but the fraction actually
-            transferred is set by Rabi flopping during transit, encoded in <Tex>{String.raw`|C_a|^2`}</Tex>. Multiply
-            flux × quantum × occupation to get the gain, Eq.&nbsp;(22).
+            <Tex>{String.raw`t_0=L/v`}</Tex>. The flux is <Tex>{String.raw`N/t_0=N v/L`}</Tex>. Each molecule enters in
+            the upper state and can give one photon <Tex>{String.raw`\hbar\Omega`}</Tex>, but only with the probability
+            it has Rabi-flopped <em>down</em> to the lower level during transit, the lower-state exit occupation{" "}
+            <Tex>{String.raw`|C_s|^2`}</Tex>. Multiply flux × quantum × occupation to get the gain, Eq.&nbsp;(22).
           </Step>
           <Step title="Balance to fix the amplitude">
             Set Eq.&nbsp;(22) = Eq.&nbsp;(21) (the condition Eq.&nbsp;18). Since{" "}
-            <Tex>{String.raw`|C_a|^2`}</Tex> depends on <Tex>{String.raw`E_0`}</Tex> through the Rabi-flopping integral
+            <Tex>{String.raw`|C_s|^2`}</Tex> depends on <Tex>{String.raw`E_0`}</Tex> through the Rabi-flopping integral
             (next section), this is a <em>self-consistent</em> equation: the amplitude that makes beam gain exactly
             replace cavity loss is the maser&rsquo;s operating point. Add detuning{" "}
             <Tex>{String.raw`\Omega-\omega_0`}</Tex> and it generates the family of tuning curves, Fig.&nbsp;5-5.
@@ -505,10 +509,12 @@ export default function Page() {
           <Tex>{String.raw`\wp E_0/\hbar`}</Tex> and the detuning <Tex>{String.raw`\Omega-\omega_0`}</Tex>. How much
           energy a molecule gives the field depends on <em>where in its flop cycle it exits</em> — i.e. on the flopping
           frequency times the transit time. Folding this into gain&nbsp;=&nbsp;loss gives a transcendental,
-          self-consistent equation for the steady-state amplitude. Its solution is Fig.&nbsp;5-5: tuning curves of
-          amplitude vs detuning, one per <Tex>{String.raw`Q`}</Tex>. At low <Tex>{String.raw`Q`}</Tex>, a single modest
-          peak; at high <Tex>{String.raw`Q`}</Tex>, the curve becomes multivalued (S-shaped) — amplitude bistability,
-          the molecular analog of a driven classical anharmonic oscillator.
+          self-consistent equation for the steady-state amplitude. Its solution is Fig.&nbsp;5-5: each{" "}
+          <Tex>{String.raw`Q`}</Tex> gives a single operating arc of amplitude vs detuning, and higher{" "}
+          <Tex>{String.raw`Q`}</Tex> gives a larger arc (a semicircle of bigger radius). The figure&rsquo;s nested family is simply the
+          set of different <Tex>{String.raw`Q`}</Tex> values stacked together. The molecular response saturates as the
+          field grows, limiting the amplitude — exactly as the negative-resistance / anharmonic classical oscillator of
+          Chapter&nbsp;IV did.
         </Intuition>
 
         <p>The energy transfer is governed by the generalized, off-resonance Rabi flopping frequency:</p>
@@ -526,20 +532,22 @@ export default function Page() {
         />
 
         <p>
-          Inserting the Rabi-flopping occupation <Tex>{String.raw`|C_a|^2`}</Tex> (cf. Ch.&nbsp;II, Eq.&nbsp;2.68) into
+          Inserting the Rabi-flopping lower-state exit occupation <Tex>{String.raw`|C_s|^2`}</Tex> (cf.
+          Ch.&nbsp;II, Eq.&nbsp;2.68) into
           gain&nbsp;=&nbsp;loss and evaluating at <Tex>{String.raw`t=t_0=L/v`}</Tex> yields the self-consistency
           relation. The energy-transfer factor is a <Tex>{String.raw`\mathrm{sinc}^2`}</Tex>:
         </p>
         <KeyResult
           number="23"
-          eq={String.raw`\frac{1}{Q} = \frac{2N\wp^2}{I_p\,\varepsilon_0\hbar\nu}\,\frac{\sin^2(\mu t_0/2)}{(\mu t_0/2)^2}`}
+          eq={String.raw`\frac{1}{Q} = \frac{2N\wp^2}{l_x l_y\,\varepsilon_0\hbar v}\,\frac{\sin^2(\mu t_0/2)}{(\mu t_0/2)^2}`}
           label="Self-consistency: the 1/Q relation"
           note={
             <>
               The sinc-squared factor with argument <Tex>{String.raw`x=\mu t_0/2`}</Tex> is the flopping-averaged energy
-              transfer; <Tex>{String.raw`I_p`}</Tex> is a flux/normalization factor and <Tex>{String.raw`\nu`}</Tex> the
-              axial velocity. Because <Tex>{String.raw`\mu`}</Tex> depends on <Tex>{String.raw`E_0`}</Tex>, this is
-              implicit in the field amplitude.
+              transfer; <Tex>{String.raw`l_x l_y`}</Tex> is the cavity transverse area (with{" "}
+              <Tex>{String.raw`l_x l_y l_z = V`}</Tex>) and <Tex>{String.raw`v`}</Tex> the molecular (axial) velocity —
+              not a flux factor or a frequency. Because <Tex>{String.raw`\mu`}</Tex> depends on{" "}
+              <Tex>{String.raw`E_0`}</Tex>, this is implicit in the field amplitude.
             </>
           }
         />
@@ -554,7 +562,11 @@ export default function Page() {
           frequency <Tex>{String.raw`\mu_n=2x_n/t_0`}</Tex>, and from <Tex>{String.raw`\mu_n^2=a^2+(\Omega-\omega_0)^2`}</Tex>{" "}
           the tuning curve of that branch is simply the arc{" "}
           <Tex>{String.raw`a(\delta)=\sqrt{\mu_n^2-\delta^2}`}</Tex> for{" "}
-          <Tex>{String.raw`|\delta|\le\mu_n`}</Tex> — a semicircle of radius <Tex>{String.raw`\mu_n`}</Tex>.
+          <Tex>{String.raw`|\delta|\le\mu_n`}</Tex> — a semicircle of radius <Tex>{String.raw`\mu_n`}</Tex>. Higher
+          roots <Tex>{String.raw`x_n`}</Tex> are successive Rabi-flop solutions (more half-flops completed during
+          transit); the maser&rsquo;s physical steady state is the single relevant operating branch, and a higher{" "}
+          <Tex>{String.raw`Q`}</Tex> simply selects an arc of larger radius — the nested family of Fig.&nbsp;5-5 is
+          one arc per <Tex>{String.raw`Q`}</Tex>, not several for one <Tex>{String.raw`Q`}</Tex>.
         </Callout>
 
         <p>
@@ -586,7 +598,7 @@ export default function Page() {
           A useful working form ties <Tex>{String.raw`Q`}</Tex> to the cavity geometry for putting numbers on the
           curves:
         </p>
-        <EqBlock label="28">{String.raw`Q = \frac{\nu L}{\mathscr{F}^2}`}</EqBlock>
+        <EqBlock label="28">{String.raw`Q = \frac{\nu L}{\mathscr{F}\,c}`}</EqBlock>
 
         <SimFrame
           title="Maser tuning curves — self-consistent field amplitude vs detuning (Fig. 5-5)"
@@ -596,19 +608,19 @@ export default function Page() {
               <Tex>{String.raw`\mathrm{const}/Q=\sin^2x/x^2`}</Tex>, then mapping each root{" "}
               <Tex>{String.raw`x_n`}</Tex> to an arc <Tex>{String.raw`\wp E_0/\hbar=\sqrt{\mu_n^2-\delta^2}`}</Tex>. The
               inset shows the universal transfer function with the <Tex>{String.raw`\mathrm{const}/Q`}</Tex> line, so the
-              number of roots — hence the onset of bistability — is visible at a glance.
+              roots — the operating branch plus the successive higher Rabi-flop roots — are visible at a glance.
             </>
           }
           tryThis={
             <>
               Step the <Tex>{String.raw`Q`}</Tex> preset from <Tex>{String.raw`7200`}</Tex> up to{" "}
-              <Tex>{String.raw`36000`}</Tex>: the single modest arc grows taller and is joined by more nested arcs as
-              the <Tex>{String.raw`\mathrm{const}/Q`}</Tex> line in the inset cuts more lobes of{" "}
-              <Tex>{String.raw`\sin^2x/x^2`}</Tex>. When the branch count hits <Tex>{String.raw`3`}</Tex> the badge flags{" "}
-              <strong>MULTIVALUED (bistable)</strong> — the high-<Tex>{String.raw`Q`}</Tex> signature. Now drop{" "}
-              <Tex>{String.raw`N`}</Tex> until <Tex>{String.raw`\mathrm{const}/Q>1`}</Tex>: no root exists and the maser
-              falls below threshold. Toggle the gain-vs-loss panel to watch the two curves cross exactly at the branch
-              amplitudes.
+              <Tex>{String.raw`36000`}</Tex>: the operating arc grows steadily larger (taller and wider) as the{" "}
+              <Tex>{String.raw`\mathrm{const}/Q`}</Tex> line in the inset drops and the first root moves out — the
+              nested family is just one arc per <Tex>{String.raw`Q`}</Tex>. The extra roots at higher{" "}
+              <Tex>{String.raw`Q`}</Tex> are successive higher-flop solutions (the badge counts them), not separate
+              operating states. Now drop <Tex>{String.raw`N`}</Tex> until{" "}
+              <Tex>{String.raw`\mathrm{const}/Q>1`}</Tex>: no root exists and the maser falls below threshold. Toggle the
+              gain-vs-loss panel to watch the two curves cross exactly at the branch amplitudes.
             </>
           }
         >
@@ -617,11 +629,12 @@ export default function Page() {
 
         <Derivation title="From Rabi flopping to the tuning curves">
           <Step title="Insert Rabi flopping into the gain">
-            The upper-state occupation a molecule retains after transit time <Tex>{String.raw`t_0`}</Tex> follows from
-            the two-level Rabi solution (Ch.&nbsp;II, Eq.&nbsp;2.68) with generalized frequency{" "}
-            <Tex>{String.raw`\mu`}</Tex> (Eq.&nbsp;24):{" "}
-            <Tex>{String.raw`|C_a|^2=\big(\tfrac{\wp E_0/\hbar}{\mu}\big)^2\sin^2(\mu t_0/2)`}</Tex>. Averaging the
-            energy given the field over the transit produces the factor{" "}
+            The lower-state exit occupation a molecule has Rabi-flopped <em>into</em> after transit time{" "}
+            <Tex>{String.raw`t_0`}</Tex> follows from the two-level Rabi solution (Ch.&nbsp;II, Eq.&nbsp;2.68) with
+            generalized frequency <Tex>{String.raw`\mu`}</Tex> (Eq.&nbsp;24):{" "}
+            <Tex>{String.raw`|C_s|^2=\big(\tfrac{\wp E_0/\hbar}{\mu}\big)^2\sin^2(\mu t_0/2)`}</Tex> — the probability it
+            has dropped to the lower level and given the field <Tex>{String.raw`\hbar\Omega`}</Tex>. Averaging the energy
+            given the field over the transit produces the factor{" "}
             <Tex>{String.raw`\sin^2(\mu t_0/2)/(\mu t_0/2)^2`}</Tex> in the gain.
           </Step>
           <Step title="Set gain = loss to get the 1/Q relation">
@@ -638,25 +651,28 @@ export default function Page() {
             <Tex>{String.raw`Q`}</Tex> gives the family in Fig.&nbsp;5-5.
           </Step>
           <Step title="Read the tuning curves">
-            Low-<Tex>{String.raw`Q`}</Tex> curves are single-valued, modest peaks centred near zero detuning. As{" "}
-            <Tex>{String.raw`Q`}</Tex> rises the line <Tex>{String.raw`\text{const}/Q`}</Tex> falls and cuts more lobes
-            of <Tex>{String.raw`\sin^2x/x^2`}</Tex>: more roots, more arcs, and the curve becomes <em>multivalued</em>{" "}
-            (S-shaped) versus detuning — amplitude bistability, the molecular analog of a driven classical anharmonic
-            (Duffing-like) oscillator. This multivaluedness is the signature high-<Tex>{String.raw`Q`}</Tex> behavior.
+            Each <Tex>{String.raw`Q`}</Tex> yields a single operating arc, a modest peak centred near zero detuning. As{" "}
+            <Tex>{String.raw`Q`}</Tex> rises the line <Tex>{String.raw`\text{const}/Q`}</Tex> falls and the operating
+            arc grows larger (a semicircle of bigger radius). The nested family of Fig.&nbsp;5-5 is precisely this set of arcs, one per{" "}
+            <Tex>{String.raw`Q`}</Tex>. As the field builds, the molecular response <em>saturates</em>, limiting the
+            amplitude — exactly as the negative-resistance / anharmonic classical oscillator of Chapter&nbsp;IV did.
+            (The lower <Tex>{String.raw`\text{const}/Q`}</Tex> line also crosses higher lobes of{" "}
+            <Tex>{String.raw`\sin^2x/x^2`}</Tex>; those extra roots are successive higher-flop solutions, not additional
+            operating states.)
           </Step>
         </Derivation>
 
         <Callout kind="insight" title="Fig. 5-5 is the payoff">
           Curves of maser amplitude <Tex>{String.raw`\wp E_0/\hbar`}</Tex> versus cavity detuning{" "}
           <Tex>{String.raw`\Omega-\omega_0`}</Tex> for{" "}
-          <Tex>{String.raw`Q = 7200,\,9000,\,12000,\,18000,\,36000`}</Tex>. Higher{" "}
-          <Tex>{String.raw`Q`}</Tex> → taller, narrower, and eventually multivalued (bistable) response — the
-          chapter&rsquo;s quantitative prediction of the field the maser produces.
+          <Tex>{String.raw`Q = 7200,\,9000,\,12000,\,18000,\,36000`}</Tex>. Each <Tex>{String.raw`Q`}</Tex> is one
+          arc; higher <Tex>{String.raw`Q`}</Tex> → a larger-amplitude response — the chapter&rsquo;s quantitative
+          prediction of the field the maser produces.
         </Callout>
         <Callout kind="history" title="Classical anharmonic analogy">
           The text stresses that the ammonia molecules behave much like the negative-resistance / anharmonic classical
-          oscillators of Chapter&nbsp;IV — the same multivalued amplitude-vs-detuning curves — even though the
-          underlying mechanism is fully quantum.
+          oscillators of Chapter&nbsp;IV: as the field grows the molecular response saturates, limiting the buildup of
+          oscillation, even though the underlying mechanism is fully quantum.
         </Callout>
       </Section>
 
@@ -687,8 +703,9 @@ export default function Page() {
             </li>
             <li>
               <strong>Cavity <Tex>{String.raw`Q`}</Tex> shapes the output</strong>: higher{" "}
-              <Tex>{String.raw`Q`}</Tex> → larger field, narrower line, and eventually multivalued/bistable tuning
-              curves (Fig.&nbsp;5-5) — a quantum device mimicking a classical anharmonic oscillator (Chapter&nbsp;IV).
+              <Tex>{String.raw`Q`}</Tex> → larger field and narrower line (one arc per <Tex>{String.raw`Q`}</Tex> in
+              Fig.&nbsp;5-5), with the molecular response saturating to limit the amplitude — a quantum device mimicking
+              the negative-resistance / anharmonic classical oscillator of Chapter&nbsp;IV.
             </li>
             <li>
               <strong>Generalized Rabi frequency</strong>{" "}

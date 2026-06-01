@@ -348,7 +348,7 @@ export default function Page() {
           basis and the continuous position basis:
         </p>
         <EqBlock>{String.raw`\psi(x,t) = \langle x|\psi(t)\rangle = \sum_n \langle x|n\rangle\langle n|\psi(t)\rangle = \sum_n C_n \exp(-i\omega_n t)\,u_n(x)`}</EqBlock>
-        <EqBlock>{String.raw`u_n(x) = \langle x|n\rangle, \qquad \langle x|\psi(t)\rangle = C_n \exp(-i\omega_n t)`}</EqBlock>
+        <EqBlock>{String.raw`u_n(x) = \langle x|n\rangle, \qquad \langle n|\psi(t)\rangle = C_n \exp(-i\omega_n t)`}</EqBlock>
         <p>
           In three dimensions the same construction gives the spatial completeness and the 3-D wave function, useful for
           problems like the hydrogen atom:
@@ -443,9 +443,9 @@ export default function Page() {
           For the dipole operator the diagonal matrix elements vanish by parity (no permanent dipole), but the
           off-diagonal transition dipole is nonzero:
         </p>
-        <EqBlock>{String.raw`\sigma_{aa} = \langle a|e\,\mathbf r|a\rangle = e\int d^3r\,u_a^{*}(r)\,r\,u_a(r) = 0`}</EqBlock>
-        <EqBlock>{String.raw`\sigma_{bb} = \langle b|e\,\mathbf r|b\rangle = e\int d^3r\,u_b^{*}(r)\,r\,u_b(r) = 0`}</EqBlock>
-        <EqBlock>{String.raw`\sigma_{ab} = \langle a|e\,\mathbf r|b\rangle = e\int d^3r\,u_a^{*}(r)\,r\,u_b(r) \neq 0`}</EqBlock>
+        <EqBlock>{String.raw`(e\,\mathbf r)_{aa} = \langle a|e\,\mathbf r|a\rangle = e\int d^3r\,u_a^{*}(r)\,r\,u_a(r) = 0`}</EqBlock>
+        <EqBlock>{String.raw`(e\,\mathbf r)_{bb} = \langle b|e\,\mathbf r|b\rangle = e\int d^3r\,u_b^{*}(r)\,r\,u_b(r) = 0`}</EqBlock>
+        <EqBlock>{String.raw`(e\,\mathbf r)_{ab} = \langle a|e\,\mathbf r|b\rangle = e\int d^3r\,u_a^{*}(r)\,r\,u_b(r) \neq 0`}</EqBlock>
         <p>
           Dropping the dead diagonal terms leaves a single coherence term plus its conjugate — a real quantity
           oscillating at the Bohr frequency. This is the chapter&rsquo;s headline and the seed of the entire book:
@@ -467,13 +467,13 @@ export default function Page() {
             Apply the general beating double-sum to <Tex>{String.raw`\mathscr{O} = e\,\mathbf r`}</Tex> with only two
             levels: two population terms plus an off-diagonal coherence term with its beat phase, plus the complex
             conjugate:
-            <EqBlock>{String.raw`\langle e\,\mathbf r\rangle = |C_a|^2\sigma_{aa} + |C_b|^2\sigma_{bb} + \big\{C_a^{*}C_b\,e^{-i(\omega_b-\omega_a)t}\,\sigma_{ab} + \text{c.c.}\big\}`}</EqBlock>
+            <EqBlock>{String.raw`\langle e\,\mathbf r\rangle = |C_a|^2(e\,\mathbf r)_{aa} + |C_b|^2(e\,\mathbf r)_{bb} + \big\{C_a^{*}C_b\,e^{-i(\omega_b-\omega_a)t}\,(e\,\mathbf r)_{ab} + \text{c.c.}\big\}`}</EqBlock>
           </Step>
           <Step title="Kill the diagonal terms by parity">
             The atomic eigenfunctions <Tex>{String.raw`u_a,u_b`}</Tex> have definite parity, so{" "}
             <Tex>{String.raw`r\,|u|^2`}</Tex> is odd and integrates to zero. Only the off-diagonal element survives, so
             the populations contribute <em>nothing</em> to the dipole — only the coherence does:
-            <EqBlock>{String.raw`\sigma_{aa} = \sigma_{bb} = 0,\qquad \sigma_{ab} = e\!\int\! d^3r\,u_a^{*}\,r\,u_b = e\,r_{ab}`}</EqBlock>
+            <EqBlock>{String.raw`(e\,\mathbf r)_{aa} = (e\,\mathbf r)_{bb} = 0,\qquad (e\,\mathbf r)_{ab} = e\!\int\! d^3r\,u_a^{*}\,r\,u_b = e\,r_{ab}`}</EqBlock>
           </Step>
           <Step title="Read off the oscillating dipole">
             The single coherence term plus its conjugate is a real quantity oscillating at the Bohr frequency. The
@@ -559,6 +559,14 @@ export default function Page() {
         <EqBlock>{String.raw`|\psi_I(t)\rangle = \exp(i\mathscr{H}_0 t/\hbar)\,|\psi(t)\rangle`}</EqBlock>
         <EqBlock>{String.raw`|\dot{\psi}_I(t)\rangle = -\frac{i}{\hbar}\,\mathscr{V}_I\,|\psi_I(t)\rangle`}</EqBlock>
         <p>
+          This is the standard interaction picture: the transformed interaction{" "}
+          <Tex>{String.raw`\mathscr{V}_I = \exp(i\mathscr{H}_0 t/\hbar)\,\mathscr{V}\,\exp(-i\mathscr{H}_0 t/\hbar)`}</Tex>{" "}
+          drives the state. The book (eq 62) writes the equivalent closed form{" "}
+          <Tex>{String.raw`|\psi_I(t)\rangle = \exp(-i\mathscr{V}t/\hbar)\,|\psi(0)\rangle`}</Tex> with the bare{" "}
+          <Tex>{String.raw`\mathscr{V}`}</Tex>; the two agree in the book&rsquo;s{" "}
+          <Tex>{String.raw`[\mathscr{H}_0,\mathscr{V}]=0`}</Tex> split, while the form above holds in general.
+        </p>
+        <p>
           In the Heisenberg picture the state is frozen and the operator evolves; its definition conjugates the
           Schrödinger operator by the evolution operator:
         </p>
@@ -577,8 +585,8 @@ export default function Page() {
           interaction-picture amplitude (uppercase <Tex>{String.raw`C`}</Tex>) differ by the free phase:
         </p>
         <EqBlock>{String.raw`c_n(t) = \langle n|\psi(t)\rangle, \qquad C_n(t) = c_n(t)\exp(i\omega_n t)`}</EqBlock>
-        <p>The interaction-picture amplitudes are driven by the interaction matrix elements:</p>
-        <EqBlock>{String.raw`\dot{C}_n = -i\omega_n C_n - \frac{i}{\hbar}\sum_k \langle n|\mathscr{V}|k\rangle\, c_k(t)`}</EqBlock>
+        <p>The Schrödinger-picture amplitudes obey the equation of motion (book eq 68):</p>
+        <EqBlock>{String.raw`\dot{c}_n = -i\omega_n c_n - \frac{i}{\hbar}\sum_k \langle n|\mathscr{V}|k\rangle\, c_k(t)`}</EqBlock>
         <p>The same state may be decomposed two ways — with bare amplitudes, or with explicit free phases:</p>
         <EqBlock>{String.raw`|\psi(t)\rangle = \sum_n c_n(t)\,|n\rangle, \qquad |\psi(t)\rangle = \sum_n C_n(t)\exp(-i\omega_n t)\,|n\rangle`}</EqBlock>
         <p>For the two levels, the relation between Schrödinger and interaction-picture amplitudes is:</p>

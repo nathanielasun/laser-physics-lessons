@@ -4,35 +4,43 @@
  * Chapter V — Ammonia beam maser tuning curves (Fig. 5-5).
  *
  * The maser oscillates where the inverted beam's saturated gain exactly
- * replaces the cavity's resistive loss. Writing the energy a transiting
- * molecule gives the field via the Rabi-flopping result (cf. Ch. 2, Eq. 2.68)
+ * replaces the cavity's resistive loss. A molecule enters in the UPPER state
+ * and delivers its quantum ℏΩ only to the extent it has Rabi-flopped DOWN to
+ * the lower level by the time it exits. That LOWER-state exit probability is,
+ * from the two-level Rabi result (cf. Ch. 2, Eq. 2.68),
  *
- *   |C_a|^2 = (℘E0/ℏ / μ)^2 sin^2(μ t0 / 2),     μ^2 = (℘E0/ℏ)^2 + (Ω-ω0)^2,
+ *   |C_s|^2 = (℘E0/ℏ / μ)^2 sin^2(μ t0 / 2),     μ^2 = (℘E0/ℏ)^2 + (Ω-ω0)^2,
  *
- * and equating beam gain (N ν / t0)|C_a|^2 ℏΩ to cavity loss (Ω/Q)·¼ε0E0²V,
+ * and equating beam gain (N v / l_z)|C_s|^2 ℏΩ to cavity loss (Ω/Q)·⅛ε0E0²V,
  * the field amplitude a ≡ ℘E0/ℏ AND the cavity frequency Ω BOTH cancel out.
  * What survives is the δ-independent self-consistency relation (Eq. 23/29):
  *
  *   const / Q = sin^2(x) / x^2 ,        x = μ t0 / 2 .
  *
  * KEY STRUCTURE (the elegant part): because this relation has no detuning in
- * it, we solve it ONCE for the full set of roots {x_n}. Each root fixes a
- * flopping frequency μ_n = 2 x_n / t0, and the tuning curve for that branch is
- * just an ARC in the (detuning, amplitude) plane,
+ * it, we solve it for the operating root, which fixes a flopping frequency
+ * μ = 2 x / t0, and the tuning curve for that operating branch is just an ARC
+ * in the (detuning, amplitude) plane,
  *
- *   a(δ) = sqrt( μ_n² − δ² ) ,   defined for |δ| ≤ μ_n,
+ *   a(δ) = sqrt( μ² − δ² ) ,   defined for |δ| ≤ μ,
  *
- * i.e. a semicircle of radius μ_n. Higher Q → smaller const/Q → the horizontal
- * line const/Q cuts more lobes of sin²(x)/x² → more roots → more (taller,
- * nested) arcs → the curve becomes MULTIVALUED (bistable / S-shaped) at high Q.
+ * i.e. a semicircle of radius μ. Each Q gives ONE operating arc; a higher Q
+ * selects a higher operating root (smaller const/Q cuts the curve at a larger
+ * x), so the arc grows larger (taller and wider) with Q. The nested family in
+ * Fig. 5-5 is exactly this set of arcs, one per Q — NOT several branches for a
+ * single Q. As the field builds the molecular response saturates and the
+ * amplitude is limited, just as for the negative-resistance / anharmonic
+ * classical oscillator of Ch. IV (no Duffing-style amplitude bistability).
+ * Lower roots of sin²x/x²=const/Q at the same Q are merely successive higher-
+ * flop solutions, not additional operating states.
  *
- * We find ALL roots by bracketing sign changes of g(x)=sin²x/x²−const/Q on a
+ * We find roots by bracketing sign changes of g(x)=sin²x/x²−const/Q on a
  * fine grid, then polishing each bracket with Newton-Raphson (Eqs. 30-31).
  *
  * Three linked views:
  *   A. main panel — the family of tuning curves a vs δ (the arcs), Fig. 5-5;
  *   B. inset — the universal transfer function sin²(x)/x² with the const/Q line,
- *      making the number of roots (hence the onset of bistability) visible;
+ *      making the operating root (and the higher-flop roots) visible;
  *   C. preset overlay of the Fig. 5-5 Q values, plus live readouts.
  */
 
@@ -43,16 +51,27 @@ import { Plot, Slider, Toggle, Segmented, Controls, Readout, Series } from "@/co
 const Q_PRESETS = [7200, 9000, 12000, 18000, 36000];
 
 // Calibration. Solving Eq. (23) for the root variable gives
-//   sin²(x)/x² = [ε₀ℏV/(℘²ν t₀)] · 1/(N·Q) ,
+//   sin²(x)/x² = [ε₀ℏ l_x l_y / (℘² v)] · (1 / l_z) · 1/(N·Q)  ∝  const/(N·Q) ,
 // so the line height the root finder uses is target = const/Q with const ∝ 1/N:
-// MORE molecules ⇒ smaller target ⇒ MORE lobes cut ⇒ taller/multivalued curve
-// and easier oscillation (a root exists only while target ≤ 1). KAPPA is chosen
-// by eye so that at the default N = 100e9 we get const ≈ 900, giving const/Q
-// from 0.125 (Q=7200, one branch) down to 0.025 (Q=36000, three branches →
-// bistable) — the single→multivalued progression of Fig. 5-5. The book's
-// printed instance is the same form, 6000/Q = sin²x/x² (Eq. 29′). Units: μ, δ
-// in 1e6 rad/s ("Mrad/s") and t0 in µs put the arcs nicely on screen.
-const KAPPA = 9.0e13; // const = KAPPA / N(molecules)  →  const(N=100e9) = 900
+// MORE molecules ⇒ smaller target ⇒ operating root moves out ⇒ taller arc, and
+// a root exists only while target ≤ 1 (oscillation threshold). Each Q gives ONE
+// operating arc (the FIRST root of sin²x/x²=const/Q); a higher Q lowers the
+// target and pushes that root to larger x, so the arc radius μ=2x/t0 grows with
+// Q — the nested family of Fig. 5-5 is one arc per Q.
+//
+// To reproduce Fig. 5-5's radii (≈ 0.7, 1.0, 2.0, 3.0, 4.0 for Q = 7200 … 36000)
+// the five targets must sit HIGH on sin²x/x² (its steep top), where the first
+// root sweeps widely; const positions that window and t0 maps x→radius linearly
+// (radius = 2x/t0). With KAPPA = 6.9e14 and N = 100e9, const ≈ 6900, giving
+// targets 0.96 (Q=7200) → 0.19 (Q=36000) — all above the lobe-2 threshold, so
+// exactly ONE root per Q. The default t0 = 1.0 µs then yields first-root radii
+// ≈ 0.71, 1.76, 2.51, 3.23, 4.08: endpoints match the figure (0.7 and 4.0),
+// monotonic and well separated. (The interior values are not forced to the
+// figure's exact 1.0/2.0/3.0 — the first-root curve is concave, so an exact
+// interior fit would push Q=7200 below threshold.) The book's printed instance
+// is the same form, 6000/Q = sin²x/x² (Eq. 29′). Units: μ, δ in 1e6 rad/s
+// ("Mrad/s") and t0 in µs put the arcs nicely on screen.
+const KAPPA = 6.9e14; // const = KAPPA / N(molecules)  →  const(N=100e9) ≈ 6900
 
 const sinc2 = (x: number) => {
   if (Math.abs(x) < 1e-9) return 1; // sin²x/x² → 1 as x → 0
@@ -112,37 +131,67 @@ function rootsOfSinc2(target: number, xMax: number): number[] {
 
 export default function Ch05Sim() {
   const [Qexp, setQexp] = useState(12000); // cavity quality factor (loss knob)
-  const [t0, setT0] = useState(5.0); // molecular transit time t0 = L/v, in µs
+  const [t0, setT0] = useState(1.0); // molecular transit time t0 = L/v, in µs
   const [N, setN] = useState(100); // upper-state molecules in cavity, in units of 1e9
-  const [detHalf, setDetHalf] = useState(2.0); // detuning display half-range, in 1e6 rad/s
+  const [detHalf, setDetHalf] = useState(4.5); // detuning display half-range, in 1e6 rad/s
+  // (≥ the largest preset arc radius ≈ 4.08 so all five nested arcs render fully)
   const [showPresets, setShowPresets] = useState(true);
   const [showInset, setShowInset] = useState(true);
 
   // const = KAPPA / N(molecules).  N is in units of 1e9, so molecules = N*1e9.
-  // target = const/Q ∝ 1/(N·Q): raising N (or Q) lowers the line and cuts more
-  // lobes — more branches and, past a point, multivaluedness / bistability.
+  // target = const/Q ∝ 1/(N·Q): raising N (or Q) lowers the line, pushing the
+  // operating (first) root to larger x — a taller operating arc — until the line
+  // drops so low (target < ~0.047) that higher-flop roots also appear in the
+  // inset. Those extras are not operating states; each Q still has ONE arc.
   const constVal = KAPPA / (N * 1e9);
 
-  // ── Branch structure for the CURRENT Q: solve const/Q = sin²(x)/x² once ────
+  // ── Operating branch for the CURRENT Q: solve const/Q = sin²(x)/x² ─────────
+  // The FIRST root is the maser's single operating branch (one arc per Q). Any
+  // further roots are successive higher-flop solutions (more half-flops during
+  // transit), shown in the inset but NOT drawn as additional operating arcs.
   const branches = useMemo(() => {
     const target = constVal / Qexp; // RHS line height in the inset
-    // search out far enough in x to catch several lobes
+    // search out far enough in x to catch the higher-flop roots for the inset
     const xMax = 14 * Math.PI;
     const xs = rootsOfSinc2(target, xMax);
-    // each root x_n → μ_n = 2 x_n / t0  (t0 in µs ⇒ μ in 1e6 rad/s = "Mrad/s")
-    const mus = xs.map((x) => (2 * x) / t0);
-    return { target, xs, mus };
+    // operating root = first root; μ = 2 x / t0 (t0 in µs ⇒ μ in 1e6 rad/s)
+    const opX = xs.length ? xs[0] : 0;
+    const opMu = (2 * opX) / t0;
+    // higher-flop roots (for the inset markers / readout only)
+    const higherX = xs.slice(1);
+    return { target, xs, opX, opMu, higherX, nHigher: higherX.length };
   }, [constVal, Qexp, t0]);
 
-  const belowThreshold = branches.target >= 1 || branches.mus.length === 0;
+  const belowThreshold = branches.target >= 1 || branches.opX === 0;
 
-  // ── A. Tuning curves a(δ) = sqrt(μ_n² − δ²) — semicircle arcs ──────────────
-  const arcSeries = (mus: number[], color: string, label?: string): Series[] => {
+  // ── A. Tuning curve a(δ) = sqrt(μ² − δ²) — one semicircle arc per Q ─────────
+  const arcSeries = (mu: number, color: string, label?: string, width = 2.4): Series[] => {
+    if (mu <= 0) return [];
+    const pts: [number, number][] = [];
+    const M = 160;
+    // arc spans δ ∈ [−μ, μ]; clip to the display half-range
+    const lim = Math.min(mu, detHalf);
+    for (let k = 0; k <= M; k++) {
+      const d = -lim + (2 * lim * k) / M;
+      const inside = mu * mu - d * d;
+      if (inside >= 0) pts.push([d, Math.sqrt(inside)]);
+    }
+    return [{ data: pts, color, width, label }];
+  };
+
+  // Faint preset family (each Q a different hue), drawn behind the current Q.
+  // ONE operating arc per preset Q (the first root) — exactly the nested family
+  // of Fig. 5-5, one arc per Q with radius growing as Q increases.
+  const presetSeries = useMemo<Series[]>(() => {
+    if (!showPresets) return [];
+    const palette = ["#cbd5e1", "#a5b4fc", "#7dd3fc", "#fcd34d", "#fca5a5"];
     const out: Series[] = [];
-    mus.forEach((mu, i) => {
+    Q_PRESETS.forEach((Qp, qi) => {
+      const xs = rootsOfSinc2(constVal / Qp, 14 * Math.PI);
+      if (!xs.length) return;
+      const mu = (2 * xs[0]) / t0; // first (operating) root only
       const pts: [number, number][] = [];
-      const M = 160;
-      // arc spans δ ∈ [−μ, μ]; clip to the display half-range
+      const M = 120;
       const lim = Math.min(mu, detHalf);
       for (let k = 0; k <= M; k++) {
         const d = -lim + (2 * lim * k) / M;
@@ -151,46 +200,17 @@ export default function Ch05Sim() {
       }
       out.push({
         data: pts,
-        color,
-        width: 2.4,
-        label: i === 0 ? label : undefined,
-      });
-    });
-    return out;
-  };
-
-  // Faint preset family (each Q a different hue), drawn behind the current Q.
-  const presetSeries = useMemo<Series[]>(() => {
-    if (!showPresets) return [];
-    const palette = ["#cbd5e1", "#a5b4fc", "#7dd3fc", "#fcd34d", "#fca5a5"];
-    const out: Series[] = [];
-    Q_PRESETS.forEach((Qp, qi) => {
-      const target = constVal / Qp;
-      const xs = rootsOfSinc2(target, 14 * Math.PI);
-      const mus = xs.map((x) => (2 * x) / t0);
-      mus.forEach((mu, i) => {
-        const pts: [number, number][] = [];
-        const M = 120;
-        const lim = Math.min(mu, detHalf);
-        for (let k = 0; k <= M; k++) {
-          const d = -lim + (2 * lim * k) / M;
-          const inside = mu * mu - d * d;
-          if (inside >= 0) pts.push([d, Math.sqrt(inside)]);
-        }
-        out.push({
-          data: pts,
-          color: palette[qi % palette.length],
-          width: 1.4,
-          dashed: false,
-          label: i === 0 ? `Q=${Qp}` : undefined,
-        });
+        color: palette[qi % palette.length],
+        width: 1.4,
+        dashed: false,
+        label: `Q=${Qp}`,
       });
     });
     return out;
   }, [showPresets, constVal, t0, detHalf]);
 
   const currentSeries = useMemo<Series[]>(
-    () => arcSeries(branches.mus, "#4f46e5", `Q=${Qexp} (current)`),
+    () => arcSeries(branches.opMu, "#4f46e5", `Q=${Qexp} (current)`),
     [branches, detHalf, Qexp]
   );
 
@@ -199,13 +219,14 @@ export default function Ch05Sim() {
     [presetSeries, currentSeries]
   );
 
-  // vertical extent of the plot: tallest arc (largest μ) across what is drawn
+  // vertical extent of the plot: tallest operating arc (largest μ) across what
+  // is drawn — the current Q plus the (first-root) preset arcs if overlaid
   const maxMu = useMemo(() => {
-    let m = branches.mus.reduce((a, b) => Math.max(a, b), 0.5);
+    let m = Math.max(0.5, branches.opMu);
     if (showPresets) {
       Q_PRESETS.forEach((Qp) => {
         const xs = rootsOfSinc2(constVal / Qp, 14 * Math.PI);
-        xs.forEach((x) => (m = Math.max(m, (2 * x) / t0)));
+        if (xs.length) m = Math.max(m, (2 * xs[0]) / t0);
       });
     }
     return m;
@@ -213,18 +234,16 @@ export default function Ch05Sim() {
   const aMax = Math.max(0.5, maxMu * 1.1);
 
   // ── Operating point at a representative interior detuning for the readouts.
-  //    Probe at half the displayed range so it reliably sits beneath the arcs.
+  //    Probe at half the displayed range so it reliably sits beneath the arc.
   const probeDelta = 0.5 * detHalf;
-  // amplitudes at this δ across all branches:  a_n = sqrt(μ_n² − δ²) if real
-  const opAmps = branches.mus
-    .map((mu) => mu * mu - probeDelta * probeDelta)
-    .filter((v) => v >= 0)
-    .map((v) => Math.sqrt(v));
-  const topAmp = opAmps.reduce((a, b) => Math.max(a, b), 0);
+  // operating amplitude at this δ on the single operating branch: a = sqrt(μ²−δ²)
+  const opInside = branches.opMu * branches.opMu - probeDelta * probeDelta;
+  const topAmp = opInside >= 0 ? Math.sqrt(opInside) : 0;
+  const opAmps = topAmp > 0 ? [topAmp] : []; // gain=loss crossing marker(s)
   const topMu = Math.sqrt(topAmp * topAmp + probeDelta * probeDelta);
   const topX = (topMu * t0) / 2;
-  const nBranches = branches.mus.length;
-  const peakMu = branches.mus.reduce((a, b) => Math.max(a, b), 0); // peak amp = μ at δ=0
+  const nHigher = branches.nHigher; // successive higher-flop roots (not operating states)
+  const peakMu = branches.opMu; // peak amp of the operating arc = μ at δ=0
 
   // ── B. Inset: universal sin²(x)/x² with the const/Q line ───────────────────
   // x-axis adapts to comfortably contain the current roots (with a floor so the
@@ -242,10 +261,12 @@ export default function Ch05Sim() {
     }
     return [{ x: xs, y: ys, color: "#0891b2", width: 2, label: "sin²x / x²" }];
   }, [insetXMax]);
+  // Operating root (first) in solid indigo; higher-flop roots in faint grey so
+  // it is clear which single root is the maser's operating branch.
   const insetMarkers = useMemo(
     () => [
       { y: Math.min(1.05, branches.target), color: "#e11d48", label: "const/Q", dashed: false },
-      ...branches.xs.map((x) => ({ x, color: "#4f46e5" as const })),
+      ...branches.xs.map((x, i) => ({ x, color: i === 0 ? ("#4f46e5" as const) : ("#cbd5e1" as const) })),
     ],
     [branches]
   );
@@ -255,8 +276,9 @@ export default function Ch05Sim() {
   // probe detuning makes the gain=loss crossing literal. After the a²/μ² and Ω
   // cancellations the balance is const/Q = sin²x/x² (with x = ½μt0), so we plot
   // the two sides of that identity, each multiplied by a² (to recover the E0²
-  // dependence of both gain and loss). The crossings then land EXACTLY at the
-  // branch amplitudes a_n = sqrt(μ_n² − δ²) found above:
+  // dependence of both gain and loss). The first crossing (marked) is the single
+  // operating amplitude a = sqrt(μ² − δ²); any further crossings are the higher-
+  // flop roots, not separate operating states:
   //   gain(a) = a² · sin²x/x²,   loss(a) = a² · (const/Q).
   const [showGainLoss, setShowGainLoss] = useState(false);
   const gainLossLines = useMemo<Series[]>(() => {
@@ -288,7 +310,7 @@ export default function Ch05Sim() {
 
   return (
     <div>
-      {/* threshold / branch-count badge */}
+      {/* threshold badge: oscillating (one operating arc) vs below threshold */}
       <div
         style={{
           display: "flex",
@@ -297,23 +319,23 @@ export default function Ch05Sim() {
           padding: "0.5rem 0.75rem",
           marginBottom: "0.5rem",
           borderRadius: 8,
-          background: belowThreshold ? "#fee2e2" : nBranches >= 3 ? "#fef9c3" : "#dcfce7",
-          border: `1px solid ${belowThreshold ? "#e11d48" : nBranches >= 3 ? "#ca8a04" : "#16a34a"}`,
+          background: belowThreshold ? "#fee2e2" : "#dcfce7",
+          border: `1px solid ${belowThreshold ? "#e11d48" : "#16a34a"}`,
         }}
       >
         <span
           style={{
             fontWeight: 700,
             fontSize: "0.95rem",
-            color: belowThreshold ? "#be123c" : nBranches >= 3 ? "#a16207" : "#15803d",
+            color: belowThreshold ? "#be123c" : "#15803d",
             letterSpacing: "0.01em",
           }}
         >
           {belowThreshold
             ? "BELOW THRESHOLD — no oscillation (const/Q > 1)"
-            : nBranches >= 3
-            ? `MULTIVALUED — ${nBranches} branches (bistable / S-shaped)`
-            : `OSCILLATING — ${nBranches} branch${nBranches === 1 ? "" : "es"} (single-valued)`}
+            : `OSCILLATING — one operating arc${
+                nHigher > 0 ? ` (+${nHigher} higher-flop root${nHigher === 1 ? "" : "s"})` : ""
+              }`}
         </span>
         <span style={{ marginLeft: "auto", fontSize: "0.85rem", color: "#475569" }}>
           const/Q ≈ {branches.target.toExponential(2)}
@@ -393,7 +415,7 @@ export default function Ch05Sim() {
         <Slider
           label={String.raw`t_0=L/v\ \text{(transit time)}`}
           tex
-          min={1}
+          min={0.5}
           max={20}
           step={0.1}
           value={t0}
@@ -424,9 +446,9 @@ export default function Ch05Sim() {
         <Toggle label="show root-finder inset" checked={showInset} onChange={setShowInset} />
         <Toggle label="show gain-vs-loss panel" checked={showGainLoss} onChange={setShowGainLoss} />
         <Readout
-          label={String.raw`\text{branches (1=single, }\geq 3\text{=bistable)}`}
+          label={String.raw`\text{higher-flop roots (beyond operating arc)}`}
           tex
-          value={belowThreshold ? "0" : String(nBranches)}
+          value={belowThreshold ? "—" : String(nHigher)}
         />
         <Readout
           label={String.raw`\text{peak } \wp E_0/\hbar\ (\delta=0)`}

@@ -36,8 +36,8 @@ export default function Page() {
           <Tex>{String.raw`\psi(\mathbf{r},t)`}</Tex> spread over space. The only thing you can physically read off
           is its squared magnitude: <Tex>{String.raw`|\psi|^2`}</Tex> is a <strong>probability density</strong> —
           the chance per unit volume of finding the electron at a point. Because the electron is{" "}
-          <em>somewhere</em> with certainty, this density must integrate to one. And because the electron carries
-          charge <Tex>{String.raw`-e`}</Tex>, the <em>charge</em> density is{" "}
+          <em>somewhere</em> with certainty, this density must integrate to one. Here{" "}
+          <Tex>{String.raw`e`}</Tex> denotes the electron&rsquo;s (negative) charge, so the <em>charge</em> density is{" "}
           <Tex>{String.raw`e\,\psi^*\psi`}</Tex> — the physical object that, once it starts moving, will radiate.
         </Intuition>
         <p>
@@ -56,13 +56,13 @@ export default function Page() {
           label="Normalization"
           note={
             <>
-              The electron exists with certainty. The associated <em>charge</em> density is{" "}
-              <Tex>{String.raw`e\,\psi^*\psi`}</Tex>.
+              The electron exists with certainty. With <Tex>{String.raw`e`}</Tex> the electron&rsquo;s (negative)
+              charge, the associated <em>charge</em> density is <Tex>{String.raw`e\,\psi^*\psi`}</Tex>.
             </>
           }
         />
         <Callout kind="insight" title="Charge density">
-          Since the electron charge is <Tex>{String.raw`-e`}</Tex>, the charge density is{" "}
+          Here <Tex>{String.raw`e`}</Tex> denotes the electron&rsquo;s (negative) charge, so the charge density is{" "}
           <Tex>{String.raw`e\,\psi^*\psi`}</Tex>. This is the source term for radiation — keep it distinct from
           the probability density <Tex>{String.raw`|\psi|^2`}</Tex> (they differ only by the factor{" "}
           <Tex>{String.raw`e`}</Tex>).

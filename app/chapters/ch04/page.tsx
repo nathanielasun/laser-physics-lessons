@@ -122,8 +122,8 @@ export default function Page() {
         <Callout kind="insight" title="Why ω ≫ α matters">
           The whole method assumes the envelope <Tex>{String.raw`V`}</Tex> drifts slowly compared with the carrier.
           Physically: the gain per optical cycle is tiny, so the oscillator looks sinusoidal on short timescales and only
-          its amplitude evolves. If this fails (<Tex>{String.raw`\alpha\gtrsim\omega`}</Tex>) you get spiking instead —
-          see the next section.
+          its amplitude evolves. Once this fails (<Tex>{String.raw`\alpha\gtrsim\omega`}</Tex>) the envelope overshoots,
+          and for <Tex>{String.raw`\alpha\gg\omega`}</Tex> you get pronounced spiking instead — see the next section.
         </Callout>
         <p>
           Differentiating the SVA product is governed by a single rule. The piece proportional to{" "}
@@ -194,8 +194,10 @@ export default function Page() {
           As <Tex>{String.raw`V`}</Tex> grows, saturation eats into the gain until growth stops: the oscillator clamps
           to the limit cycle <Tex>{String.raw`V^2=\alpha/\beta`}</Tex>, set entirely by the ratio of gain to saturation,
           <em> not</em> by initial conditions. If <Tex>{String.raw`\omega\gg\alpha`}</Tex> the approach is smooth and
-          monotonic. But if <Tex>{String.raw`\alpha\gtrsim\omega`}</Tex> the amplitude <strong>overshoots</strong>,
-          saturation drives the gain negative, the field decays, the gain recovers, and the cycle repeats:{" "}
+          monotonic. As <Tex>{String.raw`\alpha\gtrsim\omega`}</Tex> the amplitude begins to{" "}
+          <strong>overshoot</strong> and the SVA picture breaks down; and once{" "}
+          <Tex>{String.raw`\alpha\gg\omega`}</Tex> the overshoot becomes pronounced — saturation drives the gain
+          negative, the field decays, the gain recovers, and the cycle repeats:{" "}
           <strong>relaxation oscillations</strong> — exactly the ruby-laser turn-on spiking.
         </Intuition>
         <p>
@@ -236,8 +238,9 @@ export default function Page() {
           </Step>
           <Step title="Identify the two dynamical regimes">
             The SVA derivation assumed <Tex>{String.raw`\omega\gg\alpha`}</Tex> (smooth buildup, negligible overshoot).
-            If instead <Tex>{String.raw`\alpha\gtrsim\omega`}</Tex>, the buildup overshoots, the saturated gain swings
-            negative, and the envelope undergoes repetitive buildup–decay cycles: relaxation oscillations. The clean
+            Once <Tex>{String.raw`\alpha\gtrsim\omega`}</Tex> the buildup overshoots and the SVA picture begins to break
+            down; and when <Tex>{String.raw`\alpha\gg\omega`}</Tex> the saturated gain swings strongly negative and the
+            envelope undergoes pronounced repetitive buildup–decay cycles: relaxation oscillations. The clean
             single-limit-cycle picture no longer applies — only the full second-order ODE captures the spikes.
           </Step>
         </Derivation>
@@ -338,7 +341,7 @@ export default function Page() {
           substitute (12) — yields a single equation in <Tex>{String.raw`v_1`}</Tex>, the coupled analogue of Van der
           Pol and the starting point for the two-mode SVA treatment:
         </p>
-        <EqBlock label="16">{String.raw`\Big[\Big(\tfrac{d}{dt}\Big)^2 + \alpha_2\tfrac{d}{dt} + \omega_2^2\Big]\Big(\tfrac{d}{dt}\Big)\big(\alpha_1 v_1 - \beta' v_1^3\big) + \omega_2^2(\alpha_1 - \beta' v_1^2)\dot v_1 = k^2\omega_1^2\omega_2^2\,v_1.`}</EqBlock>
+        <EqBlock label="16">{String.raw`\Big[\Big(\tfrac{d}{dt}\Big)^2 + \alpha_2\tfrac{d}{dt} + \omega_2^2\Big]\Big[\Big(\tfrac{d}{dt}\Big)^2 - \tfrac{d}{dt}\big(\alpha_1 - \beta' v_1^2\big) + \omega_1^2\Big] v_1 = k^2\omega_1^2\omega_2^2\,v_1.`}</EqBlock>
         <p>
           Now expand <Tex>{String.raw`v_1`}</Tex> as a superposition of the two normal modes, each with its own slowly
           varying amplitude — the multimode-laser field expansion:
@@ -494,13 +497,13 @@ export default function Page() {
         </p>
         <EqBlock label="34">{String.raw`v(t) = \tfrac{1}{2}V(t)\,\exp\!\big[-i(\nu t + \Psi)\big] + \text{c.c.}`}</EqBlock>
         <p>Substituting into (33) and keeping fundamental terms gives the reduced driven equation:</p>
-        <EqBlock label="35">{String.raw`-2i\nu\dot V - (\nu + \dot\Psi)^2 V - (\alpha - \beta V^2)(-i\nu)V + \omega^2 V = \nu^2 V_0\,e^{i\Psi}.`}</EqBlock>
+        <EqBlock label="35">{String.raw`-2i\nu\dot V - (\nu + \dot\Psi)^2 V - (\alpha - \beta V^2)(-i\nu)V + \omega^2 V = i\,\nu^2 V_0\,e^{i\Psi}.`}</EqBlock>
         <p>
-          The real part is the amplitude equation (drive in the cosine, in-phase quadrature); for weak drive{" "}
+          The imaginary part is the amplitude equation (drive in the cosine, in-phase quadrature); for weak drive{" "}
           <Tex>{String.raw`V`}</Tex> stays near its free value <Tex>{String.raw`\sqrt{\alpha/\beta}`}</Tex>:
         </p>
         <EqBlock label="36">{String.raw`\dot V = \tfrac{1}{2}(\alpha - \beta V^2)V - \tfrac{1}{2}\nu V_0\cos\Psi.`}</EqBlock>
-        <p>The imaginary part is the phase equation — <strong>Adler&rsquo;s equation</strong>, drive in the sine quadrature:</p>
+        <p>The real part is the phase equation — <strong>Adler&rsquo;s equation</strong>, drive in the sine quadrature:</p>
         <KeyResult
           number="37"
           eq={String.raw`\dot\Psi = (\omega - \nu) + \tfrac{1}{2}\nu\frac{V_0}{V}\sin\Psi = d + l\sin\Psi, \qquad d = \omega-\nu,\;\; l = \tfrac{1}{2}\nu\frac{V_0}{V}.`}
@@ -522,8 +525,8 @@ export default function Page() {
           </Step>
           <Step title="Split into amplitude and phase equations">
             Equate real and imaginary parts of (35) separately to zero (with{" "}
-            <Tex>{String.raw`\omega\approx\nu`}</Tex> inside slowly varying coefficients). The real part gives the
-            amplitude equation (36) with the cosine drive; the imaginary part gives the phase equation (37) with the sine
+            <Tex>{String.raw`\omega\approx\nu`}</Tex> inside slowly varying coefficients). The imaginary part gives the
+            amplitude equation (36) with the cosine drive; the real part gives the phase equation (37) with the sine
             drive. Define <Tex>{String.raw`d=\omega-\nu`}</Tex> and <Tex>{String.raw`l=\tfrac12\nu V_0/V`}</Tex>.
           </Step>
           <Step title="Read off the locking condition">
@@ -544,7 +547,7 @@ export default function Page() {
             <>
               Integrate the full driven Van der Pol equation (Eq. 1 / Eq. 33) with RK4 and overlay the reduced SVA
               envelope (Eqs. 6 / 36–37). Watch the field build from noise, clamp to its limit cycle{" "}
-              <Tex>{String.raw`V^2=\alpha/\beta`}</Tex>, spike when <Tex>{String.raw`\alpha\gtrsim\omega`}</Tex>, and lock
+              <Tex>{String.raw`V^2=\alpha/\beta`}</Tex>, spike when <Tex>{String.raw`\alpha\gg\omega`}</Tex>, and lock
               to the drive inside the band <Tex>{String.raw`|d|<|l|`}</Tex>. Because{" "}
               <Tex>{String.raw`\beta=\tfrac34\beta'`}</Tex> is matched to the full-ODE cubic, both models share the same
               limit cycle — so any gap you see in the time series is the SVA approximation breaking down, not a bug.
@@ -554,9 +557,13 @@ export default function Page() {
             <>
               Keep <Tex>{String.raw`V_0=0`}</Tex>: drag the seed <Tex>{String.raw`v_0`}</Tex> and confirm the steady
               amplitude is unchanged — the limit cycle is an attractor. Now raise{" "}
-              <Tex>{String.raw`\alpha`}</Tex> past <Tex>{String.raw`\omega`}</Tex>: the smooth circle in the phase plane
-              sharpens into a relaxation loop and the time series breaks into spikes — and the SVA envelope (which cannot
-              overshoot) visibly departs from the truth. Finally turn on the drive (<Tex>{String.raw`V_0>0`}</Tex>) and
+              <Tex>{String.raw`\alpha`}</Tex>: near <Tex>{String.raw`\alpha\approx\omega`}</Tex> the smooth circle in the
+              phase plane begins to distort (the badge reads <strong>relaxation onset</strong>), but pronounced spikes
+              need <Tex>{String.raw`\alpha\gg\omega`}</Tex>. Push the ratio <Tex>{String.raw`\alpha/\omega`}</Tex> up
+              toward 3–4 or more (easiest by lowering <Tex>{String.raw`\omega`}</Tex>): the circle sharpens into a
+              relaxation loop and the time series breaks into spikes once the badge reads{" "}
+              <strong>relaxation oscillations (spiking)</strong> — and the SVA envelope (which cannot overshoot) visibly
+              departs from the truth. Finally turn on the drive (<Tex>{String.raw`V_0>0`}</Tex>) and
               sweep <Tex>{String.raw`\nu`}</Tex>: inside <Tex>{String.raw`|d|\le|l|`}</Tex> the Adler curve dips through
               zero (a fixed point, badge turns <strong>LOCKED</strong>); push <Tex>{String.raw`\nu`}</Tex> out and the
               curve lifts off the axis, the beat period diverging as you cross the boundary.
@@ -600,8 +607,9 @@ export default function Page() {
               <Tex>{String.raw`V^2=a_0/\beta`}</Tex> is the direct quantum-era descendant.
             </li>
             <li>
-              <strong>Relaxation spiking</strong> for <Tex>{String.raw`\alpha\gtrsim\omega`}</Tex> — overshoot, deplete,
-              decay, recover, repeat. Ruby-laser turn-on, made quantitative by rate equations in Chapter VIII.
+              <strong>Relaxation spiking</strong> for <Tex>{String.raw`\alpha\gg\omega`}</Tex> (overshoot begins already
+              at <Tex>{String.raw`\alpha\gtrsim\omega`}</Tex>) — overshoot, deplete, decay, recover, repeat. Ruby-laser
+              turn-on, made quantitative by rate equations in Chapter VIII.
             </li>
             <li>
               <strong>The factor-of-2 cross-saturation</strong> — mode <Tex>{String.raw`m`}</Tex> saturates mode{" "}
