@@ -1,9 +1,21 @@
 # Laser Physics — Interactive Lessons
 
+**▶ Live site: https://nathanielasun.github.io/laser-physics-lessons/**
+
 An **intuition-first, interactive** reconstruction of every chapter of *Laser
 Physics* by **Murray Sargent III, Marlan O. Scully, and Willis E. Lamb Jr.**
 (Addison-Wesley, 1974) — the classic graduate text on semiclassical and quantum
 laser theory.
+
+All **21 chapters + 9 appendices** are live: each renders intuition-first prose,
+full collapsible derivations, every formula in KaTeX, and a live interactive
+simulation. Equations are transcribed by reading the scanned pages, then
+adversarially checked against the scans by a separate verification pass.
+
+> **Verification status.** Math-verified against the source scans: Ch II, III,
+> XIX, XX, XXI and Appendices A–I. Built and rendering cleanly but pending the
+> equation-fidelity pass: Ch I and Ch IV–XVIII (verification resumes as API
+> quota allows; fixes auto-redeploy).
 
 The goal: take a famously rigorous derivation-heavy book and teach it to people
 who are **new to laser physics but mathematically prepared**. Every lesson leads
