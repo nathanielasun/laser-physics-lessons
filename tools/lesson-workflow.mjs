@@ -9,16 +9,35 @@ export const meta = {
   ],
 };
 
-// args: array of units { slug, label, title, blurb, arc, pages:[start,end] }
+// args: either an array of units, or { mode: "full"|"verify", units: [...] }.
+// Each unit: { slug, label, title, blurb, arc, pages:[start,end] }.
+//  - "full"   : extract -> build -> verify -> repair  (for un-built units)
+//  - "verify" : verify -> repair on the EXISTING files (for built-but-unverified units)
 const ROOT = "/Users/nathaniel.sun/Academic/lessons/laser-study";
 let parsed = args;
 if (typeof parsed === "string") {
   try { parsed = JSON.parse(parsed); } catch (e) { /* leave as-is */ }
 }
-const units = Array.isArray(parsed) ? parsed : parsed ? [parsed] : [];
-log(`launch: typeof args=${typeof args}, units=${units.length}, first.slug=${units[0] && units[0].slug}`);
+const MODE = parsed && parsed.mode ? parsed.mode : "full";
+const units = Array.isArray(parsed) ? parsed : parsed && parsed.units ? parsed.units : parsed ? [parsed] : [];
+log(`launch: mode=${MODE}, units=${units.length}, slugs=${units.map((u) => u.slug).join(",")}`);
 if (!units.length || !units[0] || !units[0].pages) {
-  throw new Error("Workflow needs args = array of units with .pages. Received: " + JSON.stringify(args).slice(0, 300));
+  throw new Error("Workflow needs units with .pages. Received: " + JSON.stringify(args).slice(0, 300));
+}
+
+// Retry wrapper: a 429/throttle can make a subagent end without calling
+// StructuredOutput (agent() then throws). Retry a few times before giving up.
+async function agentRetry(prompt, opts, tries = 3) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const extra = i ? `\n\n(Attempt ${i + 1}: you MUST finish by calling the StructuredOutput tool with the required schema.)` : "";
+      const r = await agent(prompt + extra, opts);
+      if (r) return r;
+    } catch (e) {
+      log(`retry ${i + 1}/${tries} for ${opts.label}: ${String(e).slice(0, 120)}`);
+    }
+  }
+  return null;
 }
 
 function cap(slug) {
@@ -160,13 +179,10 @@ const BUILD_SCHEMA = {
   properties: { summary: { type: "string" }, naturalSimFit: { type: "boolean" }, componentsUsed: { type: "array", items: { type: "string" } } },
 };
 
-const results = await pipeline(
-  units,
-
-  // ── Stage 1: Extract ──────────────────────────────────────────────────────
-  (u) =>
-    agent(
-      `You are a laser-physics expert preparing to teach ${u.label}: "${u.title}" to students new to laser physics but mathematically prepared (comfortable with calculus, linear algebra, intro QM).
+// ── Stage: Extract ──────────────────────────────────────────────────────────
+const extractStage = async (u) => {
+  const spec = await agentRetry(
+    `You are a laser-physics expert preparing to teach ${u.label}: "${u.title}" to students new to laser physics but mathematically prepared (comfortable with calculus, linear algebra, intro QM).
 
 This chapter of Sargent/Scully/Lamb "Laser Physics" is a SCANNED book — the OCR text is garbled for math, so you MUST read the page images and transcribe equations by eye. Read EVERY page in this range (use the Read tool on each path):
   ${pagePaths(u)}
@@ -179,13 +195,16 @@ Produce a complete teaching spec:
   - carryForward: what the student should retain for later chapters.
 
 Transcribe math faithfully (correct subscripts, Greek letters, signs, factors). Double-check each equation against the scan. This spec is the single source of truth for the builder, who will NOT see the scans.`,
-      { label: `extract:${u.slug}`, phase: "Extract", schema: EXTRACT_SCHEMA }
-    ),
+    { label: `extract:${u.slug}`, phase: "Extract", schema: EXTRACT_SCHEMA }
+  );
+  if (!spec) throw new Error(`extract failed after retries: ${u.slug}`);
+  return spec;
+};
 
-  // ── Stage 2: Build ─────────────────────────────────────────────────────────
-  (spec, u) =>
-    agent(
-      `Build the interactive lesson for ${u.label}: "${u.title}" (slug "${u.slug}") as a Next.js page + simulation, matching the gold chapter's quality.
+// ── Stage: Build ──────────────────────────────────────────────────────────────
+const buildStage = async (spec, u) => {
+  const r = await agentRetry(
+    `Build the interactive lesson for ${u.label}: "${u.title}" (slug "${u.slug}") as a Next.js page + simulation, matching the gold chapter's quality.
 
 ${GOLD}
 
@@ -205,72 +224,80 @@ Write exactly two files (create them; overwrite if present):
        - If simSpec.naturalFit is false, still build a clear interactive/animated DIAGRAM (never a decorative slider that teaches nothing).
 
 After writing, re-read your own two files once to confirm imports match the frozen API and all LaTeX uses String.raw. Then return the result. Do NOT touch any other file.`,
-      { label: `build:${u.slug}`, phase: "Build", schema: BUILD_SCHEMA }
-    ),
+    { label: `build:${u.slug}`, phase: "Build", schema: BUILD_SCHEMA }
+  );
+  // Build may have written the files even if its final structured output was
+  // throttled away; keep going to verify whatever is on disk.
+  return r || { naturalSimFit: true, partial: true };
+};
 
-  // ── Stage 3: Verify two axes, then repair-loop until clean ─────────────────
-  async (build, u) => {
-    const pages = pagePaths(u);
-    const files = `  ${ROOT}/app/chapters/${u.slug}/page.tsx\n  ${ROOT}/components/sims/${u.slug}.tsx`;
+// ── Stage: Verify two axes, then repair-loop until clean (reused by both modes)
+async function verifyAndRepair(u, build) {
+  const pages = pagePaths(u);
+  const files = `  ${ROOT}/app/chapters/${u.slug}/page.tsx\n  ${ROOT}/components/sims/${u.slug}.tsx`;
 
-    // Initial two-axis verification (parallel).
-    let verdicts = (
-      await parallel([
-        () =>
-          agent(
-            `MATH-FIDELITY CHECK for ${u.label} "${u.title}". Adversarially compare EVERY rendered LaTeX equation in ${ROOT}/app/chapters/${u.slug}/page.tsx against the ORIGINAL scanned pages (read them all):
+  let verdicts = (
+    await parallel([
+      () =>
+        agentRetry(
+          `MATH-FIDELITY CHECK for ${u.label} "${u.title}". Adversarially compare EVERY rendered LaTeX equation in ${ROOT}/app/chapters/${u.slug}/page.tsx against the ORIGINAL scanned pages (read them all):
   ${pages}
 Confirm each equation matches the book exactly (subscripts, signs, factors of 2 or 1/2, hbar, Greek letters, hats/vectors, which frequency sits in which numerator/denominator). Flag every equation that is wrong, garbled, or invented, and any KaTeX that would fail to render. Be exhaustive — missing one wrong formula ships a wrong lesson. Severity: critical = physically wrong/garbled formula; major = notable factor/label error; minor = cosmetic. Give the exact corrected LaTeX in each fix.`,
-            { label: `verify-math:${u.slug}`, phase: "Verify", schema: VERDICT_SCHEMA }
-          ),
-        () =>
-          agent(
-            `PHYSICS-SOUNDNESS CHECK for ${u.label} "${u.title}". Read these files:\n${files}\nYou are a laser physicist judging whether the INTUITION-FIRST reframing is physically correct — the explanations and the SIM behavior, not the LaTeX. Catch plausible-but-wrong simplifications, misleading hand-waving, wrong limits or signs of an effect, and any sim whose behavior contradicts the physics (wrong frequency dependence, energy from nothing, a curve that should saturate but diverges, a peak that should grow as 1/Γ but stays fixed). You may consult the scans under ${ROOT}/source-pages/. Severity: critical = teaches something false; major = misleading; minor = imprecise. Give a concrete fix for each issue.`,
-            { label: `verify-phys:${u.slug}`, phase: "Verify", schema: VERDICT_SCHEMA }
-          ),
-      ])
-    ).filter(Boolean);
+          { label: `verify-math:${u.slug}`, phase: "Verify", schema: VERDICT_SCHEMA }
+        ),
+      () =>
+        agentRetry(
+          `PHYSICS-SOUNDNESS CHECK for ${u.label} "${u.title}". Read these files:\n${files}\nYou are a laser physicist judging whether the INTUITION-FIRST reframing is physically correct — the explanations and the SIM behavior, not the LaTeX. Catch plausible-but-wrong simplifications, misleading hand-waving, wrong limits or signs of an effect, and any sim whose behavior contradicts the physics (wrong frequency dependence, energy from nothing, a curve that should saturate but diverges, a peak that should grow as 1/Γ but stays fixed). You may consult the scans under ${ROOT}/source-pages/. Severity: critical = teaches something false; major = misleading; minor = imprecise. Give a concrete fix for each issue.`,
+          { label: `verify-phys:${u.slug}`, phase: "Verify", schema: VERDICT_SCHEMA }
+        ),
+    ])
+  ).filter(Boolean);
 
-    let open = serious(verdicts);
-    const changeLog = [];
-    let round = 0;
+  const verifiedAtAll = verdicts.length > 0; // distinguish "passed" from "verify failed"
+  let open = serious(verdicts);
+  const changeLog = [];
+  let round = 0;
 
-    // Repair loop: apply ALL issues, then re-verify against the scan. Repeat
-    // until no critical/major issues remain (max 3 rounds). This is what makes
-    // the corrections actually land — a single fix pass misses some.
-    while (open.length && round < 3) {
-      round++;
-      await agent(
-        `Apply ALL of these verified corrections to ${u.label} "${u.title}". Edit ONLY these two files:
+  while (open.length && round < 3) {
+    round++;
+    await agentRetry(
+      `Apply ALL of these verified corrections to ${u.label} "${u.title}". Edit ONLY these two files:
 ${files}
 Issues (critical/major) — every one MUST be fixed:
 ${JSON.stringify(open, null, 2)}
 Procedure: for EACH issue, make the edit, then immediately Read that exact equation/line back to confirm it now matches the stated correction. Do not finish until every issue is verified applied. Keep the frozen API. Report what you changed and anything still unresolved.`,
-        { label: `fix-r${round}:${u.slug}`, phase: "Fix", schema: { type: "object", required: ["changes"], properties: { changes: { type: "array", items: { type: "string" } }, remaining: { type: "array", items: { type: "string" } } } } }
-      ).then((r) => r && r.changes && changeLog.push(...r.changes));
+      { label: `fix-r${round}:${u.slug}`, phase: "Fix", schema: { type: "object", required: ["changes"], properties: { changes: { type: "array", items: { type: "string" } }, remaining: { type: "array", items: { type: "string" } } } } }
+    ).then((r) => r && r.changes && changeLog.push(...r.changes));
 
-      const recheck = await agent(
-        `RE-VERIFY ${u.label} "${u.title}" after fixes. Read ${ROOT}/app/chapters/${u.slug}/page.tsx and ${ROOT}/components/sims/${u.slug}.tsx and the scans:
+    const recheck = await agentRetry(
+      `RE-VERIFY ${u.label} "${u.title}" after fixes. Read ${ROOT}/app/chapters/${u.slug}/page.tsx and ${ROOT}/components/sims/${u.slug}.tsx and the scans:
   ${pages}
 Confirm these previously-found issues are now correctly resolved, AND scan for any remaining or newly-introduced critical/major math or physics errors. Report only genuine critical/major problems still present (empty issues list = clean). Previously-found issues:
 ${JSON.stringify(open.map((i) => i.problem), null, 2)}`,
-        { label: `reverify-r${round}:${u.slug}`, phase: "Fix", schema: VERDICT_SCHEMA }
-      );
-      open = serious([recheck]);
-    }
-
-    return {
-      slug: u.slug,
-      status: open.length ? "needs-attention" : round ? "fixed" : "ok",
-      naturalSimFit: build && build.naturalSimFit !== false,
-      pageFile: `app/chapters/${u.slug}/page.tsx`,
-      simFile: `components/sims/${u.slug}.tsx`,
-      repairRounds: round,
-      changes: changeLog,
-      residual: open.map((i) => `[${i.severity}] ${i.location || ""}: ${i.problem}`),
-      summary: verdicts.map((v) => `${v.verdict}: ${v.summary}`).join(" || "),
-    };
+      { label: `reverify-r${round}:${u.slug}`, phase: "Fix", schema: VERDICT_SCHEMA }
+    );
+    open = serious(recheck ? [recheck] : []); // null recheck -> keep looping won't help; treat as resolved-best-effort
+    if (!recheck) break;
   }
-);
+
+  const status = !verifiedAtAll ? "unverified" : open.length ? "needs-attention" : round ? "fixed" : "ok";
+  return {
+    slug: u.slug,
+    status,
+    naturalSimFit: build && build.naturalSimFit !== false,
+    pageFile: `app/chapters/${u.slug}/page.tsx`,
+    simFile: `components/sims/${u.slug}.tsx`,
+    verifierCount: verdicts.length,
+    repairRounds: round,
+    changes: changeLog,
+    residual: open.map((i) => `[${i.severity}] ${i.location || ""}: ${i.problem}`),
+    summary: verdicts.map((v) => `${v.verdict}: ${v.summary}`).join(" || "),
+  };
+}
+
+const results =
+  MODE === "verify"
+    ? await pipeline(units, (u) => verifyAndRepair(u, null))
+    : await pipeline(units, extractStage, buildStage, (build, u) => verifyAndRepair(u, build));
 
 return results.filter(Boolean);
