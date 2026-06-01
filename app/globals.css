@@ -122,7 +122,10 @@ strong { font-weight: 650; }
 .section-h:hover .section-anchor { opacity: 1; }
 
 /* ── Math ────────────────────────────────────────────────────────────────── */
-.texblock { display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin: 1.3rem 0; overflow-x: auto; }
+/* overflow-x:auto would promote overflow-y from visible to auto, and KaTeX's
+   display math has a scrollHeight a few px taller than its box (strut space),
+   so a phantom vertical scrollbar appeared on every equation. Pin overflow-y. */
+.texblock { display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin: 1.3rem 0; overflow-x: auto; overflow-y: hidden; }
 .texblock-eq { flex: 0 1 auto; }
 .texblock-label { color: var(--ink-faint); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
 .katex { font-size: 1.05em; }
