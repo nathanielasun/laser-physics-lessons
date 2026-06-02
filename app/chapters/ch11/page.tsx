@@ -245,7 +245,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="10"
-          eq={String.raw`\mathcal{P}_\pm^{(3)} = \tfrac{1}{4}\,\wp^4 N\,(\hbar^3 K\bar u)^{-1}\,E_\pm\Big\{ |E_\pm|^2\,[\,Z\text{-combination}\,] \;+\; |E_\mp|^2\,[\,Z\text{-combination}\,] \Big\}.`}
+          eq={String.raw`\mathcal{P}_\pm^{(3)} = \tfrac{1}{2}\,\wp^4\bar N\,(\hbar^3 K\bar u)^{-1}\,2\gamma_{ab}(\gamma_a\gamma_b)^{-1}\,E_\pm\Big\{ |E_\pm|^2\,[\,Z\text{-combination}\,] \;+\; |E_\mp|^2\,[\,Z\text{-combination}\,] \Big\}.`}
           label="Third-order (self + cross saturation)"
           note={
             <>
@@ -340,7 +340,10 @@ export default function Page() {
         <p>
           The same substitution into the frequency equation gives each wave&rsquo;s operating frequency: the
           empty-cavity value <Tex>{String.raw`\Omega_\pm`}</Tex>, plus linear pulling <Tex>{String.raw`\sigma_\pm`}</Tex>,
-          plus a self-push <Tex>{String.raw`\rho_\pm I_\pm`}</Tex> and a cross-push from the opposite wave:
+          plus a self-push <Tex>{String.raw`\rho_\pm I_\pm`}</Tex> and a cross-push from the opposite wave. We keep the
+          general two-mode form here, but note in advance that for <em>this</em> ring Table&nbsp;11-1 gives{" "}
+          <Tex>{String.raw`\rho_+=\rho_-=0`}</Tex> exactly — the self-pushing vanishes, so the only intensity-dependent
+          frequency shift that survives is the cross-pushing <Tex>{String.raw`\tau`}</Tex>:
         </p>
         <EqBlock label="15">{String.raw`\nu_+ + \dot{\phi}_+ = \Omega_+ + \sigma_+ - \rho_+ I_+ - \tau_{+-}\,I_-,`}</EqBlock>
         <EqBlock label="16">{String.raw`\nu_- + \dot{\phi}_- = \Omega_- + \sigma_- - \rho_- I_- - \tau_{-+}\,I_+.`}</EqBlock>
@@ -351,7 +354,7 @@ export default function Page() {
         <EqBlock label="α">{String.raw`\alpha_\pm = F_1\,\exp\!\big[-(\omega-\nu_\pm)^2/(K\bar u)^2\big] - \tfrac{1}{2}\frac{\nu}{Q_\pm}\quad(\text{linear net gain: Doppler gain }-\text{ half loss}).`}</EqBlock>
         <EqBlock label="β,θ">{String.raw`\beta_\pm = (\text{self-saturation}),\qquad \theta_{\pm\mp} = \beta_\pm\,\mathscr{L}(\omega-\nu_0)\ \approx\ \beta_\pm\ \text{near line center}.`}</EqBlock>
         <EqBlock label="σ">{String.raw`\sigma_\pm \propto \mathrm{Re}\,Z\;\;(\text{linear mode pulling, odd in detuning }\nu_\pm-\omega).`}</EqBlock>
-        <EqBlock label="ρ,τ">{String.raw`\rho_\pm = (\text{self-pushing}),\qquad \tau_{\pm\mp} = (\text{cross-pushing}),`}</EqBlock>
+        <EqBlock label="ρ,τ">{String.raw`\rho_+ = \rho_- = 0\ (\text{self-pushing vanishes for the ring}),\qquad \tau_{\pm\mp} = (\text{cross-pushing}),`}</EqBlock>
         <KeyResult
           number="F₁"
           eq={String.raw`F_1 = \tfrac{1}{2}\,\nu\,\sqrt{\pi}\,\wp^2 \bar N\,(\hbar K\bar u\,\varepsilon_0)^{-1}`}
@@ -379,7 +382,8 @@ export default function Page() {
           <Step title="Amplitude → frequency">
             Insert <Tex>{String.raw`\mathrm{Re}\,Z`}</Tex> (first order) and the real part of the third-order
             polarization into Eq.&nbsp;(5). The linear term gives the pulling <Tex>{String.raw`\sigma_\pm`}</Tex>; the
-            self real part gives the pushing <Tex>{String.raw`\rho_\pm I_\pm`}</Tex>; the cross real part gives{" "}
+            self real part gives the pushing <Tex>{String.raw`\rho_\pm I_\pm`}</Tex> (which evaluates to zero for this
+            ring, <Tex>{String.raw`\rho_+=\rho_-=0`}</Tex>); the cross real part gives{" "}
             <Tex>{String.raw`\tau\,I_\mp`}</Tex>. That is Eqs.&nbsp;(15)–(16).
           </Step>
           <Step title="Expand about line center">
@@ -401,7 +405,7 @@ export default function Page() {
             <li><Tex>{String.raw`\beta`}</Tex> — self-saturation; sets <Tex>{String.raw`I_\pm\approx\alpha_\pm/\beta_\pm`}</Tex> when uncoupled.</li>
             <li><Tex>{String.raw`\theta`}</Tex> — cross-saturation; <Tex>{String.raw`\theta/\beta`}</Tex> controls all competition.</li>
             <li><Tex>{String.raw`\sigma`}</Tex> — linear mode pulling (toward line center).</li>
-            <li><Tex>{String.raw`\rho,\ \tau`}</Tex> — self- and cross-pushing (intensity-dependent frequency shifts).</li>
+            <li><Tex>{String.raw`\rho,\ \tau`}</Tex> — self- and cross-pushing (intensity-dependent frequency shifts). For this ring <Tex>{String.raw`\rho_+=\rho_-=0`}</Tex> (Table&nbsp;11-1), so only the cross-pushing <Tex>{String.raw`\tau`}</Tex> survives.</li>
             <li><Tex>{String.raw`F_1`}</Tex> — common first-order factor.</li>
           </ul>
           Seven symbols; every later equation is built from them.
@@ -490,7 +494,7 @@ export default function Page() {
             </>
           }
         />
-        <EqBlock label="22">{String.raw`d = \Omega_+ - \Omega_- + \sigma_+ - \sigma_- - (\rho_+ - \rho_-)I + \cdots = (\nu_+ - \nu_-)\big|_{l=0}\;\propto\;\text{rotation rate }\Omega.`}</EqBlock>
+        <EqBlock label="22">{String.raw`d = \Omega_+ - \Omega_- + \sigma_+ - \sigma_- - (\rho_+ - \tau_{-+})E_+^2 - (\tau_{+-} - \rho_-)E_-^2 = (\nu_+ - \nu_-)\big|_{l=0}\;\propto\;\text{rotation rate }\Omega.`}</EqBlock>
         <EqBlock label="23">{String.raw`l = g_{+-}\left(\frac{E_-}{E_+} + \frac{E_+}{E_-}\right),`}</EqBlock>
         <p>
           where <Tex>{String.raw`d`}</Tex> is the beat frequency the two waves would have <em>without</em> backscatter
@@ -499,6 +503,15 @@ export default function Page() {
           Eqs.&nbsp;(19)–(20) — times the symmetric field-amplitude ratio{" "}
           <Tex>{String.raw`E_-/E_+ + E_+/E_-`}</Tex> that injects each wave into the other. It sets the half-width{" "}
           <Tex>{String.raw`|d|<l`}</Tex> of the locking dead band.
+        </p>
+        <p>
+          A subtlety in Eq.&nbsp;(22): the self-pushing coefficients vanish for this ring,{" "}
+          <Tex>{String.raw`\rho_+=\rho_-=0`}</Tex> (Table&nbsp;11-1), so the intensity-dependent part of{" "}
+          <Tex>{String.raw`d`}</Tex> is <em>purely cross-pushing</em>,{" "}
+          <Tex>{String.raw`+\tau_{-+}E_+^2 - \tau_{+-}E_-^2`}</Tex> — not a self-push. In symmetric near-central
+          operation (<Tex>{String.raw`E_+\approx E_-`}</Tex>, <Tex>{String.raw`\tau_{+-}\approx\tau_{-+}`}</Tex>) even
+          the cross-pushing cancels, so the headline result stands: <Tex>{String.raw`d`}</Tex> is the would-be beat
+          without backscatter, proportional to the rotation rate.
         </p>
 
         <Derivation title="Solve the Adler equation: locked vs. running">
