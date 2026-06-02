@@ -12,10 +12,14 @@ full collapsible derivations, every formula in KaTeX, and a live interactive
 simulation. Equations are transcribed by reading the scanned pages, then
 adversarially checked against the scans by a separate verification pass.
 
-> **Verification status.** Math-verified against the source scans: Ch II, III,
-> XIX, XX, XXI and Appendices A–I. Built and rendering cleanly but pending the
-> equation-fidelity pass: Ch I and Ch IV–XVIII (verification resumes as API
-> quota allows; fixes auto-redeploy).
+> **Verification status: complete.** Every one of the 21 chapters and 9
+> appendices has been adversarially checked against the original page scans
+> along two axes — LaTeX-vs-scan transcription fidelity and physical soundness
+> of the explanations/simulations — and repaired until no critical or major
+> issue remained. The verification pass caught and corrected hundreds of real
+> errors (fabricated equations, sign/factor mistakes, wrong prefactors,
+> mislabeled frequencies, and physics overstatements), with the densest
+> chapters (IX, XI) taking several repair rounds to converge.
 
 The goal: take a famously rigorous derivation-heavy book and teach it to people
 who are **new to laser physics but mathematically prepared**. Every lesson leads
