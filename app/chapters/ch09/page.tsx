@@ -95,11 +95,12 @@ export default function Page() {
         </Intuition>
 
         <p>
-          The off-diagonal (coherence) part of the polarization in the rotating-wave approximation, driven by the
-          multimode field, is the source term for the population equations (<Tex>{String.raw`\wp`}</Tex> is the dipole
-          matrix element):
+          The rotating-wave-approximation interaction energy <Tex>{String.raw`\mathscr{V}_{ab} = -\wp E(z,t)`}</Tex>{" "}
+          couples the field to the dipole and drives the density-matrix equations (<Tex>{String.raw`\wp`}</Tex> is the
+          dipole matrix element). Written out for the multimode field it is the source term that feeds the population
+          equations:
         </p>
-        <EqBlock label="2">{String.raw`\mathscr{P}_{ab}(z,t) = -\tfrac{1}{2}\wp\sum_n E_n(t)\,\exp[-i(\nu_n t + \phi_n(t))]\,U_n(z)`}</EqBlock>
+        <EqBlock label="2">{String.raw`\mathscr{V}_{ab}(z,t) = -\tfrac{1}{2}\wp\sum_n E_n(t)\,\exp[-i(\nu_n t + \phi_n(t))]\,U_n(z)`}</EqBlock>
 
         <p>The unperturbed (zeroth-order) populations and inversion, set by pump rates and decay rates:</p>
         <EqBlock label="3">{String.raw`\rho_{aa}^{(0)}(z,t) = \lambda_a \gamma_a^{-1}`}</EqBlock>
@@ -129,17 +130,20 @@ export default function Page() {
         />
 
         <p>
-          To second order in the field the population of level <Tex>{String.raw`a`}</Tex> is a constant DC-saturation
-          part plus a <em>pulsating</em> part that oscillates at the intermode beat frequencies:
+          The rate equation for the population of level <Tex>{String.raw`a`}</Tex> separates into a zeroth-order pump/decay
+          part and a second-order saturation part; the bracketed term carries the constant DC saturation plus the{" "}
+          <em>pulsating</em> contributions that oscillate at the intermode beat frequencies:
         </p>
-        <EqBlock label="7a">{String.raw`\rho_{aa}^{(2)} = \beta_{aa}^{(0)} + \beta_{aa}^{(2)} = \lambda_a \gamma_a^{-1} + \beta_{aa}^{(2)}`}</EqBlock>
+        <EqBlock label="7">{String.raw`\dot{\rho}_{aa} \simeq \dot{\rho}_{aa}^{(0)} + \dot{\rho}_{aa}^{(2)} = \lambda_a - \gamma_a\rho_{aa} - \left[\tfrac{1}{4}\left(\frac{\wp}{\hbar}\right)^2 N\sum_{\rho}\sum_{\sigma} E_\rho E_\sigma\,\exp\{i[(\nu_\rho - \nu_\sigma)t + \phi_\rho - \phi_\sigma]\}\,\mathscr{D}(\omega - \nu_\sigma)\,U_\rho^* U_\sigma + \text{c.c.}\right]`}</EqBlock>
         <p>
-          The pulsating part is the heart of multimode coupling — a double sum over modes{" "}
-          <Tex>{String.raw`\rho,\sigma`}</Tex>, in which the <Tex>{String.raw`\rho\neq\sigma`}</Tex> terms oscillate at
-          the beat frequency <Tex>{String.raw`\nu_\sigma - \nu_\rho`}</Tex>, weighted by the Lorentzian and the inverse
-          decay rate. This is the moving population grating:
+          Integrating gives the second-order population <Tex>{String.raw`\rho_{aa}^{(2)}`}</Tex> — the heart of multimode
+          coupling — a double sum over modes <Tex>{String.raw`\rho,\sigma`}</Tex>, in which the{" "}
+          <Tex>{String.raw`\rho\neq\sigma`}</Tex> terms oscillate at the beat frequency{" "}
+          <Tex>{String.raw`\nu_\sigma - \nu_\rho`}</Tex>, weighted by the population-pulsation Lorentzian{" "}
+          <Tex>{String.raw`\mathscr{D}_a(\nu_\rho - \nu_\sigma)`}</Tex> and the inverse decay rate. This is the moving
+          population grating:
         </p>
-        <EqBlock label="7">{String.raw`\beta_{aa}^{(2)} = -\tfrac{1}{4}\left(\frac{\wp}{\hbar}\right)^2 N\sum_{\rho}\sum_{\sigma} E_\rho E_\sigma\, U_\rho^* U_\sigma \,\exp\{i[(\nu_\rho - \nu_\sigma)t + \phi_\rho - \phi_\sigma]\}\,\mathscr{D}_a(\nu_\rho - \nu_\sigma)\,\mathscr{D}(\omega - \nu_\sigma) + \text{c.c.}`}</EqBlock>
+        <EqBlock label="7b">{String.raw`\rho_{aa}^{(2)} = -\tfrac{1}{4}\left(\frac{\wp}{\hbar}\right)^2 N\sum_{\rho}\sum_{\sigma} E_\rho E_\sigma\, U_\rho^* U_\sigma \,\exp\{i[(\nu_\rho - \nu_\sigma)t + \phi_\rho - \phi_\sigma]\}\,\mathscr{D}_a(\nu_\rho - \nu_\sigma)\,\mathscr{D}(\omega - \nu_\sigma) + \text{c.c.}`}</EqBlock>
 
         <p>
           The pulsating populations re-drive the dipole, giving the third-order coherence. Its anti-Hermitian symmetry
@@ -151,7 +155,7 @@ export default function Page() {
           The full third-order off-diagonal polarization is then a <em>triple</em> sum over modes; the bracketed factor
           collects the two Lorentzian denominators (one from the pulsation step, one from this re-driving step):
         </p>
-        <EqBlock label="10, 11">{String.raw`\rho_{ab}^{(3)} = -\tfrac{1}{8}\left(\frac{\wp}{\hbar}\right)^3 N\sum_{\rho}\sum_{\sigma}\sum_{n} E_\rho E_\sigma E_n\, U_\rho U_\sigma U_n \,\exp\{i[(\nu_\sigma - \nu_\rho + \nu_n)t + \phi_\sigma - \phi_\rho + \phi_n]\}\,\mathscr{D}(\omega - \nu_n)[\,\cdot\,]`}</EqBlock>
+        <EqBlock label="10, 11">{String.raw`\rho_{ab}^{(3)} = \tfrac{1}{8}\,i\left(\frac{\wp}{\hbar}\right)^3 N\sum_{\mu}\sum_{\rho}\sum_{\sigma} E_\mu E_\rho E_\sigma\, U_\mu U_\rho^* U_\sigma \,\exp\{-i[(\nu_\mu - \nu_\rho + \nu_\sigma)t + \phi_\mu - \phi_\rho + \phi_\sigma]\}\,\mathscr{D}(\omega - \nu_\mu + \nu_\rho - \nu_\sigma)[\,\cdot\,]`}</EqBlock>
 
         <p>
           Projecting the polarization onto mode <Tex>{String.raw`n`}</Tex> means a spatial overlap integral of four mode
@@ -390,11 +394,19 @@ export default function Page() {
             saddle and the single-mode solutions are stable (bistable). Summarized in Table&nbsp;9-2.
           </Step>
           <Step title="Interpret physically">
-            Connect <Tex>{String.raw`C`}</Tex> to spatial hole burning: standing-wave modes that burn the{" "}
-            <em>same</em> atoms (large overlap) have large <Tex>{String.raw`\theta`}</Tex> and strong coupling; modes
-            burning different atoms (different velocity groups in a Doppler line) have weak coupling and coexist. This is
-            why homogeneously broadened lasers tend to single-mode (<Tex>{String.raw`C\gtrsim1`}</Tex>) while
-            inhomogeneously broadened ones run multimode.
+            Connect <Tex>{String.raw`C`}</Tex> to spatial hole burning. In the standing-wave geometry analyzed here,
+            adjacent modes burn <em>different</em> spatial holes in the inversion, so they largely saturate different
+            atoms and the coupling is weak (<Tex>{String.raw`C \cong \left[\tfrac{2}{3}\left(1 + \tfrac{1}{2}\,N_2/\bar N\right)\right]^2 < 1`}</Tex>,
+            where <Tex>{String.raw`N_2`}</Tex> is the <Tex>{String.raw`M=2`}</Tex> spatial Fourier component of the
+            inversion from Eq.&nbsp;16, distinct from the spatial average <Tex>{String.raw`N_0 = \bar N`}</Tex>).
+            Homogeneously broadened standing-wave lasers therefore tend to run <strong>multimode</strong>, and forcing
+            single-mode operation requires removing the spatial holes (a unidirectional ring, the twisted-mode trick, or
+            an intracavity etalon). The naive &ldquo;homogeneous line → same atoms → strong coupling → single mode&rdquo;
+            rule holds only when all modes sample the <em>same</em> atoms (e.g. a unidirectional ring with no spatial
+            hole burning). Inhomogeneous (Doppler) broadening also gives weak coupling — different modes interact with
+            different velocity groups — so it likewise runs multimode. (Chapter&nbsp;X adds a wrinkle: in a predominantly
+            Doppler medium the atoms move through several wavelengths and wash out the spatial holes, which can restore
+            strong coupling — Fig.&nbsp;10-5.)
           </Step>
         </Derivation>
 
@@ -498,13 +510,13 @@ export default function Page() {
         </p>
         <KeyResult
           number="61"
-          eq={String.raw`\overline{\mathscr{Z}}_T = d\left(1 - \frac{|l|^2}{|d|^2}\right)^{1/2}`}
+          eq={String.raw`\overline{\Delta\nu} = d\left(1 - \frac{l^2}{d^2}\right)^{1/2}`}
           label="Average slipping frequency (unlocked)"
           note={
             <>
               Outside the locking range the relative phase advances at this average rate. As{" "}
               <Tex>{String.raw`|l|\to|d|`}</Tex> it tends to zero — the slip period{" "}
-              <Tex>{String.raw`2\pi/\mathscr{Z}_T`}</Tex> diverges at the locking threshold.
+              <Tex>{String.raw`2\pi/\overline{\Delta\nu}`}</Tex> diverges at the locking threshold.
             </>
           }
         />
@@ -534,7 +546,7 @@ export default function Page() {
           <Step title="Solve: locked vs. running">
             Fixed points exist when <Tex>{String.raw`|d/l| \le 1`}</Tex> (Eqs.&nbsp;62–63); the stable one satisfies
             Eq.&nbsp;(64). For <Tex>{String.raw`|d| > |l|`}</Tex>, <Tex>{String.raw`\Psi`}</Tex> runs, slipping at average
-            rate <Tex>{String.raw`\overline{\mathscr{Z}}_T = \sqrt{d^2 - l^2}`}</Tex> (Eq.&nbsp;61). The slip period
+            rate <Tex>{String.raw`\overline{\Delta\nu} = \sqrt{d^2 - l^2}`}</Tex> (Eq.&nbsp;61). The slip period
             diverges as <Tex>{String.raw`|d|\to|l|`}</Tex>.
           </Step>
         </Derivation>
@@ -547,8 +559,8 @@ export default function Page() {
         <Callout kind="note" title="Eq. (61): the slip-time integral">
           The average slipping frequency follows from{" "}
           <Tex>{String.raw`t = \int d\Psi/\dot\Psi = \int d\Psi/[d + l\sin(\Psi - \Psi_0)]`}</Tex> over one cycle — a
-          standard integral giving <Tex>{String.raw`2\pi/\mathscr{Z}_T`}</Tex> with{" "}
-          <Tex>{String.raw`\mathscr{Z}_T = \sqrt{d^2 - l^2}`}</Tex>. The divergent period near threshold is Lord
+          standard integral giving <Tex>{String.raw`2\pi/\overline{\Delta\nu}`}</Tex> with{" "}
+          <Tex>{String.raw`\overline{\Delta\nu} = \sqrt{d^2 - l^2}`}</Tex>. The divergent period near threshold is Lord
           Rayleigh&rsquo;s slipping clock (Prob.&nbsp;9-6).
         </Callout>
       </Section>
@@ -771,18 +783,18 @@ export default function Page() {
           The AM part in mode-sum form; the <Tex>{String.raw`\cos(\nu_M t)`}</Tex> factor generates sidebands at{" "}
           <Tex>{String.raw`\nu_n \pm \nu_M`}</Tex> which land on neighboring modes and lock them:
         </p>
-        <EqBlock label="85">{String.raw`\Delta P(z,t) = \varepsilon_0\cos(\nu_M t)\,\chi'(z)\,\tfrac{1}{2}\sum_n E_n\exp[-i(\nu_n t + \phi_n)]\,U_n(z) + \text{c.c.}`}</EqBlock>
+        <EqBlock label="85">{String.raw`\Delta P(z,t) = \tfrac{1}{2}\varepsilon_0\big\{[\Delta\chi'(z) + i\,\Delta\chi''(z)]\cos(\nu_M t) + i\,\Delta\chi''(z)\big\}\sum_n E_n\exp[-i(\nu_n t + \phi_n)]\,U_n(z) + \text{c.c.}`}</EqBlock>
         <p>Projected onto mode <Tex>{String.raw`n`}</Tex>, a self term plus coupling to neighbors <Tex>{String.raw`n\pm1`}</Tex>:</p>
         <EqBlock label="88">{String.raw`\Delta\mathscr{P}_n(t) = i\varepsilon_0\,\overline{\Delta\chi'}\,E_n + \tfrac{1}{2}\varepsilon_0\,\overline{\Delta\chi_1}\big\{E_{n+1}\exp[-i((\nu_{n+1}-\nu_n-\nu_M)t+\phi_{n+1}-\phi_n)] + E_{n-1}\exp[i((\nu_n-\nu_M-\nu_{n-1})t+\phi_n-\phi_{n-1})]\big\}`}</EqBlock>
         <p>through the spatially averaged modulation susceptibilities (the modulator&rsquo;s overlap with the modes):</p>
-        <EqBlock label="89, 90">{String.raw`\overline{\Delta\chi'} = \frac{1}{L}\int_0^L dz\,\Delta\chi'(z), \qquad \overline{\Delta\chi_+'} = \frac{1}{L}\int_0^L dz\,\Delta\chi'(z)\cos(\pi z/L)`}</EqBlock>
+        <EqBlock label="89">{String.raw`\overline{\Delta\chi} = \frac{1}{L}\int_0^L dz\,\Delta\chi(z), \qquad \overline{\Delta\chi_1} = \frac{1}{L}\int_0^L dz\,\Delta\chi(z)\cos(\pi z/L)`}</EqBlock>
 
-        <p>The amplitude equation with the modulator coupling to nearest neighbors — the exponent vanishes when the modes are equally spaced at <Tex>{String.raw`\nu_M`}</Tex>, locking them:</p>
-        <EqBlock label="91">{String.raw`\dot{E}_n = \alpha_n E_n + \tfrac{1}{2}\nu_M\,\overline{\Delta\chi}\,[E_{n+1}\exp[-i(\nu_{n+1} - \nu_n - \nu_M)t + i(\phi_{n+1} - \phi_n)] + E_{n-1}\exp[\ldots]]`}</EqBlock>
+        <p>In the locked, equally spaced state the exponents collapse to pure phase differences, and the polarization driving mode <Tex>{String.raw`n`}</Tex> becomes a self term plus nearest-neighbor coupling:</p>
+        <EqBlock label="91">{String.raw`\Delta\mathscr{P}_n(t) = i\varepsilon_0\,\overline{\Delta\chi''}\,E_n + \tfrac{1}{2}\varepsilon_0\,\overline{\Delta\chi_1}\big\{E_{n+1}\exp[-i(\phi_{n+1} - \phi_n)] + E_{n-1}\exp[i(\phi_n - \phi_{n-1})]\big\}`}</EqBlock>
         <p>In the locked, equally spaced state this becomes a compact nearest-neighbor coupling weighted by sines of the phase differences:</p>
         <EqBlock label="97">{String.raw`\dot{E}_n = 0 = E_{n+1}\sin(\phi_{n+1} - \phi_n) - E_{n-1}\sin(\phi_n - \phi_{n-1})`}</EqBlock>
         <p>The phase equations close the recurrence (the locked phases are independent of <Tex>{String.raw`n`}</Tex>):</p>
-        <EqBlock label="98, 99">{String.raw`\phi_{n+1} = \phi_n, \qquad [\dot{\phi}_n - (n - q)\Delta\nu]E_n = -\tfrac{1}{2}\,\nu\,\overline{\Delta\chi_1}'\,[E_{n+1} + E_{n-1}]\cos(\phi_n - \phi_{n-1})`}</EqBlock>
+        <EqBlock label="98, 99">{String.raw`\phi_{n+1} = \phi_n, \qquad [\dot{\phi}_n - (n - q)\Delta\nu]E_n = -\tfrac{1}{2}\,\nu\,\overline{\Delta\chi_1}'\,[E_{n+1}\cos(\phi_{n+1} - \phi_n) + E_{n-1}\cos(\phi_n - \phi_{n-1})]`}</EqBlock>
         <p>which reduces, in the steady FM state, to a three-term recurrence among neighboring amplitudes:</p>
         <EqBlock label="100">{String.raw`[\dot{\phi} - (n - q)\Delta\nu]\,E_n = -\tfrac{1}{2}\,\nu\,\overline{\Delta\chi_1}'\,(E_{n+1} + E_{n-1})`}</EqBlock>
         <p>This has exactly the form of the Bessel-function recurrence relation:</p>
@@ -893,8 +905,12 @@ export default function Page() {
             <li>
               <strong>The coupling constant</strong> <Tex>{String.raw`C = \theta_{12}\theta_{21}/(\beta_1\beta_2)`}</Tex>{" "}
               decides multimode fate: <Tex>{String.raw`C<1`}</Tex> coexistence, <Tex>{String.raw`C>1`}</Tex> bistable
-              winner-take-all. Homogeneous broadening tends to strong coupling (single-mode); inhomogeneous (Doppler)
-              broadening tends to weak coupling (multimode) — this explains real laser mode spectra.
+              winner-take-all. In the standing-wave geometry, adjacent modes burn different spatial holes, so a
+              homogeneously broadened standing-wave laser has weak coupling (<Tex>{String.raw`C<1`}</Tex>) and tends to
+              run multimode — single-mode operation requires killing the spatial holes (unidirectional ring,
+              twisted-mode, or etalon). Inhomogeneous (Doppler) broadening likewise gives weak coupling (different
+              velocity groups) and multimode output. The naive &ldquo;homogeneous → same atoms → strong coupling → single
+              mode&rdquo; rule holds only when all modes sample the same atoms.
             </li>
             <li>
               <strong>The competition equations</strong>{" "}

@@ -243,17 +243,17 @@ export default function Page() {
           The polarization is the dipole moment <Tex>{String.raw`\wp(\rho_{ab}+\rho_{ba})`}</Tex> summed over every atom
           ever created, with creation rate <Tex>{String.raw`\lambda(z,t_0)`}</Tex>:
         </p>
-        <EqBlock label="20">{String.raw`P(z,t)=\sum_{a,b}\int_{-\infty}^{t} dt_0\,\lambda(z,t_0)\,\wp\,\langle r\rangle=\wp\sum_{a,b}\int_{-\infty}^{t} dt_0\,\lambda(z,t_0)\big[\rho_{ab}(a,z,t_0,t)+\text{c.c.}\big]`}</EqBlock>
+        <EqBlock label="20">{String.raw`P(z,t)=\sum_{a}\int_{-\infty}^{t} dt_0\,\lambda_a(z,t_0)\,\wp\,\langle r\rangle=\wp\sum_{a}\int_{-\infty}^{t} dt_0\,\lambda_a(z,t_0)\big[\rho_{ab}(a,z,t_0,t)+\text{c.c.}\big]`}</EqBlock>
         <p>Projecting onto mode <Tex>{String.raw`n`}</Tex> (multiply by <Tex>{String.raw`U_n^*`}</Tex>, integrate):</p>
-        <EqBlock label="21">{String.raw`\mathscr{P}_n(t)=2\wp\,e^{i(\nu_n t+\phi_n)}\dfrac{1}{\mathcal{N}_n}\int_0^{L} dz\,U_n^*(z)\sum_{a,b}\int_{-\infty}^{t} dt_0\,\lambda(z,t_0)\,\rho_{ab}(a,z,t_0,t)`}</EqBlock>
+        <EqBlock label="21">{String.raw`\mathscr{P}_n(t)=2\wp\,e^{i(\nu_n t+\phi_n)}\dfrac{1}{\mathcal{N}_n}\int_0^{L} dz\,U_n^*(z)\sum_{a}\int_{-\infty}^{t} dt_0\,\lambda_a(z,t_0)\,\rho_{ab}(a,z,t_0,t)`}</EqBlock>
         <EqBlock label="22">{String.raw`\mathcal{N}_n=\int_0^{L} dz\,|U_n(z)|^2\;\;\Big(=\tfrac{L}{2}\text{ for sine modes}\Big)`}</EqBlock>
 
         <Derivation title="From the Liouville equation to three coupled equations" defaultOpen={false}>
           <Step title="Sum single-atom matrices into a population matrix">
             Collect all atoms regardless of creation time into one coarse-grained matrix,
-            <EqBlock label="23">{String.raw`\rho(a,z,t)=\sum_{a,b}\int_{-\infty}^{t} dt_0\,\lambda(z,t_0)\,\rho(a,z,t_0,t)`}</EqBlock>
+            <EqBlock label="23">{String.raw`\rho(z,t)=\sum_{a}\int_{-\infty}^{t} dt_0\,\lambda_a(z,t_0)\,\rho(a,z,t_0,t)`}</EqBlock>
             whose time derivative has a boundary (pump source) term plus a coherent-evolution term:
-            <EqBlock label="24">{String.raw`\dfrac{d\rho(z,t)}{dt}=\sum_{a,b}\lambda(z,t_0)\,\rho(a,z,t,t)+\sum_{a,b}\int_{-\infty}^{t} dt_0\,\lambda(z,t_0)\dfrac{\partial}{\partial t}\rho(a,z,t_0,t)`}</EqBlock>
+            <EqBlock label="24">{String.raw`\dfrac{d\rho(z,t)}{dt}=\sum_{a}\lambda_a(z,t)\,\rho(a,z,t,t)+\sum_{a}\int_{-\infty}^{t} dt_0\,\lambda_a(z,t_0)\dfrac{\partial}{\partial t}\rho(a,z,t_0,t)`}</EqBlock>
           </Step>
           <Step title="The pump source term">
             A freshly created atom enters with population, no coherence:
@@ -358,7 +358,7 @@ export default function Page() {
             <EqBlock label="46">{String.raw`\mathscr{P}_n(t)\simeq-\wp^2\hbar^{-1}E_n\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2\big[1+\tfrac{3}{2}(\gamma_{ab}/\gamma)I_n\big]}`}</EqBlock>
             <EqBlock label="47">{String.raw`\mathscr{P}_n(t)=-\wp^2\hbar^{-1}\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2}\,f(w)\,E_n`}</EqBlock>
             <EqBlock label="48">{String.raw`w=2\dfrac{\gamma_{ab}}{\gamma}\,I_n\,\mathscr{L}(\omega-\nu_n)`}</EqBlock>
-            <EqBlock label="49">{String.raw`f(w)=\dfrac{2}{w}\big[1-(1+w)^{-1/2}\big]\;\xrightarrow{w\ll1}\;1-\tfrac{1}{2}w`}</EqBlock>
+            <EqBlock label="49">{String.raw`f(w)=\dfrac{2}{w}\big[1-(1+w)^{-1/2}\big]\;\xrightarrow{w\ll1}\;1-\tfrac{3}{4}w`}</EqBlock>
           </Step>
         </Derivation>
 
