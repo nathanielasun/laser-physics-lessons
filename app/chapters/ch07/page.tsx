@@ -82,7 +82,7 @@ export default function Page() {
         <EqBlock label="10">{String.raw`\dot\rho_{bb} = +\tfrac{i}{\hbar}\,\mathcal{V}_{ab}\,\rho_{ba} + \text{c.c.}`}</EqBlock>
         <KeyResult
           number="11"
-          eq={String.raw`\dot\rho_{ab} = -i\omega_{ab}\,\rho_{ab} - \tfrac{i}{\hbar}\,\mathcal{V}_{ab}\,(\rho_{aa} - \rho_{bb}), \qquad \omega_{ab} \equiv \omega_a - \omega_b`}
+          eq={String.raw`\dot\rho_{ab} = -i\omega_{ab}\,\rho_{ab} + \tfrac{i}{\hbar}\,\mathcal{V}_{ab}\,(\rho_{aa} - \rho_{bb}), \qquad \omega_{ab} \equiv \omega_a - \omega_b`}
           label="The coherence (dipole) equation of motion"
           note={
             <>
@@ -199,7 +199,7 @@ export default function Page() {
           For a thermal mixture the surviving diagonal is the Boltzmann distribution: the density operator is diagonal in
           the energy basis with <Tex>{String.raw`\exp(-E_n/k_B T)`}</Tex> weights.
         </p>
-        <EqBlock label="25">{String.raw`P_a = P_{aa} = \exp(-\hbar\omega_a/k_B T)\big[1 - \exp(-\hbar\omega/k_B T)\big]`}</EqBlock>
+        <EqBlock label="25">{String.raw`P_\psi = P_n = \exp(-n\hbar\omega/k_B T)\big[1 - \exp(-\hbar\omega/k_B T)\big]`}</EqBlock>
         <EqBlock label="26">{String.raw`\rho = \big[1 - \exp(-\hbar\omega/k_B T)\big]\sum_{n}\exp(-n\hbar\omega/k_B T)\,\ket{n}\bra{n}`}</EqBlock>
         <p>
           The master formula is unchanged, but it is now a <em>double</em> average — quantum (over{" "}
@@ -465,8 +465,8 @@ export default function Page() {
         </p>
         <EqBlock label="54">{String.raw`\rho_{aa} - \rho_{bb} = \rho_{aa}^{(0)} - \rho_{bb}^{(0)} = -1`}</EqBlock>
         <KeyResult
-          number="55–56"
-          eq={String.raw`\rho_{ab}^{(1)}(t) = \tfrac{1}{2}\Big(\frac{\wp E_0}{\hbar}\Big)\frac{\sin[\tfrac{1}{2}(\omega-\nu)t]}{\tfrac{1}{2}(\omega-\nu)}\,\exp\!\Big[-i\tfrac{\omega+\nu}{2}\,t\Big]`}
+          number="55"
+          eq={String.raw`\rho_{ab}^{(1)}(t) = \frac{i}{2}\Big(\frac{\wp E_0}{\hbar}\Big)\frac{\sin[\tfrac{1}{2}(\omega-\nu)t]}{\tfrac{1}{2}(\omega-\nu)}\,\exp\!\Big[-i\tfrac{\omega+\nu}{2}\,t\Big]`}
           label="First-order induced coherence (the resonance lineshape)"
           note={
             <>
@@ -483,12 +483,15 @@ export default function Page() {
         </p>
         <EqBlock label="57">{String.raw`\rho_{aa}(t) = 1 - \rho_{bb}(t)`}</EqBlock>
         <EqBlock label="58">{String.raw`\rho_{aa} = \rho_{aa}^{(0)} + \rho_{aa}^{(2)}(t) + \rho_{aa}^{(4)}(t) + \cdots`}</EqBlock>
-        <EqBlock label="59">{String.raw`\rho_{bb}(t) = \rho_{bb}^{(0)}(t) + \rho_{bb}^{(2)}(t) + \cdots`}</EqBlock>
+        <EqBlock label="59">{String.raw`\rho_{ab}(t) = \rho_{ab}^{(1)}(t) + \rho_{ab}^{(3)}(t) + \cdots`}</EqBlock>
         <p>
-          Higher-order populations are built iteratively, feeding the lower-order coherence back through the field. The
-          book writes these compactly; the structure is an iterative integral:
+          Higher-order terms are built iteratively, each order feeding the next back through the field. The coherence at
+          order <Tex>{String.raw`2n+1`}</Tex> is driven by the inversion at order <Tex>{String.raw`2n`}</Tex> (Eq.&nbsp;60),
+          and the population at order <Tex>{String.raw`2n`}</Tex> is driven by the coherence at order{" "}
+          <Tex>{String.raw`2n-1`}</Tex> (Eq.&nbsp;61):
         </p>
-        <EqBlock label="60–61">{String.raw`\rho_{aa}^{(0+n)}(t) = -\tfrac{i}{2\hbar}\wp E_0\!\int_0^t\! dt'\,\exp[-i(\omega-\nu)(t-t')]\,\big[\rho_{ab}^{(n)}(t')\big]^{*} \;+\; \text{c.c. structure}`}</EqBlock>
+        <EqBlock label="60">{String.raw`\rho_{ab}^{(2n+1)}(t) = -\tfrac{i}{2\hbar}\wp E_0\,e^{-i\nu t}\!\int_0^t\! dt'\,e^{-i(\omega-\nu)(t-t')}\big[\rho_{aa}^{(2n)}(t') - \rho_{bb}^{(2n)}(t')\big]`}</EqBlock>
+        <EqBlock label="61">{String.raw`\rho_{aa}^{(2n)}(t) = \tfrac{i}{2\hbar}\wp E_0\!\int_0^t\! dt'\,\big[e^{-i\nu t'}\rho_{ba}^{(2n-1)}(t') + \text{c.c.}\big]`}</EqBlock>
         <p>
           Finally, pass to the slowly varying frame by factoring out the optical carrier{" "}
           <Tex>{String.raw`e^{-i\nu t}`}</Tex> — the natural variable for the vector model in&nbsp;7-5 and for the laser
@@ -542,7 +545,7 @@ export default function Page() {
           <Tex>{String.raw`\mathbf{R}=(R_1,R_2,R_3)`}</Tex> — the Bloch (pseudospin) vector. The transverse components{" "}
           <Tex>{String.raw`R_1,R_2`}</Tex> are the in-phase and quadrature parts of the slowly varying dipole;{" "}
           <Tex>{String.raw`R_3`}</Tex> is the population inversion. Astonishingly, the messy complex equations collapse
-          into one geometric statement: <Tex>{String.raw`\dot{\mathbf{R}}=\boldsymbol{\beta}\times\mathbf{R}`}</Tex>{" "}
+          into one geometric statement: <Tex>{String.raw`\dot{\mathbf{R}}=\mathbf{R}\times\boldsymbol{\beta}`}</Tex>{" "}
           minus relaxation — the vector <em>precesses about an effective field</em>{" "}
           <Tex>{String.raw`\boldsymbol{\beta}`}</Tex> exactly as a magnetic moment precesses in a real field. The
           detuning tips <Tex>{String.raw`\boldsymbol{\beta}`}</Tex> along the inversion axis; the Rabi drive tips it into
@@ -579,12 +582,12 @@ export default function Page() {
         </p>
         <EqBlock label="72">{String.raw`\dot R_1 = -(\omega-\nu)R_2 - \gamma R_1`}</EqBlock>
         <EqBlock label="73">{String.raw`\dot R_2 = +(\omega-\nu)R_1 - \gamma R_2 + \frac{\wp E_0}{\hbar}R_3`}</EqBlock>
-        <EqBlock label="74">{String.raw`\gamma_{ab} = \gamma = \frac{1}{T_2}`}</EqBlock>
-        <EqBlock label="75">{String.raw`\dot R_3 = -\frac{R_3}{T_1} + \Big[\tfrac{i}{\hbar}\wp E_0\,\rho_{ab}\exp(-i\nu t) + \text{c.c.}\Big] = -\frac{R_3}{T_1} - \frac{\wp E_0}{\hbar}R_2`}</EqBlock>
+        <EqBlock label="74">{String.raw`\gamma_a = \gamma_b = \frac{1}{T_1}, \qquad \gamma = \frac{1}{T_2}`}</EqBlock>
+        <EqBlock label="75">{String.raw`\dot R_3 = -\frac{R_3}{T_1} + \Big[\tfrac{i}{\hbar}\wp E_0\,\rho_{ba}\exp(-i\nu t) + \text{c.c.}\Big] = -\frac{R_3}{T_1} - \frac{\wp E_0}{\hbar}R_2`}</EqBlock>
         <p>The rotation terms are exactly the components of a cross product. The whole system becomes one torque equation:</p>
         <KeyResult
           number="76–77"
-          eq={String.raw`\dot{\mathbf{R}} = \boldsymbol{\beta}\times\mathbf{R} - \gamma\mathbf{R}_{\perp} - \frac{R_3}{T_1}\hat{e}_3, \qquad \boldsymbol{\beta} = \frac{\wp E_0}{\hbar}\,\hat{e}_1 - (\omega-\nu)\,\hat{e}_3`}
+          eq={String.raw`\dot{\mathbf{R}} = \mathbf{R}\times\boldsymbol{\beta} - \gamma\mathbf{R}_{\perp} - \frac{R_3}{T_1}\hat{e}_3, \qquad \boldsymbol{\beta} = \frac{\wp E_0}{\hbar}\,\hat{e}_1 - (\omega-\nu)\,\hat{e}_3`}
           label="The Bloch vector equation of motion"
           note={
             <>
@@ -596,14 +599,16 @@ export default function Page() {
           }
         />
         <p>
-          To make <Tex>{String.raw`\boldsymbol{\beta}`}</Tex> time-independent, transform to the rotating frame with the
-          merry-go-round transformation; the effective field becomes a fixed vector{" "}
-          <Tex>{String.raw`\mathbf{b}`}</Tex> about which <Tex>{String.raw`\mathbf{R}`}</Tex> simply precesses at the
-          generalized Rabi frequency <Tex>{String.raw`|\mathbf{b}|=\sqrt{(\wp E_0/\hbar)^2+(\omega-\nu)^2}`}</Tex>:
+          The effective field of Eq.&nbsp;(77), <Tex>{String.raw`\boldsymbol{\beta}=(\wp E_0/\hbar)\hat{e}_1-(\omega-\nu)\hat{e}_3`}</Tex>,
+          is already time-independent in the rotating frame, and <Tex>{String.raw`\mathbf{R}`}</Tex> precesses about it at the
+          generalized Rabi frequency <Tex>{String.raw`|\boldsymbol{\beta}|=\sqrt{(\wp E_0/\hbar)^2+(\omega-\nu)^2}`}</Tex>. The
+          merry-go-round transformation makes this explicit: passing from the body (rotating) frame back to the space (lab)
+          frame restores the full optical (transition) frequency, so the lab-frame field <Tex>{String.raw`\mathbf{b}`}</Tex> carries{" "}
+          <Tex>{String.raw`-\omega\,\hat{e}_3`}</Tex>:
         </p>
-        <EqBlock label="78">{String.raw`\hat{r} = \Big(\frac{d\mathbf{R}}{dt}\Big)_{\text{rot}} = \Big(\frac{d\mathbf{R}}{dt}\Big)_{\text{lab}} + \boldsymbol{\nu}\times\mathbf{R}`}</EqBlock>
-        <EqBlock label="79">{String.raw`\dot{\hat{r}} = -\frac{\hat{r}}{T_1} + (\mathbf{r}\times\mathbf{b})`}</EqBlock>
-        <EqBlock label="80">{String.raw`\mathbf{b} = \frac{\wp E_0}{\hbar}\,\hat{e}_1 - (\omega-\nu)\,\hat{e}_3`}</EqBlock>
+        <EqBlock label="78">{String.raw`\dot{\mathbf{r}} = \Big(\frac{d\mathbf{R}}{dt}\Big)_{\text{space}} = \Big(\frac{d\mathbf{R}}{dt}\Big)_{\text{body}} + \nu\,\hat{e}_3\times\mathbf{R}`}</EqBlock>
+        <EqBlock label="79">{String.raw`\dot{\mathbf{r}} = -\frac{\mathbf{r}}{T_1} + (\mathbf{r}\times\mathbf{b})`}</EqBlock>
+        <EqBlock label="80">{String.raw`\mathbf{b} = \frac{\wp E_0}{\hbar}\,\hat{e}_1 - \omega\,\hat{e}_3`}</EqBlock>
 
         <p>
           The simulation below integrates exactly these equations — Eqs.&nbsp;(72)–(75) in the rotating frame. The map{" "}
@@ -629,8 +634,8 @@ export default function Page() {
               <Tex>{String.raw`-1`}</Tex> to <Tex>{String.raw`+1`}</Tex> and back as{" "}
               <Tex>{String.raw`-\cos(\Omega t)`}</Tex> — pure Rabi flopping, a great circle on the sphere. Now detune:{" "}
               <Tex>{String.raw`\boldsymbol{\beta}`}</Tex> tilts toward <Tex>{String.raw`\hat{e}_3`}</Tex>,{" "}
-              <Tex>{String.raw`\mathbf{R}`}</Tex> precesses on a cone and never reaches the north pole (max inversion{" "}
-              <Tex>{String.raw`\Omega^2/|\beta|^2`}</Tex>). Finally uncheck the drive: with{" "}
+              <Tex>{String.raw`\mathbf{R}`}</Tex> precesses on a cone and never reaches the north pole (the upper-state
+              population peaks at <Tex>{String.raw`\rho_{aa}=\Omega^2/|\beta|^2`}</Tex>). Finally uncheck the drive: with{" "}
               <Tex>{String.raw`\Omega=0`}</Tex> the transverse part shrinks at <Tex>{String.raw`1/T_2`}</Tex> (free
               induction decay) while <Tex>{String.raw`R_3`}</Tex> relaxes to <Tex>{String.raw`R_3^{\mathrm{eq}}`}</Tex>{" "}
               at <Tex>{String.raw`1/T_1`}</Tex>.
@@ -658,17 +663,20 @@ export default function Page() {
           </Step>
           <Step title="Recognize the cross-product structure">
             The rotation terms are exactly the components of{" "}
-            <Tex>{String.raw`\boldsymbol{\beta}\times\mathbf{R}`}</Tex> with{" "}
+            <Tex>{String.raw`\mathbf{R}\times\boldsymbol{\beta}`}</Tex> with{" "}
             <Tex>{String.raw`\boldsymbol{\beta}=(\wp E_0/\hbar)\hat{e}_1-(\omega-\nu)\hat{e}_3`}</Tex>. Hence{" "}
-            <Tex>{String.raw`\dot{\mathbf{R}}=\boldsymbol{\beta}\times\mathbf{R}`}</Tex> minus damping (Eqs.&nbsp;76–77)
+            <Tex>{String.raw`\dot{\mathbf{R}}=\mathbf{R}\times\boldsymbol{\beta}`}</Tex> minus damping (Eqs.&nbsp;76–77)
             — a precessing, damped torque equation identical to a magnetic moment in field{" "}
             <Tex>{String.raw`\boldsymbol{\beta}`}</Tex>.
           </Step>
           <Step title="Transform to the rotating frame">
-            Apply the merry-go-round transformation (Eq.&nbsp;78) to remove the optical carrier; the effective field{" "}
-            <Tex>{String.raw`\mathbf{b}`}</Tex> becomes time-independent (Eqs.&nbsp;79–80). There{" "}
-            <Tex>{String.raw`\mathbf{R}`}</Tex> precesses about a fixed <Tex>{String.raw`\mathbf{b}`}</Tex> at the
-            generalized Rabi frequency <Tex>{String.raw`|\mathbf{b}|=\sqrt{(\wp E_0/\hbar)^2+(\omega-\nu)^2}`}</Tex>.
+            In the rotating frame the effective field is the time-independent{" "}
+            <Tex>{String.raw`\boldsymbol{\beta}=(\wp E_0/\hbar)\hat{e}_1-(\omega-\nu)\hat{e}_3`}</Tex> (Eq.&nbsp;77), about
+            which <Tex>{String.raw`\mathbf{R}`}</Tex> precesses at the generalized Rabi frequency{" "}
+            <Tex>{String.raw`|\boldsymbol{\beta}|=\sqrt{(\wp E_0/\hbar)^2+(\omega-\nu)^2}`}</Tex>. The merry-go-round
+            transformation (Eq.&nbsp;78) relates this to the space (lab) frame, where the field{" "}
+            <Tex>{String.raw`\mathbf{b}`}</Tex> carries the full detuning <Tex>{String.raw`-\omega\,\hat{e}_3`}</Tex>{" "}
+            (Eqs.&nbsp;79–80).
           </Step>
           <Step title="Read the geometry">
             On resonance <Tex>{String.raw`\mathbf{b}`}</Tex> lies along <Tex>{String.raw`\hat{e}_1`}</Tex>;{" "}
@@ -715,7 +723,7 @@ export default function Page() {
           }
         />
         <KeyResult
-          eq={String.raw`\dot{\mathbf{R}} = \boldsymbol{\beta}\times\mathbf{R} - \gamma\mathbf{R}_{\perp} - \frac{R_3}{T_1}\hat{e}_3, \qquad \boldsymbol{\beta} = \frac{\wp E_0}{\hbar}\,\hat{e}_1 - (\omega-\nu)\,\hat{e}_3`}
+          eq={String.raw`\dot{\mathbf{R}} = \mathbf{R}\times\boldsymbol{\beta} - \gamma\mathbf{R}_{\perp} - \frac{R_3}{T_1}\hat{e}_3, \qquad \boldsymbol{\beta} = \frac{\wp E_0}{\hbar}\,\hat{e}_1 - (\omega-\nu)\,\hat{e}_3`}
           label="Bloch vector equation of motion"
           note={
             <>
@@ -778,7 +786,7 @@ export default function Page() {
             </li>
             <li>
               <strong>The Bloch-vector picture.</strong>{" "}
-              <Tex>{String.raw`\dot{\mathbf{R}}=\boldsymbol{\beta}\times\mathbf{R}`}</Tex> minus relaxation — the optical
+              <Tex>{String.raw`\dot{\mathbf{R}}=\mathbf{R}\times\boldsymbol{\beta}`}</Tex> minus relaxation — the optical
               analog of a spin in a magnetic field, and the geometric language for Rabi flopping, free induction decay,
               photon echoes, and pulse propagation later.
             </li>

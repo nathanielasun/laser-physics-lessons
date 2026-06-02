@@ -264,13 +264,13 @@ export default function Page() {
             <Tex>{String.raw`\mathscr H=\mathscr H_\text{atom}+\mathscr V`}</Tex>, <Tex>{String.raw`\mathscr V=-\wp E`}</Tex>.
             The off-diagonal gives the coherence, the diagonals the populations:
             <EqBlock label="26">{String.raw`\dot\rho_{ab}=-(i\omega+\gamma)\rho_{ab}+\tfrac{i}{\hbar}\mathscr{V}_{ab}(z)(\rho_{aa}-\rho_{bb})`}</EqBlock>
-            <EqBlock label="27">{String.raw`\dot\rho_{aa}=\lambda_a-\gamma_a\rho_{aa}+\tfrac{i}{\hbar}\big[\mathscr{V}_{ab}\rho_{ba}-\text{c.c.}\big]`}</EqBlock>
-            <EqBlock label="28">{String.raw`\dot\rho_{bb}=\lambda_b-\gamma_b\rho_{bb}+\tfrac{i}{\hbar}\big[\mathscr{V}_{ba}\rho_{ab}-\text{c.c.}\big]`}</EqBlock>
+            <EqBlock label="27">{String.raw`\dot\rho_{aa}=\lambda_a-\gamma_a\rho_{aa}-\tfrac{i}{\hbar}\big(\mathscr{V}_{ab}\rho_{ba}+\text{c.c.}\big)`}</EqBlock>
+            <EqBlock label="28">{String.raw`\dot\rho_{bb}=\lambda_b-\gamma_b\rho_{bb}+\tfrac{i}{\hbar}\big(\mathscr{V}_{ab}\rho_{ba}+\text{c.c.}\big)`}</EqBlock>
             with dipole-decay rate <Tex>{String.raw`\gamma=\tfrac{1}{2}(\gamma_a+\gamma_b)`}</Tex>.
           </Step>
           <Step title="Rotating-wave interaction and formal solution">
             Keep only the near-resonant piece of the interaction,
-            <EqBlock label="29, 31">{String.raw`\mathscr{V}_{ab}=-\wp E_n\sin(K_n z)\cos(\nu_n t+\phi_n)`}</EqBlock>
+            <EqBlock label="31">{String.raw`\mathscr{V}_{ab}=-\tfrac{1}{2}\wp E_n(t)\exp[-i(\nu_n t+\phi_n)]\,U_n(z)`}</EqBlock>
             and integrate (26) formally into a damped, oscillating memory integral:
             <EqBlock label="30">{String.raw`\rho_{ab}(z,t)=\tfrac{i}{\hbar}\int_{-\infty}^{t} dt'\,e^{-(i\omega+\gamma)(t-t')}\,\mathscr{V}_{ab}(z,t')\big[\rho_{aa}(z,t')-\rho_{bb}(z,t')\big]`}</EqBlock>
           </Step>
@@ -313,7 +313,7 @@ export default function Page() {
         </Intuition>
 
         <p>Insert the rotating-wave field into the memory integral (30) and adiabatically eliminate the coherence:</p>
-        <EqBlock label="32">{String.raw`\rho_{ab}(z,t)=-\tfrac{1}{2}i\wp\hbar^{-1}E_n\sum_n e^{-i(\nu_n t+\phi_n)}U_n(z)\int_{-\infty}^{t} dt'\,U_n^*\,e^{-(i\omega+\gamma)(t-t')}\,(\rho_{aa}-\rho_{bb})`}</EqBlock>
+        <EqBlock label="32">{String.raw`\rho_{ab}(z,t)=-\tfrac{1}{2}i\wp\hbar^{-1}E_n\exp[-i(\nu_n t+\phi_n)]U_n(z)\dfrac{\rho_{aa}-\rho_{bb}}{i(\omega-\nu_n)+\gamma}`}</EqBlock>
         <p>
           The populations then obey rate equations with a single stimulated rate{" "}
           <Tex>{String.raw`R`}</Tex>:
@@ -328,7 +328,7 @@ export default function Page() {
             Set <Tex>{String.raw`\dot\rho_{aa}=\dot\rho_{bb}=0`}</Tex> in (33),(34) and subtract. The inversion is the
             unsaturated value divided by <Tex>{String.raw`1+R/R_s`}</Tex>:
             <EqBlock label="37">{String.raw`\rho_{aa}-\rho_{bb}=\dfrac{N(z)}{1+R/R_s}`}</EqBlock>
-            <EqBlock label="38">{String.raw`R_s=\dfrac{2\gamma_a\gamma_b}{\gamma_a+\gamma_b}`}</EqBlock>
+            <EqBlock label="38">{String.raw`R_s=\dfrac{\gamma_a\gamma_b}{\gamma_a+\gamma_b}=\dfrac{\gamma_a\gamma_b}{2\gamma_{ab}}=\tfrac{1}{2}T_1`}</EqBlock>
             <EqBlock label="39">{String.raw`N(z)=\dfrac{\lambda_a}{\gamma_a}-\dfrac{\lambda_b}{\gamma_b}`}</EqBlock>
           </Step>
           <Step title="Spatial hole burning">
@@ -340,7 +340,7 @@ export default function Page() {
             Insert the saturated inversion (37) into the polarization sum. The numerator{" "}
             <Tex>{String.raw`(\omega-\nu_n)+i\gamma`}</Tex> splits into a real (dispersive) and imaginary (absorptive)
             part; the denominator carries the saturation:
-            <EqBlock label="40">{String.raw`\mathscr{P}_n(t)=-\wp^2\hbar^{-1}E_n\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2}\int_0^{L} dz\,\dfrac{|U_n(z)|^2\,N(z)}{1+R/R_s}`}</EqBlock>
+            <EqBlock label="40">{String.raw`\mathscr{P}_n(t)=-\wp^2\hbar^{-1}E_n\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2}\dfrac{1}{\mathcal{N}_n}\int_0^{L} dz\,\dfrac{|U_n(z)|^2\,N(z)}{1+R/R_s}`}</EqBlock>
             Dropping the saturation (weak field) and replacing <Tex>{String.raw`N(z)`}</Tex> by its mode-weighted
             average gives the linear polarization:
             <EqBlock label="41">{String.raw`\mathscr{P}_n^{(1)}(t)=-\wp^2\hbar^{-1}E_n\,\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2}`}</EqBlock>
@@ -349,21 +349,22 @@ export default function Page() {
           <Step title="The ⟨sin⁴⟩ average and the third-order term">
             Expanding <Tex>{String.raw`1/(1+R/R_s)\approx 1-R/R_s`}</Tex> and doing the spatial average produces the
             standing-wave hole-burning factor <Tex>{String.raw`\tfrac{3}{2}`}</Tex>:
-            <EqBlock label="43">{String.raw`\big\langle \tfrac{1}{2}(1-\cos 2K_n z)^2\big\rangle=\tfrac{1}{2}\cdot\tfrac{3}{4}=\tfrac{3}{8}`}</EqBlock>
-            <EqBlock label="44">{String.raw`\mathscr{P}_n^{(1)+(3)}(t)=-\wp^2\hbar^{-1}E_n\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2}\left[1-\dfrac{3}{2}\dfrac{\gamma\,\wp^2 E_n^2}{(\omega-\nu_n)^2+\gamma^2}\,\dfrac{1}{\cdots}\right]`}</EqBlock>
+            <EqBlock label="43">{String.raw`|U_n|^4=\tfrac{1}{4}(1-\cos 2K_n z)^2=\tfrac{3}{8}-\tfrac{1}{2}\cos 2K_n z+\tfrac{1}{8}\cos 4K_n z,\qquad \big\langle|U_n|^4\big\rangle=\tfrac{3}{8}`}</EqBlock>
+            <EqBlock label="44">{String.raw`\mathscr{P}_n^{(1)+(3)}(t)=-\wp^2\hbar^{-1}E_n\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2}\left[1-\dfrac{3}{2}\dfrac{\gamma_{ab}\gamma I_n}{(\omega-\nu_n)^2+\gamma^2}\right]`}</EqBlock>
           </Step>
           <Step title="Sum the saturation exactly">
             For arbitrary intensity, integrate the full denominator over <Tex>{String.raw`z`}</Tex> to get a saturation
             function <Tex>{String.raw`f(w)`}</Tex> of the dimensionless saturation parameter <Tex>{String.raw`w`}</Tex>:
-            <EqBlock label="46, 47">{String.raw`\mathscr{P}_n(t)=-\wp^2\hbar^{-1}E_n\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2\big[1+\tfrac{3}{2}(\gamma_a\gamma_b)^{-1}\gamma\cdots\big]}\,f(w)`}</EqBlock>
-            <EqBlock label="48">{String.raw`w=2\dfrac{\wp^2}{\gamma^2\hbar^2}\,I_n\,\mathscr{L}(\omega-\nu_n)`}</EqBlock>
+            <EqBlock label="46">{String.raw`\mathscr{P}_n(t)\simeq-\wp^2\hbar^{-1}E_n\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2\big[1+\tfrac{3}{2}(\gamma_{ab}/\gamma)I_n\big]}`}</EqBlock>
+            <EqBlock label="47">{String.raw`\mathscr{P}_n(t)=-\wp^2\hbar^{-1}\bar N\,\dfrac{(\omega-\nu_n)+i\gamma}{(\omega-\nu_n)^2+\gamma^2}\,f(w)\,E_n`}</EqBlock>
+            <EqBlock label="48">{String.raw`w=2\dfrac{\gamma_{ab}}{\gamma}\,I_n\,\mathscr{L}(\omega-\nu_n)`}</EqBlock>
             <EqBlock label="49">{String.raw`f(w)=\dfrac{2}{w}\big[1-(1+w)^{-1/2}\big]\;\xrightarrow{w\ll1}\;1-\tfrac{1}{2}w`}</EqBlock>
           </Step>
         </Derivation>
 
         <KeyResult
           number="37"
-          eq={String.raw`\rho_{aa}-\rho_{bb}=\dfrac{N(z)}{1+R/R_s},\qquad R=\tfrac{1}{2}\left(\dfrac{\wp E_n}{\hbar}\right)^2\dfrac{1}{\gamma}\mathscr{L}(\omega-\nu_n),\qquad R_s=\dfrac{2\gamma_a\gamma_b}{\gamma_a+\gamma_b}`}
+          eq={String.raw`\rho_{aa}-\rho_{bb}=\dfrac{N(z)}{1+R/R_s},\qquad R=\tfrac{1}{2}\left(\dfrac{\wp E_n}{\hbar}\right)^2\dfrac{1}{\gamma}\mathscr{L}(\omega-\nu_n),\qquad R_s=\dfrac{\gamma_a\gamma_b}{\gamma_a+\gamma_b}`}
           label="Saturated population difference (gain saturation)"
           note={
             <>
@@ -380,7 +381,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="45"
-          eq={String.raw`I_n=\tfrac{1}{2}\dfrac{\wp^2}{\hbar^2\gamma^2}E_n^2`}
+          eq={String.raw`I_n=\tfrac{1}{2}\dfrac{\wp^2}{\hbar^2\gamma_a\gamma_b}E_n^2`}
           label="Dimensionless intensity"
           note="Saturation, threshold, and steady state are all expressed in terms of I_n — the natural variable for the single-mode results."
         />
@@ -433,9 +434,9 @@ export default function Page() {
         </Figure>
 
         <Callout kind="insight" title="Spatial hole burning">
-          A standing wave saturates the medium <Tex>{String.raw`\tfrac{3}{2}`}</Tex> times <em>less</em> per unit
-          average intensity than a running wave, and leaves leftover gain at the nodes. That leftover gain is the seed
-          of multimode operation and the Lamb dip in later chapters.
+          A standing wave saturates the medium <Tex>{String.raw`\tfrac{3}{2}`}</Tex> times <em>more</em> per unit
+          average intensity than a running wave (because the field piles up at the antinodes), and leaves leftover gain
+          at the nodes. That leftover gain is the seed of multimode operation and the Lamb dip in later chapters.
         </Callout>
         <Callout kind="warning" title="Third-order theory overestimates saturation">
           The cubic <Tex>{String.raw`\beta_n I_n`}</Tex> term is the lowest-order nonlinearity; it overstates saturation
@@ -471,7 +472,7 @@ export default function Page() {
 
         <p>The coefficients are collected in Table 8-1, built from the Lorentzian and first/third-order factors:</p>
         <EqBlock label="Table 8-1">{String.raw`\alpha_n=\mathscr{L}(\omega-\nu_n)F_1-\tfrac{1}{2}\dfrac{\nu}{Q_n},\quad \beta_n=\mathscr{L}(\omega-\nu_n)^2 F_3,\quad \sigma_n=\dfrac{\omega-\nu_n}{\gamma}\mathscr{L}\,F_1,\quad \rho_n=\dfrac{\omega-\nu_n}{\gamma}\mathscr{L}^2 F_3`}</EqBlock>
-        <EqBlock label="F₁, F₃">{String.raw`F_1=\tfrac{1}{2}\dfrac{\nu_n}{\varepsilon_0}\dfrac{\wp^2\bar N}{\hbar\gamma},\qquad F_3\sim\tfrac{3}{2}F_1\Big(\dfrac{\wp}{\hbar\gamma}\Big)^2\gamma^2,\qquad \beta_n=\tfrac{3}{2}\,\mathfrak{N}\,\mathscr{L}^2\Big(\tfrac{1}{2}\dfrac{\nu}{Q_n}\Big)`}</EqBlock>
+        <EqBlock label="F₁, F₃">{String.raw`F_1=\tfrac{1}{2}\dfrac{\nu_n}{\varepsilon_0}\dfrac{\wp^2\bar N}{\hbar\gamma},\qquad F_3=\tfrac{3}{2}\,\dfrac{\gamma_{ab}}{\gamma}\,F_1,\qquad \beta_n=\tfrac{3}{2}\,\dfrac{\gamma_{ab}}{\gamma}\,\mathfrak{N}\,\mathscr{L}^2\Big(\tfrac{1}{2}\dfrac{\nu}{Q_n}\Big)`}</EqBlock>
 
         <Derivation title="Threshold, steady state, the S-curve, and pulling" defaultOpen={false}>
           <Step title="Threshold: gain = loss">
@@ -484,7 +485,7 @@ export default function Page() {
           <Step title="Steady-state intensity">
             Set <Tex>{String.raw`\dot I_n=0`}</Tex> in (51): the nonzero root is{" "}
             <Tex>{String.raw`I_n=\alpha_n/\beta_n`}</Tex>, a Lorentzian tuning curve in detuning (Fig 8-5):
-            <EqBlock label="55">{String.raw`I_n=\dfrac{\alpha_n}{\beta_n}=\dfrac{\mathfrak{N}-1}{\tfrac{3}{2}\mathfrak{N}\,\mathscr{L}(\omega-\nu_n)}`}</EqBlock>
+            <EqBlock label="55">{String.raw`I_n=\dfrac{\alpha_n}{\beta_n}=\dfrac{\mathfrak{N}\,\mathscr{L}(\omega-\nu_n)-1}{\tfrac{3}{2}\,\dfrac{\gamma_{ab}}{\gamma}\,\mathfrak{N}\,\mathscr{L}^2(\omega-\nu_n)}`}</EqBlock>
           </Step>
           <Step title="The buildup transient">
             Equation (51) is a logistic ODE; separating variables integrates to the exact S-curve (Fig 8-6):
@@ -497,15 +498,15 @@ export default function Page() {
             Substituting the real (dispersive) polarization into (15)/(52) and solving self-consistently for{" "}
             <Tex>{String.raw`\nu_n`}</Tex> gives a width-weighted average of the cavity frequency{" "}
             <Tex>{String.raw`\Omega_n`}</Tex> and the atomic frequency <Tex>{String.raw`\omega`}</Tex>:
-            <EqBlock label="57">{String.raw`\nu_n=\dfrac{\Omega_n+S\nu_0}{1+S},\qquad S=\dfrac{F_1}{\gamma}\mathscr{L}(\omega-\nu_n)\Big[1-\tfrac{3}{2}\dfrac{\gamma\nu_n}{\cdots}\mathscr{L}(\omega-\nu_n)\Big]`}</EqBlock>
-            <EqBlock label="58">{String.raw`\nu_n=\dfrac{2\Omega_n+\tfrac{1}{2}(\nu/Q_n)\,\omega}{\gamma+\tfrac{1}{2}(\nu/Q_n)}`}</EqBlock>
+            <EqBlock label="57">{String.raw`\nu_n=\dfrac{\Omega_n+S\,\omega}{1+S},\qquad S=\dfrac{F_1}{\gamma}\mathscr{L}(\omega-\nu_n)\Big[1-\tfrac{3}{2}\dfrac{\gamma_{ab}}{\gamma}I_n\,\mathscr{L}(\omega-\nu_n)\Big]`}</EqBlock>
+            <EqBlock label="58">{String.raw`\nu_n=\dfrac{\gamma\Omega_n+\tfrac{1}{2}(\nu/Q_n)\,\omega}{\gamma+\tfrac{1}{2}(\nu/Q_n)}`}</EqBlock>
             <EqBlock label="59">{String.raw`\eta(\nu_n)=\dfrac{\Omega_n}{\nu_n}=1+\dfrac{\nu}{2Q_n}\dfrac{1}{\gamma}\left(1-\dfrac{\omega}{\Omega_n}\right)`}</EqBlock>
           </Step>
         </Derivation>
 
         <KeyResult
           number="55, 53, 54"
-          eq={String.raw`I_n^{ss}=\dfrac{\alpha_n}{\beta_n}=\dfrac{\mathfrak{N}-1}{\tfrac{3}{2}\mathfrak{N}\,\mathscr{L}(\omega-\nu_n)}\,,\qquad \text{threshold: }\alpha_n=0\Leftrightarrow \mathfrak{N}=\dfrac{\bar N}{N_T}=1`}
+          eq={String.raw`I_n^{ss}=\dfrac{\alpha_n}{\beta_n}=\dfrac{\mathfrak{N}\,\mathscr{L}(\omega-\nu_n)-1}{\tfrac{3}{2}\,\dfrac{\gamma_{ab}}{\gamma}\,\mathfrak{N}\,\mathscr{L}^2(\omega-\nu_n)}\,,\qquad \text{threshold: }\alpha_n=0\Leftrightarrow \mathfrak{N}=\dfrac{\bar N}{N_T}=1`}
           label="Threshold and steady-state intensity"
           note={
             <>

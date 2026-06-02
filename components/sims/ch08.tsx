@@ -264,7 +264,7 @@ export default function Ch08Sim() {
       {showDisp ? (
         <div style={{ marginTop: "1rem" }}>
           <div style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 4 }}>
-            Frequency pulling (ν_n − Ω_n)/γ vs detuning (Fig 8-7)
+            Dispersion / index shape σ_n ∝ x·ℒ vs detuning (Fig 8-7)
           </div>
           <Plot
             width={660}
@@ -272,7 +272,7 @@ export default function Ch08Sim() {
             xRange={[-3, 3]}
             yRange={[-0.6, 0.6]}
             xLabel="(ω − ν_n)/γ"
-            yLabel="(ν_n − Ω_n)/γ"
+            yLabel="σ_n ∝ x·ℒ  (Fig 8-7, arb.)"
             lines={dispersion}
             markers={[
               { x: x, color: "#e11d48", label: "current" },

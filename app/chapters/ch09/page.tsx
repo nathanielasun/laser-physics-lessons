@@ -102,7 +102,7 @@ export default function Page() {
         <EqBlock label="2">{String.raw`\mathscr{P}_{ab}(z,t) = -\tfrac{1}{2}\wp\sum_n E_n(t)\,\exp[-i(\nu_n t + \phi_n(t))]\,U_n(z)`}</EqBlock>
 
         <p>The unperturbed (zeroth-order) populations and inversion, set by pump rates and decay rates:</p>
-        <EqBlock label="3">{String.raw`\rho_{ab}(z,t) = \lambda_a \gamma_a^{-1}`}</EqBlock>
+        <EqBlock label="3">{String.raw`\rho_{aa}^{(0)}(z,t) = \lambda_a \gamma_a^{-1}`}</EqBlock>
         <EqBlock label="4">{String.raw`N(z,t) \equiv \rho_{aa}^{(0)} - \rho_{bb}^{(0)} = \lambda_a\gamma_a^{-1} - \lambda_b\gamma_b^{-1}`}</EqBlock>
         <p>
           Here <Tex>{String.raw`N(z,t)`}</Tex> is the unsaturated inversion density (spatially varying in{" "}
@@ -110,14 +110,20 @@ export default function Page() {
         </p>
         <KeyResult
           number="6"
-          eq={String.raw`\mathscr{D}(\Delta\omega) = \frac{1}{\gamma_\perp + i\,\Delta\omega}`}
+          eq={String.raw`\mathscr{D}_x(\Delta\omega) = \frac{1}{\gamma_x + i\,\Delta\omega}`}
           label="The complex Lorentzian denominator"
           note={
             <>
-              <Tex>{String.raw`\gamma_\perp`}</Tex> is the dipole (coherence) decay rate. Its real part gives the
-              absorption/gain lineshape, its imaginary part the dispersion/pulling. It is <em>large</em> when{" "}
-              <Tex>{String.raw`\Delta\omega`}</Tex> is small — which is why adjacent longitudinal modes (tiny beat
-              frequency) couple most strongly.
+              A generic complex Lorentzian with a decay rate <Tex>{String.raw`\gamma_x`}</Tex> (
+              <Tex>{String.raw`x = a, b`}</Tex>, or the coherence rate <Tex>{String.raw`\gamma_\perp`}</Tex>). With{" "}
+              <Tex>{String.raw`\gamma_\perp`}</Tex> and the line-center detuning <Tex>{String.raw`\omega - \nu`}</Tex> it is
+              the <em>gain/dispersion lineshape</em>: real part gives absorption/gain, imaginary part the
+              dispersion/pulling. The strong coupling of adjacent longitudinal modes is a <em>separate</em> resonance —
+              the population-pulsation Lorentzian <Tex>{String.raw`\mathscr{D}_a(\nu_\rho - \nu_\sigma)`}</Tex> whose width
+              is the population decay rate <Tex>{String.raw`\gamma_a`}</Tex> and whose argument is the intermode{" "}
+              <em>beat</em> frequency. It is large (resonant) when the beat is small compared to{" "}
+              <Tex>{String.raw`\gamma_a`}</Tex>, which is why closely spaced modes pulse the populations — and couple —
+              most strongly.
             </>
           }
         />
@@ -133,7 +139,7 @@ export default function Page() {
           the beat frequency <Tex>{String.raw`\nu_\sigma - \nu_\rho`}</Tex>, weighted by the Lorentzian and the inverse
           decay rate. This is the moving population grating:
         </p>
-        <EqBlock label="7">{String.raw`\beta_{aa}^{(2)} = -\tfrac{1}{4}\left(\frac{\wp}{\hbar}\right)^2 N\sum_{\rho}\sum_{\sigma} E_\rho E_\sigma\, U_\rho U_\sigma \,\exp\{i[(\nu_\sigma - \nu_\rho)t + \phi_\sigma - \phi_\rho]\}\,\mathscr{D}(\omega - \nu_\sigma)\, \gamma_a^{-1} + \text{c.c.}`}</EqBlock>
+        <EqBlock label="7">{String.raw`\beta_{aa}^{(2)} = -\tfrac{1}{4}\left(\frac{\wp}{\hbar}\right)^2 N\sum_{\rho}\sum_{\sigma} E_\rho E_\sigma\, U_\rho^* U_\sigma \,\exp\{i[(\nu_\rho - \nu_\sigma)t + \phi_\rho - \phi_\sigma]\}\,\mathscr{D}_a(\nu_\rho - \nu_\sigma)\,\mathscr{D}(\omega - \nu_\sigma) + \text{c.c.}`}</EqBlock>
 
         <p>
           The pulsating populations re-drive the dipole, giving the third-order coherence. Its anti-Hermitian symmetry
@@ -151,9 +157,9 @@ export default function Page() {
           Projecting the polarization onto mode <Tex>{String.raw`n`}</Tex> means a spatial overlap integral of four mode
           functions weighted by the inversion, normalized:
         </p>
-        <EqBlock label="12">{String.raw`\mathscr{P}_n(t) = \int_0^L dz\, N(z)\,U_n(z)\,U_\rho(z)\,U_\sigma(z)\,U_n(z)\Big/ \int_0^L dz\,|U_n(z)|^2`}</EqBlock>
+        <EqBlock label="12">{String.raw`\frac{\int_0^L dz\, N(z)\,U_n^*(z)\,U_\mu(z)\,U_\rho^*(z)\,U_\sigma(z)}{\int_0^L dz\,|U_n(z)|^2}`}</EqBlock>
         <p>Expanding products of sines into cosines and keeping only slowly varying terms enforces a frequency-matching condition:</p>
-        <EqBlock label="13">{String.raw`n = \rho - \sigma + n'`}</EqBlock>
+        <EqBlock label="13">{String.raw`n = \sigma - \rho + n'`}</EqBlock>
         <p>
           and leaves behind the spatial Fourier components of the inversion (this is where spatial hole burning
           re-enters; <Tex>{String.raw`N_0 = \bar N`}</Tex> is the spatial average):
@@ -324,7 +330,7 @@ export default function Page() {
           The eigenvalues of <Tex>{String.raw`\Theta`}</Tex> decide stability (both{" "}
           <Tex>{String.raw`\mathrm{Re}\,\lambda < 0`}</Tex> for a stable state):
         </p>
-        <EqBlock label="42">{String.raw`\det(\Theta - \lambda \mathscr{I}) = 0, \qquad \lambda_{1,2} = \frac{a_1' + a_2'}{1 - C} \pm \sqrt{\left(\frac{a_1' + a_2'}{1 - C}\right)^2 - \frac{4 a_1' a_2'}{1 - C}}`}</EqBlock>
+        <EqBlock label="42">{String.raw`\det(\Theta - \lambda \mathscr{I}) = 0, \qquad \lambda_{1,2} = -\frac{a_1' + a_2'}{1 - C} \pm \sqrt{\left(\frac{a_1' + a_2'}{1 - C}\right)^2 - \frac{4 a_1' a_2'}{1 - C}}`}</EqBlock>
         <p>The three regimes named explicitly:</p>
         <EqBlock label="43">{String.raw`C < 1 \ \text{weak coupling}, \qquad C = 1 \ \text{neutral coupling}, \qquad C > 1 \ \text{strong coupling}`}</EqBlock>
 
@@ -432,22 +438,22 @@ export default function Page() {
           frequency arising from cavity dispersion:
         </p>
         <EqBlock label="44">{String.raw`\Psi \equiv \Psi_{1233} = (2\nu_2 - \nu_1 - \nu_3)t + 2\phi_2 - \phi_1 - \phi_3`}</EqBlock>
-        <EqBlock label="45">{String.raw`2\nu_2 - \nu_1 - \nu_3 = \nu_1'`}</EqBlock>
+        <EqBlock label="45">{String.raw`2\nu_2 - \nu_3 \equiv \nu_1'`}</EqBlock>
         <p>The combination tone tempts mode 2 to oscillate at its injected/locked frequency; locking is the condition that the two adjacent beats become equal:</p>
-        <EqBlock label="46">{String.raw`\nu_2 = \nu_2' = 2\nu_2 - \nu_2'`}</EqBlock>
-        <EqBlock label="47">{String.raw`\nu_2 - \nu_2{}' = \nu_3 - \nu_2{}'`}</EqBlock>
+        <EqBlock label="46">{String.raw`\nu_1 \equiv \nu_1' = 2\nu_2 - \nu_3`}</EqBlock>
+        <EqBlock label="47">{String.raw`\nu_2 - \nu_1 = \nu_3 - \nu_2`}</EqBlock>
 
         <p>
           Specializing Eqs.&nbsp;(18)–(19) to <Tex>{String.raw`N=3`}</Tex> and keeping the combination-tone terms with
           their <Tex>{String.raw`\exp(\pm i\Psi')`}</Tex> phase factors gives three coupled amplitude equations,
         </p>
-        <EqBlock label="48">{String.raw`\dot{E}_1 = E_1(\alpha_1 - \sum_{m=1}^{3}\theta_{1m} I_m) - \mathrm{Im}\,[\theta_{1233}\exp(-i\Psi')]\,E_2^2 E_3`}</EqBlock>
-        <EqBlock label="49">{String.raw`\dot{E}_2 = E_2(\alpha_2 - \sum_{m=1}^{3}\theta_{2m} I_m) - \mathrm{Im}\,[(\theta_{2113} + \theta_{2331})\exp(i\Psi')]\,E_1 E_3 E_2`}</EqBlock>
-        <EqBlock label="50">{String.raw`\dot{E}_3 = E_3(\alpha_3 - \sum_{m=1}^{3}\theta_{3m} I_m) - \mathrm{Im}\,[\theta_{3211}\exp(-i\Psi')]\,E_2^2 E_1`}</EqBlock>
+        <EqBlock label="48">{String.raw`\dot{E}_1 = E_1(\alpha_1 - \sum_{m=1}^{3}\theta_{1m} I_m) - \mathrm{Im}\,[\theta_{1232}\exp(-i\Psi')]\,E_2^2 E_3`}</EqBlock>
+        <EqBlock label="49">{String.raw`\dot{E}_2 = E_2(\alpha_2 - \sum_{m=1}^{3}\theta_{2m} I_m) - \mathrm{Im}\,[(\theta_{2123} + \theta_{2321})\exp(i\Psi')]\,E_1 E_3 E_2`}</EqBlock>
+        <EqBlock label="50">{String.raw`\dot{E}_3 = E_3(\alpha_3 - \sum_{m=1}^{3}\theta_{3m} I_m) - \mathrm{Im}\,[\theta_{3212}\exp(-i\Psi')]\,E_2^2 E_1`}</EqBlock>
         <p>and three frequency equations, whose real (combination-tone) parts do the locking:</p>
-        <EqBlock label="51">{String.raw`\nu_1 + \dot{\phi}_1 = \Omega_1 + \sigma_1 - \sum_{m=1}^{3}\tau_{1m} I_m - \mathrm{Re}\,[\theta_{1233}\exp(-i\Psi')]\,E_2^2 E_3 / E_1`}</EqBlock>
-        <EqBlock label="52">{String.raw`\nu_2 + \dot{\phi}_2 = \Omega_2 + \sigma_2 - \sum_{m=1}^{3}\tau_{2m} I_m - \mathrm{Re}\,[(\theta_{2113} + \theta_{2331})\exp(i\Psi')]\,E_1 E_3 E_2 / E_2`}</EqBlock>
-        <EqBlock label="53">{String.raw`\nu_3 + \dot{\phi}_3 = \Omega_3 + \sigma_3 - \sum_{m=1}^{3}\tau_{3m} I_m - \mathrm{Re}\,[\theta_{3211}\exp(-i\Psi')]\,E_2^2 E_1 / E_3`}</EqBlock>
+        <EqBlock label="51">{String.raw`\nu_1 + \dot{\phi}_1 = \Omega_1 + \sigma_1 - \sum_{m=1}^{3}\tau_{1m} I_m - \mathrm{Re}\,[\theta_{1232}\exp(-i\Psi')]\,E_2^2 E_3 / E_1`}</EqBlock>
+        <EqBlock label="52">{String.raw`\nu_2 + \dot{\phi}_2 = \Omega_2 + \sigma_2 - \sum_{m=1}^{3}\tau_{2m} I_m - \mathrm{Re}\,[(\theta_{2123} + \theta_{2321})\exp(i\Psi')]\,E_1 E_3 E_2 / E_2`}</EqBlock>
+        <EqBlock label="53">{String.raw`\nu_3 + \dot{\phi}_3 = \Omega_3 + \sigma_3 - \sum_{m=1}^{3}\tau_{3m} I_m - \mathrm{Re}\,[\theta_{3212}\exp(-i\Psi')]\,E_2^2 E_1 / E_3`}</EqBlock>
 
         <p>
           Taking the combination <Tex>{String.raw`2\times(\text{Eq. }52) - (\text{Eq. }51) - (\text{Eq. }53)`}</Tex>{" "}
@@ -456,8 +462,8 @@ export default function Page() {
         </p>
         <EqBlock label="54">{String.raw`\dot{\Psi} = d + l_s \sin\Psi + l_c \cos\Psi`}</EqBlock>
         <EqBlock label="55">{String.raw`d = 2\sigma_2 - \sigma_1 - \sigma_3 - \sum_{m=1}^{3}(2\tau_{2m} - \tau_{1m} - \tau_{3m})I_m`}</EqBlock>
-        <EqBlock label="56">{String.raw`l_s = \mathrm{Im}\,[2 E_1 E_3 (\theta_{2113} + \theta_{2331}) + (\theta_{1233}E_2^2 E_3/E_1) + (\theta_{3211}E_2^2 E_1/E_3)]`}</EqBlock>
-        <EqBlock label="57">{String.raw`l_c = \mathrm{Re}\,[-2 E_1 E_3 (\theta_{2113} + \theta_{2331}) + (\theta_{1233}E_2^2 E_3/E_1) + (\theta_{3211}E_2^2 E_1/E_3)]`}</EqBlock>
+        <EqBlock label="56">{String.raw`l_s = \mathrm{Im}\,[2 E_1 E_3 (\theta_{2123} + \theta_{2321}) + (\theta_{1232}E_2^2 E_3/E_1) + (\theta_{3212}E_2^2 E_1/E_3)]`}</EqBlock>
+        <EqBlock label="57">{String.raw`l_c = \mathrm{Re}\,[-2 E_1 E_3 (\theta_{2123} + \theta_{2321}) + (\theta_{1232}E_2^2 E_3/E_1) + (\theta_{3212}E_2^2 E_1/E_3)]`}</EqBlock>
 
         <p>
           Combining <Tex>{String.raw`l_s\sin\Psi + l_c\cos\Psi = l\sin(\Psi - \Psi_0)`}</Tex> collapses this to the
@@ -482,7 +488,7 @@ export default function Page() {
           When <Tex>{String.raw`|d/l| \le 1`}</Tex> the equation has two stationary (locked) solutions — one stable, one
           unstable, like the bottom and top of a pendulum:
         </p>
-        <EqBlock label="62, 63">{String.raw`\Psi_1 = \Psi_0 - \sin^{-1}(d/l), \qquad \Psi_2 = \Psi_0 + \pi - \sin^{-1}(d/l)`}</EqBlock>
+        <EqBlock label="62, 63">{String.raw`\Psi_1 = \Psi_0 - \sin^{-1}(d/l), \qquad \Psi_2 = \Psi_0 + \pi + \sin^{-1}(d/l)`}</EqBlock>
         <p>The stable one is selected by the restoring-force condition:</p>
         <EqBlock label="64">{String.raw`l\cos(\Psi^{(0)} - \Psi_0) < 0`}</EqBlock>
         <p>
@@ -577,23 +583,23 @@ export default function Page() {
           <Tex>{String.raw`\mathfrak{B}`}</Tex>, <Tex>{String.raw`I_n=0`}</Tex>; for the on-subset{" "}
           <Tex>{String.raw`\mathfrak{N}`}</Tex>, invert the truncated coupling submatrix:
         </p>
-        <EqBlock label="72">{String.raw`I_n{}^{(s)} = \alpha_n, \quad n \in \mathfrak{B}; \qquad I_n{}^{(s)} = \sum_m (\theta^{-1})_{nm}\alpha_m, \quad n, m \in \mathfrak{N}`}</EqBlock>
+        <EqBlock label="72">{String.raw`I_n{}^{(s)} = 0, \quad n \in \mathfrak{B}; \qquad I_n{}^{(s)} = \sum_m (\theta^{-1})_{nm}\alpha_m, \quad n, m \in \mathfrak{N}`}</EqBlock>
         <p>Stability of each candidate state follows from a small-deviation analysis (generalizing 27–28):</p>
         <EqBlock label="73">{String.raw`I_n = I_n{}^{(s)} + \varepsilon_n`}</EqBlock>
         <EqBlock label="74">{String.raw`\dot{\varepsilon}_n = -2 I_n{}^{(s)}\sum_m \theta_{nm}\varepsilon_m + O(\varepsilon^2)`}</EqBlock>
-        <EqBlock label="75">{String.raw`\varepsilon_n = 2\varepsilon_n[\alpha_n - \sum_m \theta_{nm}\nu_m{}^{(s)}] + O(\varepsilon^2)`}</EqBlock>
+        <EqBlock label="75">{String.raw`\dot{\varepsilon}_n = 2\varepsilon_n\left[\alpha_n - \sum_m \theta_{nm} I_m{}^{(s)}\right] + O(\varepsilon^2)`}</EqBlock>
         <p>
           A state is stable only if every off mode has negative effective gain — its single-mode gain in the presence of
           all the oscillating modes:
         </p>
-        <EqBlock label="76">{String.raw`a_n' = \alpha_n - \sum_m \theta_{nm}\nu_m{}^{(s)}, \quad n \in \mathfrak{N}, \ m \in \mathfrak{N}`}</EqBlock>
+        <EqBlock label="76">{String.raw`a_n' = \alpha_n - \sum_m \theta_{nm} I_m{}^{(s)}, \quad n \in \mathfrak{B}, \ m \in \mathfrak{N}`}</EqBlock>
 
         <p>
           For locking, define the <Tex>{String.raw`N-2`}</Tex> interior relative phase angles; locking requires all of
           them to stop drifting:
         </p>
         <EqBlock label="77">{String.raw`\Psi_j = (2\nu_j - \nu_{j-1} - \nu_{j+1})t + 2\phi_j - \phi_{j-1} - \phi_{j+1}`}</EqBlock>
-        <EqBlock label="78">{String.raw`\dot{E}_n = \Psi_n{}', \qquad \dot{\Psi}_n = \Psi_{\text{lock}}{}'`}</EqBlock>
+        <EqBlock label="78">{String.raw`\dot{E}_n = \dot{\Psi}_j = 0, \qquad n = 1,\ldots,N;\ j = 2,\ldots,N-1`}</EqBlock>
         <p>
           By induction, <Tex>{String.raw`\dot\Psi_j = 0`}</Tex> for all interior <Tex>{String.raw`j`}</Tex> forces all
           beat notes equal — the locked frequencies form a perfect comb spaced by the axial mode spacing:
@@ -632,7 +638,7 @@ export default function Page() {
           Breaking the sine modes into two exponentials shows two counter-propagating pulse trains — a single pulse
           bouncing between the mirrors, hitting the output mirror once per round trip:
         </p>
-        <EqBlock label="82">{String.raw`E(z,t) = -\tfrac{1}{2}i\,\exp[-i(\nu_q t + \phi_q - K_q z)]\sum_n E_n \exp[-i(n-q)(\Delta t + \tfrac{\pi}{c}z)] + \tfrac{1}{2}i\,\exp[-i(\nu_q t + \phi_q + K_q z)]\sum_n E_n \exp[-i(n-q)(\Delta t - \tfrac{\pi}{c}z)] + \text{c.c.}`}</EqBlock>
+        <EqBlock label="82">{String.raw`E(z,t) = -\tfrac{1}{4}i\,\exp[-i(\nu_q t + \phi_q - K_q z)]\sum_n E_n \exp[-i(n-q)(\Delta t - \tfrac{\pi}{L}z)] + \tfrac{1}{4}i\,\exp[-i(\nu_q t + \phi_q + K_q z)]\sum_n E_n \exp[-i(n-q)(\Delta t + \tfrac{\pi}{L}z)] + \text{c.c.}`}</EqBlock>
 
         <Figure
           caption={
@@ -758,27 +764,27 @@ export default function Page() {
           Model the intracavity modulator as a time- and space-dependent susceptibility multiplying the field — the
           external drive that forces locking (<Tex>{String.raw`d`}</Tex> is a coupling/length factor):
         </p>
-        <EqBlock label="83">{String.raw`\Delta P(z,t) = \varepsilon_0 d\,\chi(z,t)\,\tfrac{1}{2}\sum_n E_n(t)\exp[-i(\nu_n t + \phi_n)]\,U_n(z) + \text{c.c.}`}</EqBlock>
+        <EqBlock label="83">{String.raw`\Delta P(z,t) = \varepsilon_0\,\Delta\chi(z,t)\,\tfrac{1}{2}\sum_n E_n(t)\exp[-i(\nu_n t + \phi_n)]\,U_n(z) + \text{c.c.}`}</EqBlock>
         <p>Split into amplitude-modulation (loss, <Tex>{String.raw`\cos\nu_M t`}</Tex>) and frequency-modulation (the time-derivative) parts:</p>
-        <EqBlock label="84">{String.raw`\Delta P(z,t) = \varepsilon_0\,\cos(\nu_M t)\,\chi'(z)\,E(z,t) + \varepsilon_0 \nu_M{}^{-1}(1 + \cos\nu_M t)\,d\chi'(z)\Big(\frac{\partial}{\partial t}\Big)E(z,t)`}</EqBlock>
+        <EqBlock label="84">{String.raw`\Delta P(z,t) = \varepsilon_0\,\cos(\nu_M t)\,\chi'(z)\,E(z,t) + \varepsilon_0\,\nu^{-1}(1 + \cos\nu_M t)\,\Delta\chi''(z)\Big(\frac{\partial}{\partial t}\Big)E(z,t)`}</EqBlock>
         <p>
           The AM part in mode-sum form; the <Tex>{String.raw`\cos(\nu_M t)`}</Tex> factor generates sidebands at{" "}
           <Tex>{String.raw`\nu_n \pm \nu_M`}</Tex> which land on neighboring modes and lock them:
         </p>
         <EqBlock label="85">{String.raw`\Delta P(z,t) = \varepsilon_0\cos(\nu_M t)\,\chi'(z)\,\tfrac{1}{2}\sum_n E_n\exp[-i(\nu_n t + \phi_n)]\,U_n(z) + \text{c.c.}`}</EqBlock>
         <p>Projected onto mode <Tex>{String.raw`n`}</Tex>, a self term plus coupling to neighbors <Tex>{String.raw`n\pm1`}</Tex>:</p>
-        <EqBlock label="88">{String.raw`\Delta P_n(z,t) = \tfrac{1}{2}\varepsilon_0\,\overline{\Delta\chi'}\,E_n - \tfrac{1}{4}i\,\mathrm{Im}\,[E_{n+1}\,\overline{\Delta\chi'_+}\exp[-i(\nu_n - \nu_{n+1})t + i(\phi_n - \phi_{n+1})] - \ldots]`}</EqBlock>
+        <EqBlock label="88">{String.raw`\Delta\mathscr{P}_n(t) = i\varepsilon_0\,\overline{\Delta\chi'}\,E_n + \tfrac{1}{2}\varepsilon_0\,\overline{\Delta\chi_1}\big\{E_{n+1}\exp[-i((\nu_{n+1}-\nu_n-\nu_M)t+\phi_{n+1}-\phi_n)] + E_{n-1}\exp[i((\nu_n-\nu_M-\nu_{n-1})t+\phi_n-\phi_{n-1})]\big\}`}</EqBlock>
         <p>through the spatially averaged modulation susceptibilities (the modulator&rsquo;s overlap with the modes):</p>
         <EqBlock label="89, 90">{String.raw`\overline{\Delta\chi'} = \frac{1}{L}\int_0^L dz\,\Delta\chi'(z), \qquad \overline{\Delta\chi_+'} = \frac{1}{L}\int_0^L dz\,\Delta\chi'(z)\cos(\pi z/L)`}</EqBlock>
 
         <p>The amplitude equation with the modulator coupling to nearest neighbors — the exponent vanishes when the modes are equally spaced at <Tex>{String.raw`\nu_M`}</Tex>, locking them:</p>
-        <EqBlock label="91">{String.raw`\dot{E}_n = (\alpha_n - \nu_M)E_n + \tfrac{1}{2}\nu_M\,\overline{\Delta\chi}\,[E_{n+1}\exp[-i(\nu_{n+1} - \nu_n - \nu_M)t + i(\phi_{n+1} - \phi_n)] + E_{n-1}\exp[\ldots]]`}</EqBlock>
+        <EqBlock label="91">{String.raw`\dot{E}_n = \alpha_n E_n + \tfrac{1}{2}\nu_M\,\overline{\Delta\chi}\,[E_{n+1}\exp[-i(\nu_{n+1} - \nu_n - \nu_M)t + i(\phi_{n+1} - \phi_n)] + E_{n-1}\exp[\ldots]]`}</EqBlock>
         <p>In the locked, equally spaced state this becomes a compact nearest-neighbor coupling weighted by sines of the phase differences:</p>
-        <EqBlock label="97">{String.raw`\dot{E}_n = \varepsilon_0\,\mathscr{Z}'' E_n + \tfrac{1}{2}\varepsilon_0\,\mathscr{Z}'\,[E_{n+1}\sin(\phi_n - \phi_{n+1}) - E_{n-1}\sin(\phi_n - \phi_{n-1})]`}</EqBlock>
+        <EqBlock label="97">{String.raw`\dot{E}_n = 0 = E_{n+1}\sin(\phi_{n+1} - \phi_n) - E_{n-1}\sin(\phi_n - \phi_{n-1})`}</EqBlock>
         <p>The phase equations close the recurrence (the locked phases are independent of <Tex>{String.raw`n`}</Tex>):</p>
-        <EqBlock label="98, 99">{String.raw`\dot{\phi}_{n+1} = \phi_n, \qquad [\dot{\phi}_n - (n - q)\dot{\Delta}]E_n = -\tfrac{1}{2}\varepsilon_0\,\mathscr{Z}'\,[E_{n+1} + E_{n-1}]\cos(\phi_n - \phi_{n-1})`}</EqBlock>
+        <EqBlock label="98, 99">{String.raw`\phi_{n+1} = \phi_n, \qquad [\dot{\phi}_n - (n - q)\Delta\nu]E_n = -\tfrac{1}{2}\,\nu\,\overline{\Delta\chi_1}'\,[E_{n+1} + E_{n-1}]\cos(\phi_n - \phi_{n-1})`}</EqBlock>
         <p>which reduces, in the steady FM state, to a three-term recurrence among neighboring amplitudes:</p>
-        <EqBlock label="100">{String.raw`[\dot{\phi} - (n - q)\dot{\Delta}]E_n = -\tfrac{1}{2}\varepsilon_0\,\mathscr{Z}'(E_{n-1} + E_{n+1})`}</EqBlock>
+        <EqBlock label="100">{String.raw`[\dot{\phi} - (n - q)\Delta\nu]\,E_n = -\tfrac{1}{2}\,\nu\,\overline{\Delta\chi_1}'\,(E_{n+1} + E_{n-1})`}</EqBlock>
         <p>This has exactly the form of the Bessel-function recurrence relation:</p>
         <EqBlock label="101">{String.raw`2 K \Gamma^{-1} J_K(\Gamma) = J_{K-1}(\Gamma) + J_{K+1}(\Gamma)`}</EqBlock>
         <p>
@@ -786,7 +792,7 @@ export default function Page() {
           the FM mode-amplitude result. The carrier mode <Tex>{String.raw`q`}</Tex> is largest; the sidebands fall off as
           Bessel functions:
         </p>
-        <EqBlock label="102">{String.raw`\dot{\phi} = l\,d\nu_M`}</EqBlock>
+        <EqBlock label="102">{String.raw`\dot{\phi} = l\,\Delta\nu`}</EqBlock>
         <KeyResult
           number="103"
           eq={String.raw`E_n = J_{n-q}(\Gamma)`}
@@ -799,11 +805,11 @@ export default function Page() {
             </>
           }
         />
-        <EqBlock label="104">{String.raw`\Gamma = J_{n-q}(\Gamma)`}</EqBlock>
+        <EqBlock label="104">{String.raw`\Gamma = \nu\,\overline{\Delta\chi_1}'\,(\Delta\nu)^{-1}`}</EqBlock>
 
         <p>Summing the Bessel-weighted comb (the Jacobi–Anger identity below) collapses to a single FM oscillation — a carrier whose phase swings sinusoidally with depth <Tex>{String.raw`\Gamma`}</Tex>:</p>
-        <EqBlock label="105">{String.raw`E(z,t) = \tfrac{1}{2}\sin[\Omega_q t + q\pi z/L + \Gamma\sin(\nu_M t + \pi z/L)] \times \sin K_q z + \text{c.c.}`}</EqBlock>
-        <EqBlock label="106">{String.raw`J_n(\Gamma) = (-1)^n J_n(\Gamma)`}</EqBlock>
+        <EqBlock label="105">{String.raw`E(z,t) = \tfrac{1}{2}\exp[-i(\nu_q t + \phi_q)]\sum_n J_{n-q}(\Gamma)\,\exp[-i(n-q)\nu_M t]\,\sin K_n z + \text{c.c.}`}</EqBlock>
+        <EqBlock label="106">{String.raw`J_{-k}(\Gamma) = (-1)^k J_k(\Gamma)`}</EqBlock>
         <p>The bridge between the single FM oscillation and the mode picture is the Jacobi–Anger identity:</p>
         <EqBlock label="p.140">{String.raw`\exp(i\Gamma\sin\theta) = \sum_{k=-\infty}^{\infty}\exp(ik\theta)\,J_k(\Gamma)`}</EqBlock>
         <p>The FM field as two oppositely directed running FM waves (from splitting the standing-wave sine):</p>
@@ -811,7 +817,7 @@ export default function Page() {
         <p>and its instantaneous frequency, which sweeps about the carrier with peak-to-peak swing <Tex>{String.raw`2\Gamma\nu_M`}</Tex> — the signature of FM mode locking:</p>
         <KeyResult
           number="108"
-          eq={String.raw`\Omega_\pm = \Omega_q \mp \Gamma\nu_M\cos(\nu_M t \pm \pi z/L)`}
+          eq={String.raw`\Omega_\pm = \Omega_q + \Gamma\nu_M\cos(\nu_M t \pm \pi z/L)`}
           label="FM instantaneous frequency (chirped carrier)"
           note={
             <>

@@ -80,7 +80,11 @@ export default function Ch07Sim() {
     const R2 = new Array<number>(NOUT + 1);
     const R3 = new Array<number>(NOUT + 1);
 
-    let R: [number, number, number] = [0, 0, -1]; // IC: atom in lower level (Eq. 51)
+    // IC: with the drive on, start at the south pole (atom in lower level, Eq. 51)
+    // so the trajectory is a clean Rabi flop. With the drive off, seed a π/2-prepared
+    // dipole on the equator R=(1,0,0) so free induction decay (transverse part shrinking
+    // at 1/T₂) and R₃ relaxing to R₃ᵉᑫ at 1/T₁ are both visible.
+    let R: [number, number, number] = driveOn ? [0, 0, -1] : [1, 0, 0];
     let t = 0;
 
     const add = (
@@ -121,12 +125,12 @@ export default function Ch07Sim() {
     }
 
     return { ts, R1, R2, R3, rho_aa, rho_bb, rho_ab, Rlen, dtOut, T, NOUT };
-  }, [drive, delta, g2, g1, r3eq]);
+  }, [drive, driveOn, delta, g2, g1, r3eq]);
 
   // ── Derived headline numbers ──────────────────────────────────────────────
-  const betaMag = Math.sqrt(drive * drive + delta * delta); // generalized Rabi |β| (Eq. 80)
+  const betaMag = Math.sqrt(drive * drive + delta * delta); // generalized Rabi |β| (Eq. 77)
   const floppingPeriod = betaMag > 1e-6 ? TWO_PI / betaMag : Infinity;
-  const maxInv = betaMag > 1e-6 ? (drive * drive) / (betaMag * betaMag) : 0; // Ω²/|β|² (off-res reduction)
+  const maxRhoAA = betaMag > 1e-6 ? (drive * drive) / (betaMag * betaMag) : 0; // Ω²/|β|² = max upper-state population ρaa (off-res Rabi result)
   const lastIdx = sim.NOUT;
   const rho_aa_now = sim.rho_aa[lastIdx];
   const rho_bb_now = sim.rho_bb[lastIdx];
@@ -412,7 +416,7 @@ export default function Ch07Sim() {
           tex
           value={Number.isFinite(floppingPeriod) ? `${floppingPeriod.toFixed(2)} /γ₀` : "∞"}
         />
-        <Readout label={String.raw`\text{max inversion }\Omega^2/|\beta|^2`} tex value={maxInv.toFixed(3)} />
+        <Readout label={String.raw`\text{max }\rho_{aa}\text{ (upper pop.) }\Omega^2/|\beta|^2`} tex value={maxRhoAA.toFixed(3)} />
         <Readout
           label={String.raw`|\mathbf{R}|\ (\text{end, }1=\text{pure})`}
           tex

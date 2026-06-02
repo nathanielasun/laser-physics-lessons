@@ -12,9 +12,13 @@
  *   D(v)   = W(v) N / (1 + R(v)/Rs)                               Eq.(22)-(24)
  *   W(v)   = (sqrt(pi) u)^{-1} exp[-(v/u)^2]                      Eq.(2)
  *   Gain(d)  ~ integral dv [ L(d-Kv) + L(d+Kv) ] D(v)            (saturated gain)
- *   steady-state output ~ Gain(d) - Loss                          Eq.(46)
+ *   gain margin ~ Gain(d) - Loss   (gain-excess proxy, NOT a       cf. Eq.(46)
+ *                 self-consistent gain=loss solve for the field)
  *
  * where d = (w - vn) is the detuning of the laser mode from line center.
+ * NOTE: the right panel plots the GAIN MARGIN at the slider field I_n, not the
+ * self-consistent operating intensity. The honest gain=loss solve would
+ * root-find I_n(d) per detuning; this proxy holds I_n fixed via the slider.
  *
  * We work in units of the Doppler width Ku = 1, so detuning x = d/Ku and the
  * homogeneous half-width is r = g/Ku. The most-probable speed sets Ku = K u = 1,
@@ -151,7 +155,7 @@ export default function Ch10Sim() {
       pert.push(gainPert(x, rGamma, intensity, excite) - loss);
     }
     const series: Series[] = [
-      { x: xs, y: sat, color: "#e11d48", width: 2.6, fill: true, label: "output (REA)" },
+      { x: xs, y: sat, color: "#e11d48", width: 2.6, fill: true, label: "gain margin (REA)" },
     ];
     if (showPert) {
       series.push({ x: xs, y: pert, color: "#9333ea", width: 1.8, dashed: true, label: "3rd-order" });
@@ -215,7 +219,7 @@ export default function Ch10Sim() {
         </div>
         <div>
           <div style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 4 }}>
-            Output power vs detuning (the Lamb dip)
+            Gain margin vs detuning (the Lamb dip)
           </div>
           <Plot
             width={320}
@@ -223,7 +227,7 @@ export default function Ch10Sim() {
             xRange={[-XMAX, XMAX]}
             yRange={[0, Math.max(0.001, stats.peak * 1.25)]}
             xLabel="detuning  (ω − νₙ)/Ku"
-            yLabel="output power"
+            yLabel="saturated gain − loss (gain margin)"
             lines={powerSeries}
             markers={powerMarkers}
           />
@@ -269,7 +273,7 @@ export default function Ch10Sim() {
         />
         <Toggle label="overlay 3rd-order (perturbation)" checked={showPert} onChange={setShowPert} />
         <Readout
-          label={String.raw`\text{relative output at } (\omega-\nu_n)/Ku`}
+          label={String.raw`\text{gain margin at } (\omega-\nu_n)/Ku`}
           tex
           value={stats.here.toFixed(3)}
         />

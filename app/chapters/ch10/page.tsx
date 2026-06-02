@@ -110,7 +110,7 @@ export default function Page() {
           <Tex>{String.raw`v`}</Tex>, the delta function enforcing free flight (<Tex>{String.raw`\lambda_a`}</Tex> is the
           pump rate):
         </p>
-        <EqBlock label="6">{String.raw`\rho(z, t) = \sum_a \int_{-\infty}^{t} dt_0 \int_{-\infty}^{\infty} dv\; \lambda_a(z_0, t_0, v)\, \rho(a, z_0, t_0, v, t)\,\delta(z - z_0 - v\,t + v t_0)`}</EqBlock>
+        <EqBlock label="6">{String.raw`\rho(z, v, t) = \sum_a \int_{-\infty}^{t} dt_0 \int_{0}^{L} dz_0\; \lambda_a(z_0, t_0, v)\, \rho(a, z_0, t_0, v, t)\,\delta(z - z_0 - v\,t + v t_0)`}</EqBlock>
         <p>
           Differentiating along a trajectory turns the ordinary time derivative into the convective one, and the matrix
           equation of motion is the stationary-atom result with that replacement and a pump source{" "}
@@ -149,7 +149,7 @@ export default function Page() {
             Tag each atom by its excitation position <Tex>{String.raw`z_0`}</Tex>, time{" "}
             <Tex>{String.raw`t_0`}</Tex>, and velocity <Tex>{String.raw`v`}</Tex>. Integrating the single-atom density
             matrix over these labels with the trajectory delta function (Eq. 6) gives the macroscopic{" "}
-            <Tex>{String.raw`\rho(z,t)`}</Tex>.
+            <Tex>{String.raw`\rho(z,v,t)`}</Tex>.
           </Step>
           <Step title="Differentiate along the path">
             Taking <Tex>{String.raw`d/dt`}</Tex> of <Tex>{String.raw`\rho(z(t),t)`}</Tex> along an atom&rsquo;s path
@@ -252,7 +252,7 @@ export default function Page() {
           waves, whose <Tex>{String.raw`\pm Kz`}</Tex> an atom converts to <Tex>{String.raw`\mp Kv`}</Tex> Doppler
           shifts:
         </p>
-        <EqBlock label="25">{String.raw`\tfrac{1}{2}\wp\,U_n(z)\,E_n\cos\nu_n t = \mathrm{Re}\,\{ -i\tfrac{1}{2}\wp E_n[e^{-i(\nu_n t + Kz)} + e^{-i(\nu_n t - Kz)}]\}`}</EqBlock>
+        <EqBlock label="25">{String.raw`\tfrac{1}{2}E_n\exp[-i(\nu_n t+\phi_n)]\sin K_n z + \mathrm{c.c.} = -i\tfrac{1}{4}E_n\big\{e^{-i(\nu_n t+\phi_n-K_n z)} - e^{-i(\nu_n t+\phi_n+K_n z)}\big\} + \mathrm{c.c.}`}</EqBlock>
         <EqBlock label="26">{String.raw`\omega \to \nu_n\left(1 - \frac{|v|}{c}\right)`}</EqBlock>
 
         <Derivation title="Adiabatic elimination, the two Lorentzians, and reading off the holes">
@@ -361,7 +361,7 @@ export default function Page() {
         <EqBlock label="28">{String.raw`\mathscr{P}_n^{(1)} = -\wp^2 (Ku\,\hbar)^{-1} E_n N\, Z(\xi)`}</EqBlock>
         <KeyResult
           number="29"
-          eq={String.raw`Z(\xi) = (Ku)^{-1}\sqrt{\pi}\int_{-\infty}^{\infty} dv\,\frac{\exp[-(v/u)^2]}{(\xi + iKv)^{-1}}`}
+          eq={String.raw`Z(\xi) = \frac{iK}{\sqrt{\pi}}\int_{-\infty}^{\infty} dv\,\frac{\exp[-(v/u)^2]}{\xi + iKv}`}
           label="Plasma dispersion function (velocity-averaged lineshape)"
           note={
             <>
@@ -374,10 +374,10 @@ export default function Page() {
         />
         <p>
           A time-domain (Fourier) representation makes the Doppler-vs-natural broadening competition explicit —
-          coherence decay <Tex>{String.raw`e^{-\gamma\tau}`}</Tex>, oscillation <Tex>{String.raw`e^{-i\xi\tau}`}</Tex>,
+          coherence decay <Tex>{String.raw`e^{-\gamma\tau}`}</Tex>, oscillation <Tex>{String.raw`e^{-i(\omega-\nu_n)\tau}`}</Tex>,
           and Gaussian Doppler damping <Tex>{String.raw`e^{-(Ku)^2\tau^2/4}`}</Tex>:
         </p>
-        <EqBlock label="30">{String.raw`Z(\xi) = iKu\int_{0}^{\infty} d\tau\,\exp[-\gamma\tau]\,e^{-i\xi\tau}e^{-\frac{1}{4}(Ku)^2\tau^2}`}</EqBlock>
+        <EqBlock label="30">{String.raw`Z = iKu\int_{0}^{\infty} d\tau\,e^{-\gamma\tau}\,e^{-i(\omega-\nu_n)\tau}\,e^{-\frac{1}{4}(Ku)^2\tau^2}`}</EqBlock>
         <p>
           In the Doppler limit <Tex>{String.raw`Ku \gg \gamma`}</Tex> the Gaussian is nearly flat over a Lorentzian and
           the integral simplifies dramatically — imaginary part a pure Gaussian, real part a Dawson-type dispersion
@@ -388,33 +388,33 @@ export default function Page() {
           The third-order (saturation) polarization is cubic in the field and carries products of the two Lorentzians;
           the cross terms (one <Tex>{String.raw`+`}</Tex> and one <Tex>{String.raw`-`}</Tex> shift) produce the dip:
         </p>
-        <EqBlock label="34">{String.raw`\mathscr{P}_n^{(3)} = \tfrac{1}{2}\wp^4(\hbar^3 Ku)^{-1} E_n^3\,N\,\Big[\dots \mathscr{D}(\omega - \nu_n + Kv) + \mathscr{D}(\omega - \nu_n - Kv)\dots\Big]/R_s`}</EqBlock>
+        <EqBlock label="33">{String.raw`\mathscr{P}_n^{(3)} = \tfrac{1}{8}\wp^4(\hbar^3 Ku\gamma)^{-1} E_n^3\,\bar N\,\Big\{iKu\int_{-\infty}^{\infty} dv\,W(v)\,\mathscr{D}(\omega-\nu_n+Kv)\,[\mathscr{L}(\omega-\nu_n+Kv)+\mathscr{L}(\omega-\nu_n-Kv)]\Big\}/R_s`}</EqBlock>
         <p>In the Doppler limit a velocity-derivative term vanishes and this reduces to a Gaussian envelope times a bracketed Lorentzian at line center:</p>
-        <EqBlock label="38">{String.raw`\tfrac{1}{2}\sqrt{\pi}\,Ku\,e^{-(\omega-\nu_n)^2/(Ku)^2}\big\{(Ku)^{-1}[\mathscr{D}(\omega-\nu_n)] + 1\big\}`}</EqBlock>
+        <EqBlock label="38">{String.raw`\tfrac{1}{8}\frac{\sqrt{\pi}\,\bar N\,\wp^4\gamma_{ab}}{\hbar^3 Ku\,\gamma\,\gamma_a\gamma_b}\,E_n^3\,e^{-(\omega-\nu_n)^2/(Ku)^2}\Big\{\tfrac{\omega-\nu_n}{\gamma}\mathscr{L}(\omega-\nu_n) + i\big[1 + \mathscr{L}(\omega-\nu_n)\big]\Big\}`}</EqBlock>
         <p>
-          The threshold population difference relates the linear gain coefficient <Tex>{String.raw`\alpha_0`}</Tex> to
-          the pump; the relative excitation <Tex>{String.raw`\mathfrak{N}=N/N_T`}</Tex> measures how far above threshold
+          The threshold population difference relates the linear gain coefficient <Tex>{String.raw`a_g`}</Tex> to
+          the pump; the relative excitation <Tex>{String.raw`\mathfrak{N}=\bar N/\bar N_T`}</Tex> measures how far above threshold
           the laser runs:
         </p>
-        <EqBlock label="40">{String.raw`N_T = \alpha_0/(Ku)\,(\wp^2\hbar^2/\sqrt{\pi})^{-1}`}</EqBlock>
+        <EqBlock label="40">{String.raw`\bar N_T = \varepsilon_0\hbar Ku\,(\wp^2 Q\sqrt{\pi})^{-1}`}</EqBlock>
         <p>The dip analysis confirms the relative excitation at which the dip appears, set by the ratio of homogeneous to Doppler width:</p>
-        <EqBlock label="41">{String.raw`\mathfrak{R} = 1 + 2\left(\frac{\gamma}{Ku}\right)^2`}</EqBlock>
+        <EqBlock label="41">{String.raw`\mathfrak{N} = 1 + 2\left(\frac{\gamma}{Ku}\right)^2`}</EqBlock>
         <p>
           The self-consistent gain and saturation coefficients come from the imaginary parts of the first- and
           third-order polarizations:
         </p>
-        <EqBlock label="42">{String.raw`\alpha_0 = \frac{\wp^2\hbar}{4\hbar^2 u\,\varepsilon_0\sqrt{\pi}}\,\mathrm{Im}\,\mathscr{P}_n`}</EqBlock>
+        <EqBlock label="42">{String.raw`a_g E_n = -\frac{\nu}{2\varepsilon_0}\,\mathrm{Im}\,\mathscr{P}_n`}</EqBlock>
         <KeyResult
           number="43"
-          eq={String.raw`\alpha_E = \frac{\wp^4 E_n^3}{48 \hbar^3 u\varepsilon_0\sqrt{\pi}}\int_{-\infty}^{\infty} dv\,\frac{e^{-(v/u)^2}\big[\mathscr{L}(\omega-\nu_n+Kv) + \mathscr{L}(\omega-\nu_n-Kv)\big]}{1 + \tfrac{1}{2}(\gamma_a u/\gamma)\big[\mathscr{L}(\omega-\nu_n+Kv) + \mathscr{L}(\omega-\nu_n-Kv)\big]}`}
+          eq={String.raw`a_g = \frac{\nu\wp^2 \bar N}{4\hbar\gamma u\varepsilon_0\sqrt{\pi}}\int_{-\infty}^{\infty} dv\,\frac{e^{-v^2/u^2}\big[\mathscr{L}(\omega-\nu_n+Kv) + \mathscr{L}(\omega-\nu_n-Kv)\big]}{1 + \tfrac{1}{2}(\gamma_{ab}/\gamma)I_n\big[\mathscr{L}(\omega-\nu_n+Kv) + \mathscr{L}(\omega-\nu_n-Kv)\big]}`}
           label="Saturated coefficient — the Lamb-dip-bearing integral"
           note={<>This velocity integral over the Maxwellian, with the saturation denominator, is exactly what the simulation evaluates.</>}
         />
         <p>Evaluate it on resonance and off resonance, and the dip falls out of the comparison:</p>
-        <EqBlock label="44">{String.raw`\alpha_E(\omega = \nu_n) = \left(\frac{\wp^4 E_n^3}{48 \hbar^3 u\varepsilon_0\sqrt{\pi}}\right)\left[\frac{2}{1 + (\gamma_a u/\gamma)\mathscr{L}(0)}\right]e^{-(\omega - \nu_n)^2/(Ku)^2}`}</EqBlock>
-        <EqBlock label="45">{String.raw`\alpha_E(\omega \neq \nu_n) = \left(\frac{\wp^4 E_n^3}{48 \hbar^3 u\varepsilon_0\sqrt{\pi}}\right)\left[\frac{2}{1 + \tfrac{1}{2}(\gamma_a u/\gamma)\mathscr{L}}\right]`}</EqBlock>
+        <EqBlock label="44">{String.raw`a_g(\omega = \nu_n) = \frac{\nu\wp^2\bar N}{4\hbar\gamma u\varepsilon_0\sqrt{\pi}}\left[\frac{2}{1 + (\gamma_{ab}/\gamma)I_n}\right]`}</EqBlock>
+        <EqBlock label="45">{String.raw`a_g(\omega \neq \nu_n) = \frac{\nu\wp^2\bar N}{4\hbar\gamma u\varepsilon_0\sqrt{\pi}}\left[\frac{2}{1 + \tfrac{1}{2}(\gamma_{ab}/\gamma)I_n}\right]e^{-(\omega - \nu_n)^2/(Ku)^2}`}</EqBlock>
         <KeyResult
-          eq={String.raw`\alpha_E(\omega=\nu_n) \;\propto\; \frac{2}{1 + (\gamma_a u/\gamma)\mathscr{L}(0)}\quad\text{vs}\quad \alpha_E(\omega\neq\nu_n) \;\propto\; \frac{2}{1 + \tfrac{1}{2}(\gamma_a u/\gamma)\big[\mathscr{L}(\omega-\nu_n+Kv)+\mathscr{L}(\omega-\nu_n-Kv)\big]}`}
+          eq={String.raw`a_g(\omega=\nu_n) \;\propto\; \frac{2}{1 + (\gamma_{ab}/\gamma)I_n}\quad\text{vs}\quad a_g(\omega\neq\nu_n) \;\propto\; \frac{2}{1 + \tfrac{1}{2}(\gamma_{ab}/\gamma)I_n\big[\mathscr{L}(\omega-\nu_n+Kv)+\mathscr{L}(\omega-\nu_n-Kv)\big]}`}
           label="The Lamb dip: single- vs double-Lorentzian saturation"
           note={
             <>
@@ -428,7 +428,7 @@ export default function Page() {
         <p>The operating intensity at each detuning comes from the steady-state balance of saturated gain against cavity loss:</p>
         <KeyResult
           number="46"
-          eq={String.raw`\mathrm{Loss} = \tfrac{1}{2}\frac{\nu}{Q}\,\varepsilon_0 = \alpha_E`}
+          eq={String.raw`\mathrm{Loss} = \tfrac{1}{2}\frac{\nu}{Q_n} = a_g`}
           label="Steady-state gain = loss"
           note={<>Solving this at each detuning gives the output power vs tuning — the curve that displays the Lamb dip.</>}
         />
@@ -437,10 +437,12 @@ export default function Page() {
           title="The Lamb dip: velocity hole burning builds the output-power dip"
           caption={
             <>
-              The dip is computed by the genuine velocity integral of Eqs. (21)–(24) with the gain&nbsp;=&nbsp;loss
-              balance of Eq. (46) — not a hand-drawn <Tex>{String.raw`1-\text{Lorentzian}`}</Tex>. The left panel shows
-              the saturated velocity distribution with the two Bennett holes; the right panel shows the resulting output
-              power vs detuning.
+              The dip is computed from the genuine velocity integral of Eqs. (21)–(24) — not a hand-drawn{" "}
+              <Tex>{String.raw`1-\text{Lorentzian}`}</Tex>. The left panel shows the saturated velocity distribution with
+              the two Bennett holes; the right panel plots the saturated gain minus a fixed cavity loss (the{" "}
+              <em>gain margin</em>) vs detuning, evaluated at the slider field <Tex>{String.raw`I_n`}</Tex>. This is a
+              gain-excess proxy for the output, not a self-consistent solve of the gain&nbsp;=&nbsp;loss balance of
+              Eq.&nbsp;(46).
             </>
           }
           tryThis={
@@ -467,12 +469,12 @@ export default function Page() {
           </Step>
           <Step title="Third-order expansion and the Doppler limit">
             Expand the denominator <Tex>{String.raw`(1+R/R_s)^{-1}\approx 1 - R/R_s`}</Tex>. The third-order
-            polarization (Eqs. 34–38) contains products of the two displaced Lorentzians. In the Doppler limit (
+            polarization (Eqs. 33–38) contains products of the two displaced Lorentzians. In the Doppler limit (
             <Tex>{String.raw`Ku \gg \gamma`}</Tex>) a velocity-derivative term vanishes and the result reduces to a
             Gaussian envelope times <Tex>{String.raw`\{1 + \text{Lorentzian at line center}\}`}</Tex> (Eq. 38).
           </Step>
           <Step title="Single- vs double-Lorentzian saturation">
-            Evaluate <Tex>{String.raw`\alpha_E`}</Tex> (Eq. 43) on center (Eq. 44) and off center (Eq. 45). On center
+            Evaluate <Tex>{String.raw`a_g`}</Tex> (Eq. 43) on center (Eq. 44) and off center (Eq. 45). On center
             the two waves share <em>one</em> velocity group (single Lorentzian); off center they use <em>two</em> groups
             (both Lorentzians, halved). The center is therefore more saturated, so through gain = loss (Eq. 46) the
             output power dips at line center.
@@ -526,18 +528,18 @@ export default function Page() {
         <p>The first-order coherence is built from one field interaction acting on the population difference, integrated over history:</p>
         <EqBlock label="48">{String.raw`\rho_{ab}(z, v, t) = \frac{i}{\hbar}\int_{-\infty}^{t} dt'\,e^{-(i\omega + \gamma)\tau}\,\mathscr{V}_{ab}(z, t')\,[\rho_{aa}(z, v, t') - \rho_{bb}(z, v, t')]`}</EqBlock>
         <p>The lowest-order population difference is just the unsaturated <Tex>{String.raw`N`}</Tex> — the source term of the tree:</p>
-        <EqBlock label="49">{String.raw`\rho_{aa}^{(2)} - \rho_{bb}^{(2)} = \gamma^{-1}\lambda_a - \gamma^{-1}\lambda_b \equiv N(z, v, t)`}</EqBlock>
+        <EqBlock label="49">{String.raw`\rho_{aa}^{(0)} - \rho_{bb}^{(0)} = \gamma_a^{-1}\lambda_a - \gamma_b^{-1}\lambda_b \equiv N(z, v, t)`}</EqBlock>
         <p>Iterating: first-order coherence (one interaction) feeds the second-order population (two interactions), which feeds the third-order coherence (three interactions):</p>
         <EqBlock label="50">{String.raw`\rho_{ab}^{(1)}(z, v, t) = \frac{i}{\hbar}\,N(z, v, t)\int_{-\infty}^{t} dt'\,e^{-(i\omega + \gamma)\tau}\,\mathscr{V}_{ab}(z', t')`}</EqBlock>
-        <EqBlock label="51">{String.raw`\rho_{aa}^{(2)}(z, v, t) = -\frac{i}{\hbar}\int_{-\infty}^{t} dt''\int_{-\infty}^{t''} dt'\,e^{-(i\omega + \gamma)\tau'}\,\mathscr{V}_{ab}(z'', t'')\,\rho_{ab}^{(1)}(z', v, t') + \text{c.c.}`}</EqBlock>
-        <EqBlock label="53">{String.raw`\rho_{ab}^{(3)}(z, v, t) = i\hbar^{-3}\int_{-\infty}^{t} dt'''\!\int\!\!\int dt''\,dt'\,e^{-(i\omega + \gamma)\tau''}\,\mathscr{V}_{ab}(z''', t''')\,[\rho_{aa}^{(2)} - \rho_{bb}^{(2)}](z'', v, t'')`}</EqBlock>
+        <EqBlock label="51">{String.raw`\rho_{aa}^{(2)}(z, v, t) = -\frac{i}{\hbar}\int_{-\infty}^{t} dt'\,e^{-\gamma_a\tau'}\,\mathscr{V}_{ab}(z', t')\,\rho_{ba}^{(1)}(z', v, t') + \text{c.c.}`}</EqBlock>
+        <EqBlock label="53">{String.raw`\rho_{ab}^{(3)}(z, v, t) = i\hbar^{-1}\int_{-\infty}^{t} dt'\,e^{-(i\omega + \gamma)\tau'}\,\mathscr{V}_{ab}(z', t')\,[\rho_{aa}^{(2)} - \rho_{bb}^{(2)}](z', v, t')`}</EqBlock>
         <p>
           The velocity/space integral of the third-order coherence yields the self- and cross-saturation coefficients
-          that drive the three-mode intensity-coupling result, in which the central mode intensity{" "}
-          <Tex>{String.raw`I_q`}</Tex> depends on the side-mode intensities through the locking parameter{" "}
-          <Tex>{String.raw`\Delta`}</Tex>:
+          that drive the three-mode intensity coupling. The symmetric saturation term <Tex>{String.raw`l_s`}</Tex>{" "}
+          collects these contributions, with the side-mode amplitudes <Tex>{String.raw`E_1, E_2`}</Tex> entering through
+          the mode-spacing parameter <Tex>{String.raw`\Delta`}</Tex>:
         </p>
-        <EqBlock label="54">{String.raw`I_q = \tfrac{1}{2}\pm \tfrac{1}{4}\sqrt{N}(\wp\hbar Ku\gamma_a)^{-1}(\gamma_{ab})^{-3}\mathscr{L}(\Delta)\Big[(E_2^2 + 2E_1^2) + 2\tfrac{\gamma}{\gamma_a}E_1^2 + (\gamma_a - \mathscr{D})\mathscr{L}(\Delta)|E_2|^2\Big] + (\gamma_a \to \gamma_b)`}</EqBlock>
+        <EqBlock label="54">{String.raw`l_s = \tfrac{1}{16}\pi^{1/2}\wp^4\bar N(\hbar^3 Ku\varepsilon_0)^{-1}(\gamma_a\gamma)^{-2}\mathscr{L}_a(\Delta)\Big[\frac{N_2}{\bar N}(\gamma_a\gamma-\tfrac{1}{2}\Delta^2)\mathscr{L}(\tfrac{1}{2}\Delta)(E_2^2 + 2E_1^2) + 2\tfrac{\gamma}{\gamma_a}E_1^2 + (\gamma_a\gamma - \Delta^2)\mathscr{L}(\Delta)E_2^2\Big] + (\gamma_a \to \gamma_b)`}</EqBlock>
 
         <Callout kind="note" title="Equations at the limit of scan legibility">
           Eq. (54) is dense and partly drawn from end-of-chapter problems. Its overall <em>structure</em>
@@ -613,29 +615,32 @@ export default function Page() {
           Expand the quadrature polarization in odd spatial harmonics and the population difference in even harmonics;
           the coupling between them generates the continued-fraction recursion:
         </p>
-        <EqBlock label="60">{String.raw`S_n(z, v, t) = -i\wp N(z, v, t)\sum_{j=0}^{\infty} q_{2j+1}(v)\,e^{i(2j+1)\,2Kz}`}</EqBlock>
-        <EqBlock label="61">{String.raw`D(z, v, t) = N(z, v, t)\sum_{j=-\infty}^{\infty} q_{2j}(v)\,e^{2ij\,2Kz}`}</EqBlock>
+        <EqBlock label="60">{String.raw`S_n(z, v, t) = -i\wp N(z, v, t)\sum_{j=-\infty}^{\infty} q_{2j+1}(v)\,e^{i(2j+1)K_n z}`}</EqBlock>
+        <EqBlock label="61">{String.raw`D(z, v, t) = N(z, v, t)\sum_{j=-\infty}^{\infty} q_{2j}(v)\,e^{2ijK_n z}`}</EqBlock>
         <p>The strong-signal self-consistency relation determines the field intensity <Tex>{String.raw`I_n`}</Tex> implicitly through the velocity average of the continued fraction:</p>
         <KeyResult
           number="62"
-          eq={String.raw`\mathfrak{R}^{-1} = 2Ku\,(\gamma_{ab}Z_d(\xi))^{-1}\int_{-\infty}^{\infty} dv\,W(v)\,\mathfrak{F}(v, \omega - \nu_n, I_n)\,[1 + I_n\,\mathfrak{F}(v, \omega - \nu_n, I_n)]^{-1}`}
+          eq={String.raw`\mathfrak{N}^{-1} = 2Ku\,(\gamma_{ab}Z_i(\gamma))^{-1}\int_0^\infty dv\,W(v)\,\mathfrak{F}(v, \omega - \nu_n, I_n)\,[1 + I_n\,\mathfrak{F}(v, \omega - \nu_n, I_n)]^{-1}`}
           label="Strong-signal self-consistency"
         />
         <p>The lowest-order value of the continued fraction is again the sum of the two displaced Lorentzians — strong-signal theory reduces to the hole-burning rate equation at lowest order:</p>
         <EqBlock label="63">{String.raw`\mathfrak{F} \equiv \tfrac{1}{2}\frac{\gamma_{ab}}{\gamma}\big[\mathscr{L}(\omega - \nu_n + Kv) + \mathscr{L}(\omega - \nu_n - Kv)\big]`}</EqBlock>
         <p>
-          For reference, the lowest-order single-mode polarization (Prob. 10-13) written compactly through the plasma
-          dispersion function:
+          For reference, the rate-equation-approximation single-mode polarization (Prob. 10-12), expressed through
+          plasma dispersion functions at shifted arguments <Tex>{String.raw`\upsilon_\pm`}</Tex>:
         </p>
-        <EqBlock label="64">{String.raw`\mathscr{P}_n(t) = -\frac{\wp^2}{8\hbar Ku}\,E_n\,Z(\sigma_+ + i\sigma_- - i\nu_n) + i\frac{\nu}{\gamma}Z(\sigma_+ + i\sigma_- - i\nu_n)`}</EqBlock>
-        <p>The third-order strong-signal quadrature polarization (Prob. 10-11), expressed through plasma dispersion functions at shifted arguments <Tex>{String.raw`\sigma_\pm`}</Tex>:</p>
-        <EqBlock label="65">{String.raw`S_n(z, v, t) = -\frac{\wp^3}{8\hbar^3 Ku}\,E_n^3\,\big[Z_d(\gamma + i\delta)(1 + A)\{2[Z(\sigma_+)\sigma_+] + Z(\sigma_-)\sigma_-\} + (1 - A)[Z_d(\sigma_+)|v_-]\big]`}</EqBlock>
+        <EqBlock label="65">{String.raw`\mathscr{P}_n(t) = -\tfrac{1}{2}\Big[\frac{\wp^2\bar N}{\hbar Ku}\Big]E_n(\gamma + i\Delta)\big\{(1 + A)[Z(\upsilon_+)/\upsilon_+] + (1 - A)[Z(\upsilon_-)/\upsilon_-]\big\}`}</EqBlock>
         <p>with the shifted arguments, power-broadened width, and velocity/detuning factor:</p>
-        <EqBlock label="66">{String.raw`\sigma_\pm = \gamma^{-1} - \delta\pm[(\gamma_a u)^{1/2}Z_d^{1/2} - 4\delta\gamma^2]^{1/2},\quad \gamma = \gamma[1 + (\gamma_a u)^2/4]^{1/2},\quad A = \frac{\gamma_a u + 4i\delta}{[(\gamma_a u)^2 - 16\delta^2(\gamma/\gamma)^2]^{1/2}}`}</EqBlock>
+        <EqBlock label="66">{String.raw`\upsilon_\pm^2 = \gamma'^2 - \Delta^2 \pm\big[(\gamma\gamma_{ab}I_n/2)^2 - 4\Delta^2\gamma'^2\big]^{1/2},\quad \gamma' = \gamma\big[1 + \tfrac{1}{2}(\gamma_{ab}/\gamma)I_n\big]^{1/2},\quad A = \frac{\gamma_{ab}I_n + 4i\Delta}{[(\gamma_{ab}I_n)^2 - 16\Delta^2(\gamma'/\gamma)^2]^{1/2}}`}</EqBlock>
+        <p>
+          For reference, the lowest-order single-mode polarization (Prob. 10-13) written compactly through the plasma
+          dispersion function and the power-broadened width <Tex>{String.raw`\gamma'`}</Tex>:
+        </p>
+        <EqBlock label="67">{String.raw`\mathscr{P}_n(t) = -\frac{\wp^2}{\hbar Ku}\,\bar N\,E_n\big[Z_r(\gamma'+i\omega-i\nu_n) + i\tfrac{\gamma}{\gamma'}Z_i(\gamma'+i\omega-i\nu_n)\big]`}</EqBlock>
 
         <Callout kind="note" title="Problem-set equations transcribed by structure">
-          Eqs. (65)–(66) come from end-of-chapter problems and are at the limit of scan legibility. Trust their{" "}
-          <em>structure</em> — plasma-dispersion arguments <Tex>{String.raw`\sigma_\pm`}</Tex>, Lorentzian products, the
+          Eqs. (65)–(67) come from end-of-chapter problems and are at the limit of scan legibility. Trust their{" "}
+          <em>structure</em> — plasma-dispersion arguments <Tex>{String.raw`\upsilon_\pm`}</Tex>, Lorentzian products, the
           power-broadened width — and treat the exact factor arrangement as best-effort. The continued-fraction
           machinery itself lives in Appendix E.
         </Callout>

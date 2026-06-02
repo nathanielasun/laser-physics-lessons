@@ -281,6 +281,7 @@ ${JSON.stringify(open.map((i) => i.problem), null, 2)}`,
   }
 
   const status = !verifiedAtAll ? "unverified" : open.length ? "needs-attention" : round ? "fixed" : "ok";
+  log(`RESULT ${u.slug}: status=${status} rounds=${round} residual=${open.length} verifiers=${verdicts.length}`);
   return {
     slug: u.slug,
     status,
