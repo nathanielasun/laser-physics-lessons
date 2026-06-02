@@ -330,7 +330,7 @@ export default function Page() {
           other two oscillate so fast they average to nothing. Dropping them is the rotating-wave approximation, and
           what remains is the Jaynes–Cummings Hamiltonian. Solve it on resonance and the atom flops between{" "}
           <Tex>{String.raw`|a,n\rangle`}</Tex> and <Tex>{String.raw`|b,n+1\rangle`}</Tex> at frequency{" "}
-          <Tex>{String.raw`2g\sqrt{n+1}`}</Tex>. The headline: even with <Tex>{String.raw`n=0`}</Tex> the atom still
+          <Tex>{String.raw`g\sqrt{n+1}`}</Tex>. The headline: even with <Tex>{String.raw`n=0`}</Tex> the atom still
           flops — the vacuum Rabi oscillation, spontaneous emission appearing as a reversible coherent flop because the
           atom talks to only one mode.
         </Intuition>
@@ -394,21 +394,21 @@ export default function Page() {
             a simple SHO equation oscillating at the quantized Rabi frequency <Tex>{String.raw`g\sqrt{n+1}`}</Tex>:
             <EqBlock label="80">{String.raw`C_{a,n}(t) = A\sin\!\big(g\sqrt{n+1}\,t\big) + B\cos\!\big(g\sqrt{n+1}\,t\big).`}</EqBlock>
             With the <strong>emission</strong> initial condition,
-            <EqBlock label="82,83">{String.raw`C_{a,n}(t) = \cos\!\big(g\sqrt{n+1}\,t\big), \qquad C_{b,n+1}(t) = -i\sin\!\big(g\sqrt{n+1}\,t\big),`}</EqBlock>
+            <EqBlock label="84,85">{String.raw`C_{a,n}(t) = \cos\!\big(g\sqrt{n+1}\,t\big), \qquad C_{b,n+1}(t) = -i\sin\!\big(g\sqrt{n+1}\,t\big),`}</EqBlock>
             while for <strong>absorption</strong> the roles of upper and lower amplitudes simply interchange:
-            <EqBlock label="84,85">{String.raw`C_{a,n}(t) = \cos\!\big(g\sqrt{n+1}\,t\big), \qquad C_{b,n+1}(t) = -i\sin\!\big(g\sqrt{n+1}\,t\big)\ \ (\text{IC interchanged}).`}</EqBlock>
+            <EqBlock label="82,83">{String.raw`C_{a,n}(t) = -i\sin\!\big(g\sqrt{n+1}\,t\big), \qquad C_{b,n+1}(t) = \cos\!\big(g\sqrt{n+1}\,t\big)`}</EqBlock>
             The atom periodically emits and reabsorbs its photon — reversible, because there is only one mode.
           </Step>
         </Derivation>
 
         <KeyResult
           eq={String.raw`C_{a,n}(t) = \cos\!\big(g\sqrt{n+1}\,t\big), \qquad |C_{b,n+1}(t)|^2 = \sin^2\!\big(g\sqrt{n+1}\,t\big)`}
-          label="Quantized Rabi flopping (Eqs. 82–83)"
+          label="Quantized Rabi flopping (Eqs. 84–85)"
           note={
             <>
               The atom oscillates between <Tex>{String.raw`|a,n\rangle`}</Tex> and{" "}
-              <Tex>{String.raw`|b,n+1\rangle`}</Tex> at the quantized Rabi frequency{" "}
-              <Tex>{String.raw`\Omega_{\text{Rabi}} = 2g\sqrt{n+1}`}</Tex>. The <Tex>{String.raw`\sqrt{n+1}`}</Tex> —
+              <Tex>{String.raw`|b,n+1\rangle`}</Tex> at the quantized Rabi (flopping) frequency{" "}
+              <Tex>{String.raw`\Omega_{\text{Rabi}} = g\sqrt{n+1}`}</Tex>. The <Tex>{String.raw`\sqrt{n+1}`}</Tex> —
               nonzero even for <Tex>{String.raw`n=0`}</Tex> — is the vacuum Rabi oscillation.
             </>
           }
@@ -419,16 +419,20 @@ export default function Page() {
           caption={
             <>
               An excited atom exchanges energy with a quantized field. In <strong>single-mode</strong> mode it flops
-              reversibly at <Tex>{String.raw`2g\sqrt{n+1}`}</Tex> (Eqs. 82–85, integrated live by RK4). Flip to{" "}
+              reversibly at <Tex>{String.raw`g\sqrt{n+1}`}</Tex> (Eqs. 82–85, integrated live by RK4). Flip to{" "}
               <strong>continuum</strong> to overlay the irreversible Weisskopf–Wigner envelope{" "}
               <Tex>{String.raw`e^{-\gamma_a t}`}</Tex>. The right panel shows the perturbative detuning lineshape of
-              Eq.&nbsp;(75).
+              Eq.&nbsp;(75). The sim&rsquo;s readout reports{" "}
+              <Tex>{String.raw`\Omega_{\text{Rabi}} = 2g\sqrt{n+1}`}</Tex> — the <em>population</em>-oscillation rate,
+              which is twice the book&rsquo;s <em>amplitude</em> flopping frequency{" "}
+              <Tex>{String.raw`g\sqrt{n+1}`}</Tex> (the frequency inside the <Tex>{String.raw`\cos/\sin`}</Tex> of
+              Eqs.&nbsp;82–85); the two should not be confused.
             </>
           }
           tryThis={
             <>
               Set <Tex>{String.raw`n=0`}</Tex> in single-mode mode: the atom <em>still</em> flops at{" "}
-              <Tex>{String.raw`2g`}</Tex> — the <strong>vacuum Rabi flop</strong>, impossible in semiclassical theory.
+              <Tex>{String.raw`g`}</Tex> — the <strong>vacuum Rabi flop</strong>, impossible in semiclassical theory.
               Now raise <Tex>{String.raw`n`}</Tex> and watch the flopping speed up as{" "}
               <Tex>{String.raw`\sqrt{n+1}`}</Tex>. Switch to continuum and the same atom decays smoothly with no
               revival — energy has escaped into the continuum. On the lineshape panel, increase{" "}
@@ -490,7 +494,7 @@ export default function Page() {
             <EqBlock label="95">{String.raw`\dot C_{a, n_1 n_2 \ldots 0_k \ldots}(t) = -i\sum_k \sqrt{n_k + 1}\,g_k\,e^{-i(\Omega_k-\omega)t}\,C_{b,\ldots n_k+1 \ldots}(t).`}</EqBlock>
             Formally integrate the lower-state equations and substitute back to get a single integro-differential
             equation for <Tex>{String.raw`C_{a,0}`}</Tex>:
-            <EqBlock label="98–100">{String.raw`C_{a,0}(t) = -i\sum_k g_k\int_0^t dt'\,e^{-i(\Omega_k-\omega)t'}\,C_{b,1_k}(t').`}</EqBlock>
+            <EqBlock label="98–100">{String.raw`\dot C_{a,0}(t) = -\sum_k g_k^2\int_0^t dt'\,e^{-i(\Omega_k-\omega)(t-t')}\,C_{a,0}(t').`}</EqBlock>
           </Step>
           <Step title="Density of modes and the Weisskopf–Wigner approximation">
             Convert the discrete mode sum to an integral over a smooth density of states{" "}
@@ -498,7 +502,7 @@ export default function Page() {
             <EqBlock label="101">{String.raw`\sum_k \rightarrow \int d\Omega\,\mathfrak{D}(\Omega).`}</EqBlock>
             Because <Tex>{String.raw`\mathfrak D`}</Tex> and <Tex>{String.raw`g`}</Tex> vary slowly across the narrow
             band that contributes, pull them out at <Tex>{String.raw`\Omega=\omega`}</Tex>:
-            <EqBlock label="102">{String.raw`C_{a,0}(t) = -g^2\Omega^2\mathfrak{D}(\Omega)\int d\Omega\int_0^t dt'\,e^{-i(\Omega-\omega)(t-t')}\,C_{a,0}(t').`}</EqBlock>
+            <EqBlock label="102">{String.raw`\dot C_{a,0}(t) = -g^2(\omega)\,\mathfrak{D}(\omega)\int d\Omega\int_0^t dt'\,e^{-i(\Omega-\omega)(t-t')}\,C_{a,0}(t').`}</EqBlock>
             The long-time limit of the time integral gives a delta-function (energy conservation) plus a principal-value
             level shift (the Lamb-type shift, dropped here):
             <EqBlock label="103">{String.raw`\int_0^t dt'\,e^{-i(\Omega-\omega)(t-t')} = \pi\delta(\Omega-\omega) - i\,\mathscr{P}\!\left(\frac{1}{\Omega-\omega}\right).`}</EqBlock>
@@ -634,7 +638,7 @@ export default function Page() {
               interaction for the rest of the quantum-optics chapters.
             </li>
             <li>
-              <strong>Quantized Rabi frequency</strong> <Tex>{String.raw`2g\sqrt{n+1}`}</Tex>: the classical Rabi
+              <strong>Quantized Rabi frequency</strong> <Tex>{String.raw`g\sqrt{n+1}`}</Tex>: the classical Rabi
               frequency with <Tex>{String.raw`\sqrt{n+1}`}</Tex> replacing the c-number amplitude. The{" "}
               <Tex>{String.raw`+1`}</Tex> is the spontaneous (vacuum) contribution.
             </li>

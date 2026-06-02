@@ -109,7 +109,7 @@ export default function Page() {
           The macroscopic <Tex>{String.raw`P`}</Tex> is the microscopic dipole density. Relate the polarization envelope
           to the density matrix through the dipole matrix element <Tex>{String.raw`\wp`}</Tex>:
         </p>
-        <EqBlock label="4">{String.raw`\mathscr{P}_{ab} = \tfrac{1}{2}\wp\,\mathscr{P}(z,t)\,\exp[-i(\nu t - Kz)].`}</EqBlock>
+        <EqBlock label="4">{String.raw`\mathscr{V}_{ab} = -\tfrac{1}{2}\wp\,\mathscr{E}(z,t)\,\exp[-i(\nu t - Kz)].`}</EqBlock>
         <p>
           The dipole obeys an optical Bloch equation: it oscillates at its own frequency{" "}
           <Tex>{String.raw`\omega`}</Tex>, decays at rate <Tex>{String.raw`\gamma = 1/T_2`}</Tex>, and is driven by the
@@ -133,11 +133,11 @@ export default function Page() {
           equation whose memory integral over past <Tex>{String.raw`D`}</Tex> arises from the unequal level decay rates.
           This memory is what makes coherent propagation history-dependent:
         </p>
-        <EqBlock label="10">{String.raw`\dot{D} = \frac{2\bar{N}_2}{\gamma_0}N - \gamma_{ab}D + \tfrac{1}{2}(\gamma_a - \gamma_b)^2\!\int_{-\infty}^{t}\!\! dt'\,\exp[-\gamma_{ab}(t-t')]\,D(z,\omega,t') + \left[\,i\left(\frac{\wp}{\hbar}\right)\mathscr{E}(z,t)\exp[-i(\nu t - Kz)]\rho_{ba} + \text{c.c.}\,\right].`}</EqBlock>
+        <EqBlock label="10">{String.raw`\dot{D} = \frac{\gamma_a\gamma_b}{\gamma_{ab}}N - \gamma_{ab}D + \tfrac{1}{4}(\gamma_a - \gamma_b)^2\!\int_{-\infty}^{t}\!\! dt'\,\exp[-\gamma_{ab}(t-t')]\,D(z,\omega,t') + \left[\,i\left(\frac{\wp}{\hbar}\right)\mathscr{E}(z,t)\exp[-i(\nu t - Kz)]\rho_{ba} + \text{c.c.}\,\right].`}</EqBlock>
         <p>
           The equilibrium inversion available before any field is set by the balance of pump and decay rates:
         </p>
-        <EqBlock label="11">{String.raw`N = \lambda_a\gamma_b^{-1} - \lambda_b\gamma_a^{-1}.`}</EqBlock>
+        <EqBlock label="11">{String.raw`N = \lambda_a\gamma_a^{-1} - \lambda_b\gamma_b^{-1}.`}</EqBlock>
 
         <Derivation title="Close the dipole into a coupled homogeneous master equation">
           <Step title="Polarization from the density matrix (homogeneous)">
@@ -151,7 +151,7 @@ export default function Page() {
             Integrating (5) over time expresses the polarization envelope as a convolution of the field history with the
             inversion, weighted by the free-dipole phase factor. This kernel is the mathematical signature of
             coherence — the trailing edge feels what the leading edge did:
-            <EqBlock label="16">{String.raw`\mathscr{P}(z,t) = -i\frac{\wp^2}{\hbar}\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\exp[-i(\omega - \nu)(t-t')]\,D(z,\omega,t').`}</EqBlock>
+            <EqBlock label="16">{String.raw`\mathscr{P}(z,t) = -i\frac{\wp^2}{\hbar}\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\exp[-(i(\omega - \nu)+\gamma)(t-t')]\,D(z,\omega,t').`}</EqBlock>
           </Step>
           <Step title="Assemble the homogeneous master equation">
             Substitute (16) into the field PDE (3) to get a single coupled integro-differential equation for the
@@ -190,8 +190,8 @@ export default function Page() {
         <p>
           The polarization envelope and field equation become compact convolutions of <Tex>{String.raw`\chi`}</Tex>:
         </p>
-        <EqBlock label="22">{String.raw`\mathscr{P}(z,t) = -i\frac{\wp^2 N}{\hbar}\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\exp[-\gamma(t-t')]\,\chi(z,t-t',t),`}</EqBlock>
-        <EqBlock label="23">{String.raw`\frac{\partial\mathscr{E}}{\partial z} + \frac{1}{c}\frac{\partial\mathscr{E}}{\partial t} + \kappa\,\mathscr{E} = \alpha'\!\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\exp[-\gamma(t-t')]\,\chi(z,t-t',t).`}</EqBlock>
+        <EqBlock label="22">{String.raw`\mathscr{P}(z,t) = -i\frac{\wp^2 N}{\hbar}\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\exp[-\gamma(t-t')]\,\chi(z,t-t',t'),`}</EqBlock>
+        <EqBlock label="23">{String.raw`\frac{\partial\mathscr{E}}{\partial z} + \frac{1}{c}\frac{\partial\mathscr{E}}{\partial t} + \kappa\,\mathscr{E} = \alpha'\!\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\exp[-\gamma(t-t')]\,\chi(z,t-t',t').`}</EqBlock>
         <p>
           The partner to (23) is the equation of motion for <Tex>{String.raw`\chi`}</Tex>, obtained by differentiating
           (21) and using the inversion dynamics (10). The intermediate form is
@@ -200,7 +200,7 @@ export default function Page() {
         <p>
           and carrying it out gives the full coupled susceptibility equation of motion:
         </p>
-        <EqBlock label="24">{String.raw`\frac{\partial}{\partial t}\chi(z,T,t) = \frac{2\wp^2 N}{\hbar}\bar{W}(T) - \gamma_{ab}\,\chi(z,T,t) + \tfrac{1}{2}(\gamma_a-\gamma_b)^2\!\int_{-\infty}^{t}\! dt'\,\exp[-\gamma(t-t')]\,\chi(z,T,t-t'+t,t') - \tfrac{1}{2}\left(\frac{\wp}{\hbar}\right)^2\!\int_{-\infty}^{t}\! dt'\,\big[\mathscr{E}(z,t')\,\chi(z,T-t+t',T+t-t'+t,t') + \mathscr{E}^*(z,t')\,\chi(z,T+t-t',T+t-t',t')\big].`}</EqBlock>
+        <EqBlock label="24">{String.raw`\frac{\partial}{\partial t}\chi(z,T,t) = \frac{\gamma_a\gamma_b}{\gamma_{ab}}\bar{W}(T) - \gamma_{ab}\,\chi(z,T,t) + \tfrac{1}{4}(\gamma_a-\gamma_b)^2\!\int_{-\infty}^{t}\! dt'\,\exp[-\gamma_{ab}(t-t')]\,\chi(z,T,t') - \tfrac{1}{2}\left(\frac{\wp}{\hbar}\right)^2\!\int_{-\infty}^{t}\! dt'\,\exp[-\gamma(t-t')]\big[\mathscr{E}(z,t)\mathscr{E}^*(z,t')\,\chi(z,T-t+t',t') + \mathscr{E}^*(z,t)\mathscr{E}(z,t')\,\chi(z,T+t-t',t')\big].`}</EqBlock>
         <p>
           Here <Tex>{String.raw`\bar{W}(T)`}</Tex> is the Fourier transform of the inhomogeneous line — physically the
           free-induction-decay envelope of the macroscopic dipole:
@@ -272,14 +272,16 @@ export default function Page() {
           <Tex>{String.raw`(\tau_p \gg T_2)`}</Tex>, so the dipoles follow the field adiabatically and the medium
           responds only through its instantaneous population difference — a rate equation. The new physics versus
           steady-state laser theory is <strong>saturable absorption (bleaching)</strong>: a weak pulse obeys ordinary
-          Beer&rsquo;s law, but a strong pulse depletes the absorbers, so the leading edge is eaten while the trailing
-          edge sails through. The pulse sharpens, its trailing edge steepens, and its peak appears to advance faster
-          than <Tex>{String.raw`c`}</Tex>.
+          Beer&rsquo;s law, but a strong pulse preferentially absorbs and bleaches the leading edge — energy is removed
+          from the front, so the surviving peak is pushed to <em>later</em> retarded time (slow light, a pulse{" "}
+          <em>delay</em>). The opposite happens in a saturable <em>amplifier</em>: the leading edge sees full inversion
+          and is amplified before the gain is depleted, so the peak grows and shifts to <em>earlier</em> retarded time —
+          an apparent advance faster than <Tex>{String.raw`c`}</Tex> (no signal actually exceeds it).
         </Intuition>
         <p>
           The regime is the timescale ordering
         </p>
-        <EqBlock label="26">{String.raw`\frac{1}{T} \ll T_2 \ll \tau_p \ll T_1 \approx \frac{1}{\gamma_a},\frac{1}{\gamma_b}.`}</EqBlock>
+        <EqBlock label="26">{String.raw`\frac{1}{\gamma} \equiv T_2 \ll \tau_p \ll T_1 \simeq \frac{1}{\gamma_a},\frac{1}{\gamma_b}.`}</EqBlock>
         <p>
           In this limit the inversion is depleted at a rate proportional to the intensity, where the natural intensity
           unit is the squared Rabi frequency:
@@ -348,7 +350,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="39"
-          eq={String.raw`I(z,\tau) = I(0,\tau)\exp(a z)\left\{1 + \exp(a z)\left[\exp\!\Big(T_2\!\int_{-\infty}^{\tau}\! dt'\, I(0,t')\Big) - 1\right]\right\}^{-1}`}
+          eq={String.raw`I(z,\tau) = I(0,\tau)\exp(a z)\,\frac{\exp\!\big[T_2\!\int_{-\infty}^{\tau}\! dt'\, I(0,t')\big]}{1 + \exp(a z)\big\{\exp\!\big[T_2\!\int_{-\infty}^{\tau}\! dt'\, I(0,t')\big] - 1\big\}}`}
           label="Propagated pulse shape (Frantz–Nodvik)"
         />
         <EqBlock label="40 region">{String.raw`I(z,\tau) \simeq I(0,\tau)\exp(a z)\qquad (\text{leading edge}).`}</EqBlock>
@@ -356,9 +358,11 @@ export default function Page() {
         <Figure
           caption={
             <>
-              Pulse sharpening in a saturable absorber. The leading edge bleaches the medium at its own expense, so the
-              surviving <em>peak</em> sits at progressively earlier retarded time — an apparent superluminal advance —
-              while the trailing edge passes through the now-transparent medium. Nothing physical exceeds{" "}
+              Pulse reshaping in a saturable absorber. The leading edge is preferentially absorbed and bleaches the
+              medium at its own expense, so energy is removed from the front and the surviving <em>peak</em> sits at{" "}
+              <em>later</em> retarded time — a pulse delay (slow light) — while the trailing edge passes through the
+              now-transparent medium. The mirror-image effect, an apparent superluminal peak <em>advance</em>, occurs in
+              a saturable amplifier whose leading edge is amplified first. Nothing physical exceeds{" "}
               <Tex>{String.raw`c`}</Tex>; the pulse is reshaped, not accelerated.
             </>
           }
@@ -379,32 +383,32 @@ export default function Page() {
             <text x="190" y="58" textAnchor="middle" fontSize="11" fill="#5b6473">
               input I(0, τ)
             </text>
-            {/* output pulse: sharpened, peak shifted earlier (left), steep trailing edge */}
+            {/* output pulse: leading edge absorbed, peak shifted later (right) — pulse delay */}
             <path
-              d="M70,160 C120,160 128,95 150,95 C172,95 176,160 230,160"
+              d="M120,160 C200,160 214,95 230,95 C252,95 262,160 330,160"
               fill="none"
               stroke="#4f46e5"
               strokeWidth="2.6"
             />
-            <text x="150" y="86" textAnchor="middle" fontSize="11" fontWeight="600" fill="#4f46e5">
+            <text x="230" y="86" textAnchor="middle" fontSize="11" fontWeight="600" fill="#4f46e5">
               output I(z, τ)
             </text>
             <line x1="190" y1="70" x2="190" y2="160" stroke="#94a3b8" strokeWidth="1" strokeDasharray="2,3" />
-            <line x1="150" y1="95" x2="150" y2="160" stroke="#4f46e5" strokeWidth="1" strokeDasharray="2,3" />
-            <path d="M190,178 L150,178" stroke="#e11d48" strokeWidth="1.5" markerEnd="url(#ar13c)" />
+            <line x1="230" y1="95" x2="230" y2="160" stroke="#4f46e5" strokeWidth="1" strokeDasharray="2,3" />
+            <path d="M190,178 L230,178" stroke="#e11d48" strokeWidth="1.5" markerEnd="url(#ar13c)" />
             <defs>
               <marker id="ar13c" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
                 <path d="M0,0 L6,3 L0,6 Z" fill="#e11d48" />
               </marker>
             </defs>
             <text x="380" y="100" fontSize="12" fill="#5b6473">
-              peak advances + sharpens
+              peak delayed (slow light)
             </text>
             <text x="380" y="120" fontSize="12" fill="#5b6473">
               (leading edge absorbed,
             </text>
             <text x="380" y="136" fontSize="12" fill="#5b6473">
-              trailing edge bleaches through)
+              energy removed from front)
             </text>
           </svg>
         </Figure>
@@ -428,16 +432,20 @@ export default function Page() {
           </Step>
           <Step title="Read the limits and the pulse shape">
             Small energy → Beer&rsquo;s law (37); large energy → saturated linear growth (38). Integrating (34) over
-            retarded time yields the Frantz–Nodvik shape (39), exhibiting leading-edge erosion, trailing-edge
-            sharpening, and apparent peak advance.
+            retarded time yields the Frantz–Nodvik shape (39): for an absorber the leading edge is eroded and the peak
+            is delayed (slow light); for an amplifier (signed <Tex>{String.raw`a>0`}</Tex>) the leading edge is amplified
+            and the peak advances apparently faster than <Tex>{String.raw`c`}</Tex>.
           </Step>
         </Derivation>
 
-        <Intuition title="Why the pulse seems to outrun light">
-          Nothing physical exceeds <Tex>{String.raw`c`}</Tex>. The leading edge is preferentially absorbed — it bleaches
-          the medium at its own expense — so the <em>peak</em> of the surviving pulse sits at progressively earlier
-          retarded time, and the pulse appears to advance and sharpen. The trailing edge, finding the medium already
-          transparent, passes freely. In an amplifier the same logic sharpens the leading edge instead.
+        <Intuition title="Why a pulse can seem to outrun light (amplifier) — and lag behind it (absorber)">
+          Nothing physical exceeds <Tex>{String.raw`c`}</Tex>. In a saturable <em>amplifier</em> the leading edge sees the
+          full inversion and is amplified, depleting the gain so the trailing edge is amplified less. Energy is{" "}
+          <em>added</em> to the front, so the <em>peak</em> of the pulse grows and shifts to progressively{" "}
+          <em>earlier</em> retarded time, sharpening the leading edge — an apparent superluminal advance.
+          A saturable <em>absorber</em> does the reverse: the leading edge is preferentially absorbed and bleaches the
+          medium, removing energy from the front, so the surviving peak is weighted toward the back and{" "}
+          <em>delayed</em> (slow light). The trailing edge then passes through the now-transparent medium.
         </Intuition>
         <Callout kind="insight" title="Saturable-absorber takeaway">
           Weak pulse: Beer&rsquo;s law <Tex>{String.raw`\exp(az)`}</Tex>. Strong pulse: the medium bleaches and absorbs
@@ -514,8 +522,13 @@ export default function Page() {
               eq={String.raw`\lim_{z\to\infty}\theta(z) = \begin{cases} 2n\pi, & a<0 \\[2pt] (2n+1)\pi, & a>0 \end{cases}`}
               label="Asymptotic pulse areas"
             />
-            Stability check: at <Tex>{String.raw`\theta = 2\pi`}</Tex> in an absorber, <Tex>{String.raw`\sin\theta`}</Tex>{" "}
-            has negative slope, so it is a stable attractor (SIT); <Tex>{String.raw`\theta = \pi`}</Tex> is unstable.
+            Stability check: linearizing <Tex>{String.raw`\tfrac{d\theta}{dz} = \tfrac{1}{2}a\sin\theta`}</Tex> about a
+            fixed point <Tex>{String.raw`\theta^\ast`}</Tex> gives growth rate <Tex>{String.raw`\tfrac{1}{2}a\cos\theta^\ast`}</Tex>.
+            For an absorber <Tex>{String.raw`(a<0)`}</Tex>: at <Tex>{String.raw`\theta = 2\pi`}</Tex>,{" "}
+            <Tex>{String.raw`\cos 2\pi = +1`}</Tex> so the rate is <Tex>{String.raw`\tfrac{1}{2}a<0`}</Tex> &rarr; stable
+            attractor (SIT); at <Tex>{String.raw`\theta = \pi`}</Tex>, <Tex>{String.raw`\cos\pi = -1`}</Tex> so the rate is{" "}
+            <Tex>{String.raw`-\tfrac{1}{2}a>0`}</Tex> &rarr; unstable. (For an amplifier <Tex>{String.raw`(a>0)`}</Tex> the
+            roles swap.)
             Consistency: a weak pulse in an absorber decays (matches Eq.&nbsp;41 and Beer&rsquo;s law Eq.&nbsp;37).
           </Step>
         </Derivation>
@@ -531,10 +544,10 @@ export default function Page() {
 
         <p>
           Why does a <Tex>{String.raw`2\pi`}</Tex> pulse leave no trace? For a square resonant pulse the Rabi solution
-          (Chapter II) gives the upper-state probability in terms of the generalized Rabi frequency{" "}
+          (Chapter II) gives the lower-state probability in terms of the generalized Rabi frequency{" "}
           <Tex>{String.raw`\mu`}</Tex>:
         </p>
-        <EqBlock label="45">{String.raw`|C_a(z,t)|^2 = 1 - |C_b(z,t)|^2 = 1 - \left[\frac{\wp\mathscr{E}_0}{2\hbar}\right]^2\frac{\sin^2(\mu\tau_p/2)}{\mu^2},`}</EqBlock>
+        <EqBlock label="45">{String.raw`|C_b(\tau_p)|^2 = 1 - |C_a(\tau_p)|^2 = 1 - \left[\frac{\wp\mathscr{E}_0}{2\hbar}\right]^2\frac{\sin^2(\mu\tau_p/2)}{(\mu/2)^2},`}</EqBlock>
         <EqBlock label="45">{String.raw`\mu = \big[(\omega-\nu)^2 + (\wp\mathscr{E}_0/\hbar)^2\big]^{1/2}.`}</EqBlock>
         <p>
           A resonant <Tex>{String.raw`2\pi`}</Tex> pulse (<Tex>{String.raw`\mu\tau_p = 2\pi`}</Tex> on resonance) returns
@@ -544,7 +557,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="46"
-          eq={String.raw`\mathscr{E}(z,t) = \frac{2\hbar}{\wp\tau_p}\,\mathrm{sech}\!\left(\frac{t - z/v_p}{\tau_p}\right)`}
+          eq={String.raw`\mathscr{E}(z,t) = \frac{2\hbar}{\wp\tau_s}\,\mathrm{sech}\!\left(\frac{t - z/v_p}{\tau_s}\right)`}
           label="2π hyperbolic-secant SIT pulse"
           note={
             <>
@@ -557,7 +570,7 @@ export default function Page() {
           The local picture is the population trajectory: an atom is excited and returns exactly to the ground state
           after the pulse, the more completely the closer to resonance:
         </p>
-        <EqBlock label="47">{String.raw`R_3(z) = -1 + \frac{2}{1 + \tau_p^2(\omega-\nu)^2}\,\mathrm{sech}^2(t/\tau_p).`}</EqBlock>
+        <EqBlock label="47">{String.raw`R_3(t) = -1 + \frac{2}{1 + \tau_s^2(\omega-\nu)^2}\,\mathrm{sech}^2(t/\tau_s).`}</EqBlock>
 
         <SimFrame
           title="Pulse area theorem integrator: areas flow to nπ (self-induced transparency)"
@@ -625,21 +638,21 @@ export default function Page() {
         <Derivation title="The McCall–Hahn proof of the sine law (optional)" defaultOpen={false}>
           <Step title="Start from the resonant coupled equations">
             For the resonant, real-envelope reduction of Eqs.&nbsp;(23)–(24), the field and susceptibility obey
-            <EqBlock label="48">{String.raw`\frac{\partial\mathscr{E}}{\partial z} + \frac{1}{c}\frac{\partial\mathscr{E}}{\partial t} + \kappa\,\mathscr{E} = \alpha'\!\int_{-\infty}^{\infty}\! d\omega'\,\mathscr{E}(z,t')\,\chi(z,t-t',t'),`}</EqBlock>
-            <EqBlock label="49">{String.raw`\frac{\partial\chi(z,T,t)}{\partial t} = -\tfrac{1}{2}\left(\frac{\wp}{\hbar}\right)^2\!\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\,\chi(z,T-t+t',T+t-t'+t,t').`}</EqBlock>
+            <EqBlock label="48">{String.raw`\frac{\partial\mathscr{E}}{\partial z} + \frac{1}{c}\frac{\partial\mathscr{E}}{\partial t} + \kappa\,\mathscr{E} = \alpha'\!\int_{t_0}^{t}\! dt'\,\mathscr{E}(z,t')\,\chi(z,t-t',t'),`}</EqBlock>
+            <EqBlock label="49">{String.raw`\frac{\partial\chi(z,T,t)}{\partial t} = -\tfrac{1}{2}\left(\frac{\wp}{\hbar}\right)^2\!\int_{t_0}^{t}\! dt'\,\mathscr{E}(z,t)\,\mathscr{E}(z,t')\big[\chi(z,T-t+t',t') + \chi(z,T+t-t',t')\big].`}</EqBlock>
           </Step>
           <Step title="Integrate the field equation over all time">
             Integrating (48) over <Tex>{String.raw`t`}</Tex> turns the left side into the derivative of the area; the
-            right becomes a frequency-integrated susceptibility evaluated at <Tex>{String.raw`T\to\infty`}</Tex>:
-            <EqBlock label="50">{String.raw`\frac{d\theta}{dz} + \kappa\theta = \frac{a'\pi}{8}\int_{-\infty}^{\infty}\! d\omega'\,\bar{W}(\omega')\,\chi(z,T\to\infty,t),`}</EqBlock>
-            <EqBlock label="51">{String.raw`\frac{d\theta}{dz} + \kappa\theta = \frac{1}{2}\frac{\wp}{\hbar}\int_{-\infty}^{\infty}\! dT\,\mathscr{E}(z,T)\int_{-\infty}^{\infty}\! dT\,\chi(z,T,t).`}</EqBlock>
+            right becomes the field weighted by the susceptibility integrated over all <Tex>{String.raw`T`}</Tex>:
+            <EqBlock label="50">{String.raw`\frac{d\theta}{dz} + \kappa\theta = \frac{1}{2}\frac{\alpha'\wp}{\hbar}\int_{-\infty}^{\infty}\! dt'\,\mathscr{E}(z,t')\int_{-\infty}^{\infty}\! dT\,\chi(z,T,t'),`}</EqBlock>
+            <EqBlock label="51">{String.raw`\frac{\partial}{\partial t}\int_{-\infty}^{\infty}\! dT\,\chi(z,T,t) = -\left(\frac{\wp}{\hbar}\right)^2\!\int_{t_0}^{t}\! dt'\,\mathscr{E}(z,t)\,\mathscr{E}(z,t')\int_{-\infty}^{\infty}\! dT\,\chi(z,T,t').`}</EqBlock>
           </Step>
           <Step title="Apply the sum rule and integrate to a sine">
             The time-integrated susceptibility before the pulse is fixed by the resonant atoms&rsquo; weight,
-            <EqBlock label="52">{String.raw`\int_{-\infty}^{\infty}\! dT\,\chi(z,T,t_0) = 2\pi\,W(\nu_0),`}</EqBlock>
+            <EqBlock label="52">{String.raw`\int_{-\infty}^{\infty}\! dT\,\chi(z,T,t_0) = \int_{-\infty}^{\infty}\! dT\,\bar{W}(T) = 2\pi\,W(\nu),`}</EqBlock>
             so substituting and recognizing the running field integral as the area gives a cosine of the running area,
             which integrates to the sine law (42):
-            <EqBlock label="53">{String.raw`\frac{d}{dz}\theta(z) + \kappa\theta(z) = 2\pi W(\nu_0)\,a'\cos\!\left[\frac{\wp}{\hbar}\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\right].`}</EqBlock>
+            <EqBlock label="53">{String.raw`\int_{-\infty}^{\infty}\! dT\,\chi(z,T,t) = 2\pi W(\nu)\cos\!\left[\frac{\wp}{\hbar}\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\right].`}</EqBlock>
             This shows the theorem is exact and shape-independent.
           </Step>
         </Derivation>
@@ -696,7 +709,7 @@ export default function Page() {
           Averaging the polarization over the inhomogeneous distribution shows all atoms come back in phase at{" "}
           <Tex>{String.raw`t' = \tau`}</Tex>:
         </p>
-        <EqBlock label="55">{String.raw`\langle er\rangle = \wp\int_{-\infty}^{\infty}\! d\omega\, W(\omega)\exp[-i\kappa(t'-\tau)] + \text{c.c.}`}</EqBlock>
+        <EqBlock label="55">{String.raw`\langle er\rangle = \tfrac{1}{2}\wp\int_{-\infty}^{\infty}\! d\omega\, W(\omega)\exp[-i\omega(\tau'-\tau)] + \text{c.c.}`}</EqBlock>
         <p>
           For a Gaussian inhomogeneous line of width <Tex>{String.raw`\Delta\omega`}</Tex>,
         </p>
@@ -767,7 +780,7 @@ export default function Page() {
           </Step>
           <Step title="Second-order iterated solution">
             Iterating the susceptibility equation to second order in the field is the basis for the two-pulse echo:
-            <EqBlock label="59">{String.raw`\chi(z,T,t) = -\tfrac{1}{2}\left(\frac{\wp}{\hbar}\right)^2\!\int_{-\infty}^{t}\! dt'\,\mathscr{E}(z,t')\!\int_{-\infty}^{t'}\! dt''\,\mathscr{E}(z,t'')\big[\chi(0,T+t-t'+t'',t'') + \chi(0,T-t'+t'',t'')\big].`}</EqBlock>
+            <EqBlock label="59">{String.raw`\chi(0,T,t) = -\tfrac{1}{2}\left(\frac{\wp}{\hbar}\right)^2\!\int_{-\infty}^{t}\! dt'\,\mathscr{E}(0,t')\!\int_{-\infty}^{t'}\! dt''\,\mathscr{E}(0,t'')\big[\chi(0,T+t'-t'',t'') + \chi(0,T-t'+t'',t'')\big].`}</EqBlock>
           </Step>
           <Step title="Idealized impulsive pulses">
             Model the <Tex>{String.raw`90^\circ`}</Tex> and <Tex>{String.raw`180^\circ`}</Tex> pulses as area-
@@ -777,9 +790,9 @@ export default function Page() {
           <Step title="Post-pulse susceptibility and the echo field">
             After both pulses, the susceptibility carries a free-induction term and a rephasing term that revives at{" "}
             <Tex>{String.raw`t = 2\tau`}</Tex>:
-            <EqBlock label="61">{String.raw`\chi(T,t>\tau) = \frac{\pi}{2}\frac{\hbar}{\wp}\,\delta(t')\,\chi(0,T,t) + \pi\frac{\hbar}{\wp}\,\delta(t'-\tau,T).`}</EqBlock>
+            <EqBlock label="61">{String.raw`\chi(0,T,\tau) = -\tfrac{1}{4}\pi^2\big[\chi(0,T+\tau,0) + \chi(0,T-\tau,0)\big].`}</EqBlock>
             The field equation then shows the radiated echo peaking at <Tex>{String.raw`t = 2\tau`}</Tex>:
-            <EqBlock label="62">{String.raw`\frac{\partial}{\partial z}\mathscr{E}(z,t) = \alpha'\!\Big[\tfrac{\pi}{2}\frac{\hbar}{\wp}\,\chi(0,t,0) + \alpha'\frac{\pi}{2}\frac{\hbar}{\wp}\,\chi(0,t-\tau,\tau)\Big].`}</EqBlock>
+            <EqBlock label="62">{String.raw`a\!\int_{t_0}^{t}\! dt'\,\mathscr{E}(0,t')\,\chi(0,t-t',t') = a\,\frac{\pi}{2}\frac{\hbar}{\wp}\,\chi(0,t,0) + a\pi\frac{\hbar}{\wp}\,\chi(0,t-\tau,\tau).`}</EqBlock>
             Because the rephasing is exact, the echo measures the true homogeneous dephasing time:{" "}
             <Tex>{String.raw`\exp(-\tau/T_2')`}</Tex>.
           </Step>
@@ -789,7 +802,7 @@ export default function Page() {
           For hyperbolic-secant pulses (Problem&nbsp;13-9) the echo intensity ties the echo quantitatively to the SIT
           pulse shape:
         </p>
-        <EqBlock label="Prob. 13-9">{String.raw`R_3(z,\nu)\exp(\alpha z) \propto \frac{\exp[T_2(\wp E_b/\hbar)\{\tanh(\tau/\tau_p)+1\}]}{1 + \exp(\alpha z)\{\exp[T_2(\wp E_b/\hbar)\{\tanh(\tau/\tau_p)+1\}]-1\}}.`}</EqBlock>
+        <EqBlock label="Prob. 13-9">{String.raw`I(z,\tau) = I(0,t)\exp(az)\,\frac{\exp\{T_2\tau_s(\wp\mathscr{E}_0/\hbar)^2[\tanh(\tau/\tau_s)+1]\}}{1 + \exp(az)\{\exp\{T_2\tau_s(\wp\mathscr{E}_0/\hbar)^2[\tanh(\tau/\tau_s)+1]\}-1\}}.`}</EqBlock>
 
         <Callout kind="insight" title="Why photon echo matters">
           The echo amplitude decays with pulse separation as <Tex>{String.raw`\exp(-\tau/T_2')`}</Tex>, measuring the{" "}
@@ -816,8 +829,9 @@ export default function Page() {
               ask which regime you are in before choosing equations.
             </li>
             <li>
-              <strong>Saturable absorption / bleaching</strong> — a strong pulse depletes absorbers, sharpens, and
-              advances; the basis of passive Q-switching and saturable-absorber mode-locking (Eqs.&nbsp;34, 38, 39).
+              <strong>Saturable absorption / bleaching</strong> — a strong pulse depletes absorbers, so its peak is
+              delayed (slow light) while a saturable amplifier advances the peak; the basis of passive Q-switching and
+              saturable-absorber mode-locking (Eqs.&nbsp;34, 38, 39).
             </li>
             <li>
               <strong>Pulse area</strong> <Tex>{String.raw`\theta = \tfrac{\wp}{\hbar}\int\mathscr{E}\,dt`}</Tex> — the

@@ -26,14 +26,25 @@
  * both-on solution goes negative -> rejected -> ONE mode survives at alpha/beta,
  * the other at 0. That sign flip at C = 1 IS the bistability.
  *
- * The coupling parameter is preset by the J-transition selector (Eq. 47):
- *     C = theta_{+-} theta_{-+} / (beta_+ beta_-)
- *       = 2.6  (J=1->0, strong, bistable),
- *         1.0  (J=1->2, neutral),
- *         0.228 (J=1->1, weak, He-Ne 6328 A).
+ * The ZERO-FIELD coupling parameter is preset by the J-transition selector
+ * (Eq. 47, evaluated at B=0):
+ *     C(0) = theta_{+-} theta_{-+} / (beta_+ beta_-)
+ *       = 2.6  (J=2->2, strong, bistable),
+ *         1.0  (J=1->0, neutral),
+ *         0.228 (J=1->2, weak, He-Ne 6328 A).
+ * These are ONLY the zero-field values. Per p.190 text and Fig. 12-3, C depends
+ * on BOTH the angular momenta AND the magnetic field: C peaks at B=0 and falls
+ * toward an asymptote as |B| grows. We model this by C(B) = C(0)*overlap(B)^2,
+ * where overlap(B) = (1+L(2 delta))/(1+L(0)) is the cross-saturation overlap
+ * (theta = sqrt(C(0))*beta*overlap, so C(B)=(theta/beta)^2). The bistability
+ * test then uses the LOCAL C(B) (i.e. theta vs beta), not a frozen preset.
  *
- * The polarization BEAT NOTE (Eq. 44 + anisotropy g_+- of Eq. 17) locks near
- * B = 0 in an Adler-type deadband and unlocks for larger B (Fig. 12-6):
+ * The polarization BEAT NOTE: in a bare isotropic cavity (Fig. 12-6) the cavity
+ * PULLS the beat through zero with a tiny wrong-way wiggle and a far-field slope
+ * orders of magnitude below the Zeeman line — there is NO flat locked band. A
+ * hard Adler lock (Delta_nu == 0 over a deadband) requires explicit cavity
+ * anisotropy g_+- != 0 and is the SEPARATE Fig. 12-7 case. This panel shows the
+ * anisotropy-locking response (Fig. 12-7), driven by g_anis:
  *     if |2 delta_beat| <= g_anis :  Delta_nu = 0          (locked)
  *     else                        :  Delta_nu = sign(delta) sqrt((2 delta_beat)^2 - g_anis^2).
  * Units are illustrative (as in the book's own figures); the Zeeman-to-beat
@@ -50,11 +61,12 @@
 import { useMemo, useState } from "react";
 import { Canvas, Plot, Slider, Segmented, Controls, Readout, Series, Marker } from "@/components/sim";
 
-// J-transition presets → benchmark coupling C (Eq. 47, used directly).
+// J-transition presets → ZERO-FIELD coupling C(0) (Eq. 47 closed form).
+// The actual coupling C(B)=(theta/beta)^2 is field-dependent (see steady()).
 const J_PRESETS: { value: number; label: string; C: number; name: string }[] = [
-  { value: 0, label: "J=1→0", C: 2.6, name: "strong (bistable)" },
-  { value: 1, label: "J=1→2", C: 1.0, name: "neutral" },
-  { value: 2, label: "J=1→1", C: 0.228, name: "weak · He–Ne 6328 Å" },
+  { value: 0, label: "J=2→2", C: 2.6, name: "strong (bistable)" },
+  { value: 1, label: "J=1→0", C: 1.0, name: "neutral" },
+  { value: 2, label: "J=1→2", C: 0.228, name: "weak · He–Ne 6328 Å" },
 ];
 
 export default function Ch12Sim() {
@@ -101,13 +113,17 @@ export default function Ch12Sim() {
     const onMinus = aMinus > 0;
     if (!onPlus && !onMinus) return { Ip: 0, Im: 0, bistable: false };
 
-    // The regime is fixed by the PRESET coupling C (angular momentum, hence
-    // B-independent in the book), NOT by the sign of beta^2 - theta^2 — which
-    // would let the suppressed mode reappear in the wings as theta(B) weakens.
-    if (C < 1) {
-      // Weak coupling: stable both-on solution wherever both are above their
-      // own threshold; the B-dependent overlap in theta sculpts the dip.
-      const det = beta * beta - theta * theta; // > 0 for C < 1
+    // The regime is fixed by the LOCAL coupling C(B) = (theta/beta)^2, which is
+    // field-dependent (p.190 text + Fig. 12-3: C peaks at B=0, falls with |B|).
+    // The both-on solution is stable iff theta < beta (i.e. C(B) < 1); the sign
+    // flip of beta^2 - theta^2 at theta = beta IS the bistability boundary, and
+    // it can move with B — a transition strongly coupled near B=0 can weaken
+    // into coexistence in the wings.
+    const TINY = 1e-9;
+    if (theta < beta - TINY) {
+      // Weak coupling C(B) < 1: stable both-on solution wherever both are above
+      // their own threshold; the B-dependent overlap in theta sculpts the dip.
+      const det = beta * beta - theta * theta; // > 0 here
       if (onPlus && onMinus) {
         const Ip = Math.max(0, (beta * aPlus - theta * aMinus) / det);
         const Im = Math.max(0, (beta * aMinus - theta * aPlus) / det);
@@ -117,10 +133,12 @@ export default function Ch12Sim() {
       if (onPlus) return { Ip: aPlus / beta, Im: 0, bistable: false };
       return { Ip: 0, Im: aMinus / beta, bistable: false };
     }
-    // C >= 1 (neutral / strong): single-mode winner everywhere. The stronger
-    // linear gain wins and suppresses the other — the bistable switch happens
-    // at B = 0 when the detuning sign flips which gain curve is higher.
-    const bistable = C > 1 && onPlus && onMinus;
+    // C(B) >= 1 (neutral / strong): single-mode winner. The stronger linear
+    // gain wins and suppresses the other — the bistable switch happens at B = 0
+    // when the detuning sign flips which gain curve is higher. (At C(B) = 1
+    // exactly, theta = beta, the both-on system is degenerate; treat as the
+    // neutral single-winner limit.)
+    const bistable = theta > beta + TINY && onPlus && onMinus;
     if (aPlus >= aMinus) return { Ip: onPlus ? aPlus / beta : 0, Im: 0, bistable };
     return { Ip: 0, Im: onMinus ? aMinus / beta : 0, bistable };
   };
@@ -253,20 +271,21 @@ export default function Ch12Sim() {
     drawMode(w * 0.16, "ê₊  (I+)", `I+ = ${Ip.toFixed(2)}`, Ip, "#4f46e5");
     drawMode(w * 0.38, "ê₋  (I−)", `I− = ${Im.toFixed(2)}`, Im, "#e11d48");
 
-    // status panel
+    // status panel — regime is set by the LOCAL field-dependent C(B)=(theta/beta)^2
+    const cLocal = (theta / beta) ** 2;
     const sx = w * 0.56;
     let sy = h * 0.22;
     ctx.textAlign = "left";
-    const regime = C < 1 ? "WEAK · coexist" : C > 1 ? "STRONG · bistable" : "NEUTRAL";
+    const regime = cLocal < 1 ? "WEAK · coexist" : cLocal > 1 ? "STRONG · bistable" : "NEUTRAL";
     ctx.font = "600 17px ui-sans-serif, system-ui";
-    ctx.fillStyle = C < 1 ? "#16a34a" : C > 1 ? "#e11d48" : "#d97706";
+    ctx.fillStyle = cLocal < 1 ? "#16a34a" : cLocal > 1 ? "#e11d48" : "#d97706";
     ctx.fillText(regime, sx, sy);
     sy += 26;
     ctx.font = "13px ui-sans-serif, system-ui";
     ctx.fillStyle = "#5b6473";
-    ctx.fillText(`${J_PRESETS[Csel].label}   C = ${C}`, sx, sy);
+    ctx.fillText(`${J_PRESETS[Csel].label}   C(0) = ${C}   C(B) = ${cLocal.toFixed(2)}`, sx, sy);
     sy += 22;
-    if (C > 1 && Ip + Im > 1e-3) {
+    if (cLocal > 1 && Ip + Im > 1e-3) {
       const winner = Ip > Im ? "ê₊ wins, ê₋ suppressed" : "ê₋ wins, ê₊ suppressed";
       ctx.fillText(winner, sx, sy);
     } else if (Ip + Im < 1e-3) {
@@ -302,7 +321,7 @@ export default function Ch12Sim() {
         </div>
         <div>
           <div style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 4 }}>
-            Polarization beat Δν vs B: lock then unlock (Fig. 12-6)
+            Polarization beat Δν vs B: anisotropy lock then unlock (Fig. 12-7)
           </div>
           <Plot
             width={300}
@@ -319,7 +338,7 @@ export default function Ch12Sim() {
 
       <Controls>
         <Segmented<number>
-          label="J-transition (sets C)"
+          label="J-transition (sets C at B=0)"
           options={J_PRESETS.map((p) => ({ value: p.value, label: p.label }))}
           value={Csel}
           onChange={setCsel}
@@ -333,9 +352,17 @@ export default function Ch12Sim() {
         <Slider label={String.raw`\gamma\ \text{(homog. half-width)}`} tex min={5} max={200} step={1} value={gamma} onChange={setGamma} unit="MHz" />
 
         <Readout
-          label={String.raw`C=\theta_{+-}\theta_{-+}/(\beta_+\beta_-)`}
+          label={String.raw`C(0)=\theta_{+-}\theta_{-+}/(\beta_+\beta_-)`}
           tex
           value={`${C}  (${J_PRESETS[Csel].name})`}
+        />
+        <Readout
+          label={String.raw`C(B)=(\theta/\beta)^2\ \text{(field-dependent)}`}
+          tex
+          value={(() => {
+            const { beta, theta } = coeffs(B);
+            return ((theta / beta) ** 2).toFixed(3);
+          })()}
         />
         <Readout label={String.raw`I_+,\,I_-\ \text{at }B`} tex value={`${cur.Ip.toFixed(3)}, ${cur.Im.toFixed(3)}`} />
         <Readout label={String.raw`I_++I_-`} tex value={(cur.Ip + cur.Im).toFixed(3)} />

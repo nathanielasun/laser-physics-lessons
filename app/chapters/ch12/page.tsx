@@ -25,9 +25,9 @@ export default function Page() {
         two circular polarizations <Tex>{String.raw`\hat{\mathbf e}_+`}</Tex> and <Tex>{String.raw`\hat{\mathbf e}_-`}</Tex>{" "}
         — competing for the same atoms exactly the way the two counter-running waves of the ring laser (Chapter&nbsp;XI)
         compete. The magnetic field is a knob that tunes that competition, and the payoffs are gorgeous and measured: a
-        magnetic <em>Lamb dip</em> in the output intensities and a polarization <em>beat note</em> that locks near{" "}
-        <Tex>{String.raw`B=0`}</Tex> and then unlocks into a clean Zeeman-split signal — the prototype of the optically
-        pumped laser magnetometer.
+        magnetic <em>Lamb dip</em> in the output intensities and a polarization <em>beat note</em> that — once the
+        cavity is made anisotropic — locks near <Tex>{String.raw`B=0`}</Tex> and then unlocks into a clean Zeeman-split
+        signal — the prototype of the optically pumped laser magnetometer.
       </Lede>
 
       <Section title="The vector field and the circular-polarization basis">
@@ -163,13 +163,13 @@ export default function Page() {
           diagonal cavity loss, the off-diagonal anisotropy coupling <Tex>{String.raw`g_{+-}E_-`}</Tex>, and the driving
           by the medium polarization:
         </p>
-        <EqBlock label="5">{String.raw`(\nu_+ + \dot\phi_+ - \Omega)E_+ + i\big(\tfrac{1}{2}E_+ + \tfrac{1}{2}g_{+-}E_-\big) = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathscr P_+.`}</EqBlock>
+        <EqBlock label="5">{String.raw`(\nu_+ + \dot\phi_+ - \Omega)E_+ + i\big\{\dot E_+ + \tfrac{1}{2}\nu\big[g_{++}E_+ + g_{+-}E_-\,e^{i\Psi}\big]\big\} = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathscr P_+.`}</EqBlock>
         <p>
-          To organize the bookkeeping we introduce the frequency dyadic, diagonal in the circular basis, and the loss
-          (conductivity) matrix:
+          To organize the bookkeeping we introduce the relative phase <Tex>{String.raw`\Psi`}</Tex> between the two
+          circular components and the loss (conductivity) matrix:
         </p>
-        <EqBlock label="6">{String.raw`\overleftrightarrow{\mathscr V} = \nu_+\,\hat{\mathbf e}_+\hat{\mathbf e}_+ + \nu_-\,\hat{\mathbf e}_-\hat{\mathbf e}_-,`}</EqBlock>
-        <EqBlock label="7">{String.raw`G = \begin{pmatrix} g_{++} & g_{+-} \\ g_{-+} & g_{--} \end{pmatrix} = (\nu\mu_0)^{-1}\,\overleftrightarrow{\sigma},\qquad \tfrac{1}{2}\nu \cong \nu_+ \cong \nu_-,`}</EqBlock>
+        <EqBlock label="6">{String.raw`\Psi = \nu_+ t + \phi_+ - \nu_- t - \phi_-,`}</EqBlock>
+        <EqBlock label="7">{String.raw`G = \begin{pmatrix} g_{++} & g_{+-} \\ g_{-+} & g_{--} \end{pmatrix} = (\varepsilon_0\nu)^{-1}\,\overleftrightarrow{\sigma},\qquad \nu \cong \nu_+ \cong \nu_-,`}</EqBlock>
         <EqBlock label="8">{String.raw`g_{\pm\pm} = Q_\pm^{-1},\qquad g_{+-} = g_{-+}^{\,*}.`}</EqBlock>
         <p>
           The diagonal elements are inverse cavity <Tex>{String.raw`Q`}</Tex>&rsquo;s; the off-diagonal elements form a
@@ -177,15 +177,15 @@ export default function Page() {
           <strong>amplitude</strong> equation (gain, saturation, and anisotropic coupling) and a{" "}
           <strong>frequency</strong> equation (pulling), with <Tex>{String.raw`\Psi`}</Tex> the relative phase:
         </p>
-        <EqBlock label="9">{String.raw`\dot E_\pm + \tfrac{1}{2}\nu\big(g_{\pm\pm}E_\pm + \mathrm{Im}[\,g_{\pm\mp}E_\mp\,e^{i\Psi}\,]\big) = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathrm{Im}(\mathscr P_\pm),`}</EqBlock>
-        <EqBlock label="10">{String.raw`(\nu_\pm + \dot\phi_\pm - \Omega)E_\pm + \tfrac{1}{2}\nu\,\mathrm{Re}[\,g_{\pm\mp}E_\mp\,e^{i\Psi}\,] = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathrm{Re}(\mathscr P_\pm).`}</EqBlock>
+        <EqBlock label="9">{String.raw`\dot E_\pm + \tfrac{1}{2}\nu\big(g_{\pm\pm}E_\pm + \mathrm{Im}[\,i\,g_{\pm\mp}E_\mp\,e^{i\Psi}\,]\big) = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathrm{Im}(\mathscr P_\pm),`}</EqBlock>
+        <EqBlock label="10">{String.raw`(\nu_\pm + \dot\phi_\pm - \Omega)E_\pm + \tfrac{1}{2}\nu\,\mathrm{Re}[\,i\,g_{\pm\mp}E_\mp\,e^{i\Psi}\,] = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathrm{Re}(\mathscr P_\pm).`}</EqBlock>
         <p>
           The imaginary part of the polarization supplies gain and saturation; the real part supplies dispersion and
           pulling. Setting the off-diagonal coupling to zero (an <em>isotropic</em> cavity) decouples the two circular
           modes entirely — they become two independent lasers:
         </p>
         <EqBlock label="11">{String.raw`\dot E_\pm + \tfrac{1}{2}\frac{\nu}{Q_\pm}E_\pm = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathrm{Im}(\mathscr P_\pm),`}</EqBlock>
-        <EqBlock label="12">{String.raw`\nu_\pm + \dot\phi_\pm = \Omega = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\frac{1}{E_\pm}\,\mathrm{Re}(\mathscr P_\pm).`}</EqBlock>
+        <EqBlock label="12">{String.raw`\nu_\pm + \dot\phi_\pm = \Omega - \tfrac{1}{2}\frac{\nu}{\varepsilon_0}\frac{1}{E_\pm}\,\mathrm{Re}(\mathscr P_\pm),`}</EqBlock>
 
         <p>
           The decisive question is what a physically realistic cavity does to the off-diagonal elements. The cavity is
@@ -272,14 +272,16 @@ export default function Page() {
         </p>
         <KeyResult
           number="18"
-          eq={String.raw`\omega_a = \omega_0 + \mu_B B\,g_a/\hbar,\qquad \omega_b = \omega_0 + \mu_B B\,g_b/\hbar`}
+          eq={String.raw`\omega_{a'} = \omega_a + \mu_B B\,g_a\,a'/\hbar,\qquad \omega_{b'} = \omega_b + \mu_B B\,g_b\,b'/\hbar`}
           label="Zeeman-split sublevel frequencies"
           note={
             <>
-              <Tex>{String.raw`\omega_0`}</Tex> is the zero-field transition frequency, <Tex>{String.raw`\mu_B`}</Tex>{" "}
-              the Bohr magneton, and <Tex>{String.raw`g_a, g_b`}</Tex> the Landé <Tex>{String.raw`g`}</Tex>-factors.
-              Because upper and lower levels generally have different <Tex>{String.raw`g`}</Tex>, the{" "}
-              <Tex>{String.raw`+`}</Tex> and <Tex>{String.raw`-`}</Tex> transitions shift by different amounts.
+              <Tex>{String.raw`\omega_a,\omega_b`}</Tex> are the zero-field level energies, <Tex>{String.raw`\mu_B`}</Tex>{" "}
+              the Bohr magneton, and <Tex>{String.raw`g_a, g_b`}</Tex> the Landé <Tex>{String.raw`g`}</Tex>-factors. Each
+              sublevel shifts in proportion to its magnetic quantum number (<Tex>{String.raw`a'=m_a`}</Tex>,{" "}
+              <Tex>{String.raw`b'=m_b`}</Tex>). Because upper and lower levels generally have different{" "}
+              <Tex>{String.raw`g`}</Tex>, the <Tex>{String.raw`+`}</Tex> and <Tex>{String.raw`-`}</Tex> transitions shift
+              by different amounts.
             </>
           }
         />
@@ -287,7 +289,7 @@ export default function Page() {
           The electric-dipole matrix element between an upper sublevel and a lower sublevel is the engine of all
           coupling:
         </p>
-        <EqBlock label="19">{String.raw`\mathscr P_{a'b'} = -e\,\langle a' | \mathbf r | b' \rangle = -e\int d\mathbf r\,\mathrm{Tr}(\rho\,e\mathbf r).`}</EqBlock>
+        <EqBlock label="19">{String.raw`\mathscr V_{a'b'} = -\langle n_a J_a a' \,|\, e\mathbf E\cdot\mathbf r \,|\, n_b J_b b' \rangle.`}</EqBlock>
         <p>
           Writing the position operator in spherical form exposes the combinations <Tex>{String.raw`x \pm i y`}</Tex>{" "}
           that carry <Tex>{String.raw`\pm 1`}</Tex> unit of angular momentum:
@@ -299,15 +301,16 @@ export default function Page() {
           The <Tex>{String.raw`(\hat{\mathbf x}\mp i\hat{\mathbf y})`}</Tex> parts couple to{" "}
           <Tex>{String.raw`\Delta m = \pm 1`}</Tex> (circular light) and the <Tex>{String.raw`\hat{\mathbf z}`}</Tex>{" "}
           part to <Tex>{String.raw`\Delta m = 0`}</Tex> (linear axial light); for an axial field and transverse light only
-          the <Tex>{String.raw`\Delta m = \pm 1`}</Tex> terms drive the laser. Rewritten in the circular basis with the
-          radial reduced matrix element <Tex>{String.raw`\boldsymbol{\wp}`}</Tex>:
+          the <Tex>{String.raw`\Delta m = \pm 1`}</Tex> terms drive the laser. Contracting this resolved dipole with the
+          field <Tex>{String.raw`e\mathbf E\cdot\mathbf r`}</Tex> gives the electric-dipole interaction energy, with the
+          selection rule carried by the Kronecker deltas:
         </p>
-        <EqBlock label="22">{String.raw`\boldsymbol{\wp}_{a'b'} = \wp\big[(J-l)\,\delta_{m_a,\,m_b+1}\,\hat{\mathbf e}_- + (J+l)\,\delta_{m_a,\,m_b-1}\,\hat{\mathbf e}_+ + \delta_{m_a m_b}\,\hat{\mathbf z}\big].`}</EqBlock>
+        <EqBlock label="22">{String.raw`\mathscr V_{a'b'} = -\boldsymbol{\wp}_{a'b'}\big[\mathbf E\cdot(\hat{\mathbf x}-i\hat{\mathbf y})\,\delta_{a',b'+1} + \mathbf E\cdot(\hat{\mathbf x}+i\hat{\mathbf y})\,\delta_{a',b'-1} + \mathbf E\cdot\hat{\mathbf z}\,\delta_{a'b'}\big].`}</EqBlock>
         <p>
           The actual numbers are the Clebsch–Gordan angular factors. For the <Tex>{String.raw`J_a = J_b`}</Tex> case
           (Condon–Shortley convention):
         </p>
-        <EqBlock label="23">{String.raw`\wp_{a'b'} = \begin{cases} \tfrac{1}{2}\wp\,[(J_a + m')(J_a + m' + 1)]^{1/2}, & a'=b'+1 \\[1ex] \wp\,m', & a'=b' \\[1ex] \tfrac{1}{2}\wp\,[(J_a - m')(J_a - m' + 1)]^{1/2}, & a'=b'-1 \end{cases}`}</EqBlock>
+        <EqBlock label="23">{String.raw`\wp_{a'b'} = \begin{cases} \tfrac{1}{2}\wp\,[(J_a - m')(J_a + m' + 1)]^{1/2}, & a'=b'+1 \\[1ex] \wp\,m', & a'=b' \\[1ex] \tfrac{1}{2}\wp\,[(J_a + m')(J_a - m' + 1)]^{1/2}, & a'=b'-1 \end{cases}`}</EqBlock>
         <EqBlock label="24">{String.raw`\boldsymbol{\wp} = (\hat{\mathbf e}_a\,|e r|\,\hat{\mathbf e}_b)\quad\text{(reduced radial matrix element, common to all sublevels).}`}</EqBlock>
         <p>
           The square-root angular factors weight each sublevel transition; their pattern over{" "}
@@ -315,13 +318,13 @@ export default function Page() {
           field and the resolved dipole into the rotating-wave interaction energy hard-wires the selection rule into the
           dynamics:
         </p>
-        <EqBlock label="25">{String.raw`\mathscr V_{a'b'} = -\tfrac{1}{2}\sqrt 2\,\boldsymbol{\wp}_{a'b'}\,U(z)\big\{E_+\,e^{-i(\nu_+ t + \phi_+)}\,\delta_{m_a,\,m_b-1} + E_-\,e^{-i(\nu_- t + \phi_-)}\,\delta_{m_a,\,m_b+1}\big\}.`}</EqBlock>
+        <EqBlock label="25">{String.raw`\mathscr V_{a'b'} = -\tfrac{1}{2}\sqrt 2\,\boldsymbol{\wp}_{a'b'}\,U(z)\big\{E_+\,e^{-i(\nu_+ t + \phi_+)}\,\delta_{m_a,\,m_b+1} + E_-\,e^{-i(\nu_- t + \phi_-)}\,\delta_{m_a,\,m_b-1}\big\}.`}</EqBlock>
         <p>
           The macroscopic circular polarization is the velocity integral and sublevel sum of the off-diagonal
           density-matrix elements (optical coherences) weighted by their dipole strengths:
         </p>
         <EqBlock label="26–27">{String.raw`P_\pm(z,t) = \int_{-\infty}^{\infty} d\mathbf v\,\mathrm{Tr}(\rho\,e\mathbf r) = \sqrt 2\int_{-\infty}^{\infty} d\mathbf v\,\sum_{a'}\sum_{b'}\boldsymbol{\wp}_{a'b'}\,\rho_{a'b'}\,\delta_{\Delta m,\,\pm1},`}</EqBlock>
-        <EqBlock label="28">{String.raw`\mathscr P_\pm(t) = 2\sqrt 2\,e^{i(\nu_\pm t + \phi_\pm)}\,\frac{1}{N}\frac{1}{\hbar}\int dt'\,U^*(z)\int d\mathbf v\,\sum_{a'}\sum_{b'}\boldsymbol{\wp}_{a'b'}\,\boldsymbol{\wp}_{a'b'}\,\rho_{a'b'}.`}</EqBlock>
+        <EqBlock label="28">{String.raw`\mathscr P_\pm(t) = 2\sqrt 2\,e^{i(\nu_\pm t + \phi_\pm)}\,\frac{1}{\mathcal N}\int_0^L dz\,U^*(z)\int d\mathbf v\,\sum_{a'}\sum_{b'}\boldsymbol{\wp}_{b'a'}\,\rho_{a'b'}\,\delta_{a',\,b'\pm1}.`}</EqBlock>
         <p>
           Its real part will give mode pulling and its imaginary part gain/saturation when inserted into
           Eqs.&nbsp;(9)–(10). The double sum over sublevels with squared dipole weights is exactly where the{" "}
@@ -370,7 +373,7 @@ export default function Page() {
           The optical coherence obeys a master equation — free precession at the Zeeman-shifted frequency, decay, and
           field driving:
         </p>
-        <EqBlock label="35">{String.raw`\dot\rho_{a'b'} = -(i\omega_{a'b'} + \gamma)\,\rho_{a'b'} + i\hbar^{-1}\big(\mathscr V_{a'a}\rho_{ab'} - \rho_{a'b}\mathscr V_{bb'}\big) + i\hbar^{-1}\mathscr V_{a'b'}\,\mathscr V_{ab},`}</EqBlock>
+        <EqBlock label="35">{String.raw`\dot\rho_{a'b'} = -(i\omega_{a'b'} + \gamma)\,\rho_{a'b'} + i\hbar^{-1}\big(\mathscr V_{a'a}\rho_{ab'} - \rho_{a'b}\mathscr V_{bb'}\big) + i\hbar^{-1}\rho_{a'b''}\,\mathscr V_{b''b'},`}</EqBlock>
         <EqBlock label="36–37">{String.raw`\dot\rho_{a'a} = -\gamma_a\rho_{a'a} - i\hbar^{-1}(\mathscr V_{a'b}\rho_{ba} - \rho_{a'b}\mathscr V_{ba}) + \text{c.c.} + \lambda_a,`}</EqBlock>
         <p>with the Hermiticity relations that halve the bookkeeping:</p>
         <EqBlock label="39–40">{String.raw`\rho_{a'b'} = \rho_{b'a'}^{\,*},\qquad \rho_{a'a'} = \rho_{a'a'}^{\,*}.`}</EqBlock>
@@ -467,7 +470,7 @@ export default function Page() {
         />
         <KeyResult
           number="44"
-          eq={String.raw`\nu_\pm + \dot\phi_\pm = \Omega = \sigma_\pm - \rho_\pm I_\pm - \tau_{\pm\mp} I_\mp`}
+          eq={String.raw`\nu_\pm + \dot\phi_\pm = \Omega + \sigma_\pm - \rho_\pm I_\pm - \tau_{\pm\mp} I_\mp`}
           label="Steady-state frequency equations"
           note={
             <>
@@ -483,13 +486,13 @@ export default function Page() {
           <Tex>{String.raw`\delta\propto\mu_B B`}</Tex>. The self-saturation and cross-saturation are angular
           (Clebsch–Gordan) sums of dipole products weighted by a lineshape:
         </p>
-        <EqBlock label="45">{String.raw`\beta_\pm = \big[1 + \mathscr L(\omega_a - \nu_\pm)\big]\,F_\beta\!\sum_{a'}\sum_{a',\,a'+1}|\wp_{a'a'}|^4 \;+\;\cdots\quad\text{(self-saturation).}`}</EqBlock>
-        <EqBlock label="46">{String.raw`\theta_{\pm\mp} = \big[1 + \mathscr L(\omega_a - \nu_\mp)\big]\,F_\theta\!\sum_{a'}\sum_{a',\,a'+1}|\wp_{a'a'}|^2|\wp_{a'a'+1}|^2 + |\wp_{a'a'+1}|^4 + \cdots\quad\text{(cross-saturation).}`}</EqBlock>
+        <EqBlock label="45">{String.raw`\beta_\pm = \big[1 + \mathscr L(\omega_0 - \nu_\pm)\big]\,F_3\!\sum_{a'}\sum_{b'=a'\mp1}\big|\wp_{a'b'}/\wp\big|^4\quad\text{(self-saturation).}`}</EqBlock>
+        <EqBlock label="46">{String.raw`\theta_{\pm\mp} = \big[1 + \mathscr L(\omega_0 - \nu_\pm)\big]\,F_3\!\sum_{a'}\sum_{b'=a'\mp1}|\wp_{a'b'}|^2\big[|\wp_{a'\mp2,b'}|^2 + |\wp_{a',b'\pm2}|^2\big]/\wp^4\quad\text{(cross-saturation).}`}</EqBlock>
         <p>
           The linear net gain is the Zeeman-detuned, Doppler-broadened gain minus the cavity loss; the frequency
           coefficients are the pulling/pushing terms:
         </p>
-        <EqBlock label="Table 12-1, α">{String.raw`\alpha_\pm = F_\alpha\,\tfrac{1}{2}\sum_{a'}\sum_{a',\,a'+1}|\wp_{a'a'+1}|^2\,\mathrm{Im}\big\{Z_i[\gamma_{ab} + i(\omega_{a'b'} - \nu_\pm)]\big\} - \frac{\nu}{2Q_\pm}.`}</EqBlock>
+        <EqBlock label="Table 12-1, α">{String.raw`\alpha_\pm = F_1\!\sum_{a'}\sum_{b'=a'\mp1}\big|\wp_{a'b'}/\wp\big|^2\,\mathrm{Im}\big\{Z_i[\gamma_{ab} + i(\omega_{a'b'} - \nu_\pm)]\big\} - \frac{\nu}{2Q_\pm}.`}</EqBlock>
         <EqBlock label="Tables 12-1/2">{String.raw`\sigma_\pm,\ \rho_\pm,\ \tau_{\pm\mp}\;=\;\text{linear-pulling, self-pushing, cross-pushing coefficients}\;\big(\text{functions of }\omega_{a'b'} - \nu_\pm,\ \delta\big).`}</EqBlock>
 
         <Derivation title="From the field equations to the two-mode rate equations">
@@ -528,8 +531,10 @@ export default function Page() {
           <Tex>{String.raw`C<1`}</Tex> (weak coupling): both polarizations oscillate simultaneously and the steady state
           is stable. <Tex>{String.raw`C>1`}</Tex> (strong coupling): the modes are mutually exclusive, one polarization
           suppresses the other, and operation is bistable (hysteresis). <Tex>{String.raw`C=1`}</Tex> is the neutral
-          borderline. Remarkably, <Tex>{String.raw`C`}</Tex> depends only on the <Tex>{String.raw`J`}</Tex>-values of the
-          transition through the angular sums.
+          borderline. The <em>zero-field</em> value of <Tex>{String.raw`C`}</Tex> is fixed by the{" "}
+          <Tex>{String.raw`J`}</Tex>-values of the transition through the angular sums; as <Tex>{String.raw`|B|`}</Tex>{" "}
+          grows the cross-saturation overlap shrinks and <Tex>{String.raw`C(B)`}</Tex> falls toward an asymptote
+          (Fig.&nbsp;12-3), so the field itself tunes the competition.
         </Intuition>
         <KeyResult
           number="47a"
@@ -545,18 +550,20 @@ export default function Page() {
         <p>Evaluating the Clebsch–Gordan angular sums gives <Tex>{String.raw`C`}</Tex> in closed form per transition type:</p>
         <KeyResult
           number="47b"
-          eq={String.raw`C = \begin{cases}\left[\dfrac{(2J+3)(2J-1)}{2J^2+2J+1}\right]^2, & J \to J \\[2.4ex] \dfrac{2J^2+4J+5}{6J^2+12J+5}, & J \to J+1 \end{cases}`}
+          eq={String.raw`C = \begin{cases}\left[\dfrac{(2J+3)(2J-1)}{2J^2+2J+1}\right]^2, & J \to J \\[2.4ex] \left(\dfrac{2J^2+4J+5}{6J^2+12J+5}\right)^2, & J \to J+1 \end{cases}`}
           label="C from angular momentum alone"
         />
         <p>Plugging in the relevant transitions gives the chapter&rsquo;s experimentally testable punchline:</p>
-        <EqBlock label="47c">{String.raw`C(J{=}1{\to}0) = (21/13)^2 \approx 2.6 > 1\ (\text{strong});\quad C(J{=}1{\to}2)=1\ (\text{neutral});\quad C(J{=}1{\to}1)\approx 0.228 < 1\ (\text{weak, He--Ne }6328\,\text{\AA}).`}</EqBlock>
-        <Callout kind="note" title="Why C(J=1→1) is 0.228, not 1">
-          The closed form <Tex>{String.raw`[(2J+3)(2J-1)/(2J^2+2J+1)]^2`}</Tex> evaluates to{" "}
-          <Tex>{String.raw`1`}</Tex> at <Tex>{String.raw`J=1`}</Tex>. The measured value{" "}
-          <Tex>{String.raw`0.228`}</Tex> for the <Tex>{String.raw`J=1\to1`}</Tex> (6328&nbsp;Å) line comes from the full
-          Doppler-limit angular sums — including the <Tex>{String.raw`m=0`}</Tex> axial sublevel contributions and
-          lineshape weighting — not from the bare <Tex>{String.raw`J\to J`}</Tex> formula. We use the three stated
-          benchmark numbers <Tex>{String.raw`(2.6,\,1.0,\,0.228)`}</Tex> directly.
+        <EqBlock label="47c">{String.raw`C(J{=}2{\to}2) = (21/13)^2 \approx 2.6 > 1\ (\text{strong});\quad C(J{=}1{\to}0)=1\ (\text{neutral});\quad C(J{=}1{\to}2)=(11/23)^2\approx 0.228 < 1\ (\text{weak, He--Ne }6328\,\text{\AA}).`}</EqBlock>
+        <Callout kind="note" title="Where the three benchmark numbers come from">
+          The He–Ne 6328&nbsp;Å line is a <Tex>{String.raw`J=1\to J=2`}</Tex> transition, so it uses the{" "}
+          <Tex>{String.raw`J\to J+1`}</Tex> branch of&nbsp;(47b): at <Tex>{String.raw`J=1`}</Tex> the closed form{" "}
+          <Tex>{String.raw`\big[(2J^2+4J+5)/(6J^2+12J+5)\big]^2`}</Tex> evaluates directly to{" "}
+          <Tex>{String.raw`(11/23)^2 = 0.228`}</Tex> — no extra angular-sum argument needed. A{" "}
+          <Tex>{String.raw`J=1\to J=1`}</Tex> line uses the <Tex>{String.raw`J\to J`}</Tex> branch and gives{" "}
+          <Tex>{String.raw`C=1`}</Tex>, and the <Tex>{String.raw`J=2\to J=2`}</Tex> line gives{" "}
+          <Tex>{String.raw`(21/13)^2\approx2.6`}</Tex>. The three benchmarks{" "}
+          <Tex>{String.raw`(2.6,\,1.0,\,0.228)`}</Tex> are these zero-field values.
         </Callout>
         <p>
           At the symmetric operating point (line center, equal coefficients) the coupled intensity equations collapse to
@@ -577,15 +584,21 @@ export default function Page() {
         />
         <p>
           The measured <strong>beat note</strong> between the two circular polarizations follows from the frequency
-          equations&nbsp;(44) plus the anisotropy coupling <Tex>{String.raw`g_{+-}`}</Tex>: near{" "}
-          <Tex>{String.raw`B=0`}</Tex> the coupling <em>locks</em> the two frequencies (a deadband,{" "}
-          <Tex>{String.raw`\Delta\nu\to0`}</Tex>); for larger <Tex>{String.raw`B`}</Tex> the Zeeman splitting overcomes
-          the lock and the beat rises — the optically pumped magnetometer response of Fig.&nbsp;12-6:
+          equations&nbsp;(44). Two distinct regimes appear in the source. In the bare isotropic cavity (Fig.&nbsp;12-6)
+          there is <em>no</em> flat locked band: the beat passes continuously through zero at <Tex>{String.raw`B=0`}</Tex>{" "}
+          with a small <em>wrong-way</em> (opposite-slope) wiggle and then a far-field slope orders of magnitude below
+          the bare Zeeman splitting <Tex>{String.raw`\omega_+ - \omega_-`}</Tex> — the cavity pulls the oscillation
+          frequency and largely defeats the magnetic tuning. A genuine hard lock (an Adler deadband,{" "}
+          <Tex>{String.raw`\Delta\nu\equiv0`}</Tex>) requires explicit cavity anisotropy{" "}
+          <Tex>{String.raw`g_{+-}\neq0`}</Tex> and is the separate Fig.&nbsp;12-7 case: locked near{" "}
+          <Tex>{String.raw`B=0`}</Tex>, unlocked at intermediate field, with re-locking possible at large field. The
+          simulator below shows the <strong>anisotropy-locking</strong> (Fig.&nbsp;12-7) response, driven by{" "}
+          <Tex>{String.raw`g_\text{anis}`}</Tex>:
         </p>
         <KeyResult
-          number="Fig. 12-6"
-          eq={String.raw`\Delta\nu = \nu_+ - \nu_-\quad\text{(locked near }B=0,\ \text{then unlocks into a Zeeman beat).}`}
-          label="Polarization beat frequency vs. B"
+          number="Fig. 12-7"
+          eq={String.raw`\Delta\nu = \nu_+ - \nu_-\quad\text{(anisotropy lock: }\Delta\nu\equiv0\text{ for }|2\delta|\le g_{+-},\ \text{then unlocks).}`}
+          label="Polarization beat frequency vs. B (anisotropy-locked)"
         />
 
         <SimFrame
@@ -593,19 +606,21 @@ export default function Page() {
           caption={
             <>
               Sweep the magnetic field <Tex>{String.raw`B`}</Tex> and watch the chapter&rsquo;s signature observables:
-              the magnetic tuning dip in <Tex>{String.raw`I_\pm(B)`}</Tex> (Fig.&nbsp;12-5) and the locked-then-unlocked
-              beat <Tex>{String.raw`\Delta\nu(B)`}</Tex> (Fig.&nbsp;12-6). The <Tex>{String.raw`J`}</Tex>-selector sets
-              the coupling parameter <Tex>{String.raw`C`}</Tex>.
+              the magnetic tuning dip in <Tex>{String.raw`I_\pm(B)`}</Tex> (Fig.&nbsp;12-5) and the anisotropy-locked
+              beat <Tex>{String.raw`\Delta\nu(B)`}</Tex> (Fig.&nbsp;12-7, set by{" "}
+              <Tex>{String.raw`g_\text{anis}`}</Tex>). The <Tex>{String.raw`J`}</Tex>-selector sets the zero-field
+              coupling parameter <Tex>{String.raw`C`}</Tex>.
             </>
           }
           tryThis={
             <>
-              Start on the <Tex>{String.raw`J{=}1{\to}1`}</Tex> He–Ne line (<Tex>{String.raw`C\approx0.228`}</Tex>):
+              Start on the <Tex>{String.raw`J{=}1{\to}2`}</Tex> He–Ne line (<Tex>{String.raw`C\approx0.228`}</Tex>):
               both polarizations coexist and trace a smooth symmetric dip. Switch to{" "}
-              <Tex>{String.raw`J{=}1{\to}0`}</Tex> (<Tex>{String.raw`C=2.6`}</Tex>): the system goes{" "}
+              <Tex>{String.raw`J{=}2{\to}2`}</Tex> (<Tex>{String.raw`C=2.6`}</Tex>): the system goes{" "}
               <strong>bistable</strong> — one polarization wins and the other is suppressed to zero, with a jump at{" "}
-              <Tex>{String.raw`B=0`}</Tex>. Then raise <Tex>{String.raw`g_\text{anis}`}</Tex> and watch the locked
-              deadband in <Tex>{String.raw`\Delta\nu(B)`}</Tex> widen.
+              <Tex>{String.raw`B=0`}</Tex>. The neutral <Tex>{String.raw`J{=}1{\to}0`}</Tex> line (
+              <Tex>{String.raw`C=1`}</Tex>) sits on the borderline. Then raise <Tex>{String.raw`g_\text{anis}`}</Tex> and
+              watch the locked deadband in <Tex>{String.raw`\Delta\nu(B)`}</Tex> widen.
             </>
           }
         >
@@ -624,26 +639,29 @@ export default function Page() {
           <Step title="Evaluate C from the angular sums">
             Carry the angular sums of&nbsp;(45)–(46) using the 3-<Tex>{String.raw`j`}</Tex> sum rules to obtain the
             closed forms&nbsp;(47b). The benchmark values follow: <Tex>{String.raw`2.6`}</Tex>{" "}
-            (<Tex>{String.raw`J{=}1{\to}0`}</Tex>), <Tex>{String.raw`1`}</Tex> (<Tex>{String.raw`J{=}1{\to}2`}</Tex>),
-            and the measured <Tex>{String.raw`0.228`}</Tex> (<Tex>{String.raw`J{=}1{\to}1`}</Tex>). A measurable laser
-            property — bistable vs. coexisting polarization — is fixed by pure angular-momentum algebra.
+            (<Tex>{String.raw`J{=}2{\to}2`}</Tex>), <Tex>{String.raw`1`}</Tex> (<Tex>{String.raw`J{=}1{\to}0`}</Tex>),
+            and <Tex>{String.raw`(11/23)^2=0.228`}</Tex> (<Tex>{String.raw`J{=}1{\to}2`}</Tex>, the He–Ne 6328&nbsp;Å
+            line). A measurable laser property — bistable vs. coexisting polarization — is fixed at zero field by pure
+            angular-momentum algebra.
           </Step>
           <Step title="The tuning dip and the beat lock">
             At the symmetric operating point the intensity solution collapses to&nbsp;(48), the magnetic Lamb dip with
-            the <Tex>{String.raw`1+\sqrt C`}</Tex> factor. For the frequencies, the anisotropy coupling{" "}
-            <Tex>{String.raw`g_{+-}`}</Tex> enters the frequency equations; when the Zeeman splitting{" "}
+            the <Tex>{String.raw`1+\sqrt C`}</Tex> factor (Fig.&nbsp;12-5). For the frequencies, the bare isotropic
+            cavity (Fig.&nbsp;12-6) merely pulls the beat through zero with a small wrong-way wiggle and a very shallow
+            far-field slope. Adding cavity anisotropy <Tex>{String.raw`g_{+-}`}</Tex> to the frequency equations produces
+            a true Adler lock (Fig.&nbsp;12-7): when the Zeeman splitting{" "}
             <Tex>{String.raw`\delta\propto\mu_B B`}</Tex> is smaller than the coupling, the relative phase locks and{" "}
-            <Tex>{String.raw`\Delta\nu = 0`}</Tex> (deadband); above it the beat unlocks and grows — Figs.&nbsp;12-5 and
-            12-6.
+            <Tex>{String.raw`\Delta\nu = 0`}</Tex> (deadband); above it the beat unlocks and grows.
           </Step>
         </Derivation>
 
         <Callout kind="insight" title="Angular momentum decides bistability">
           Whether a Zeeman laser is bistable in polarization (one circular mode kills the other) or supports both is
-          fixed by the <Tex>{String.raw`J`}</Tex>-values of the lasing transition through{" "}
-          <Tex>{String.raw`C`}</Tex> — no free parameters. The famous 6328&nbsp;Å He–Ne line is weakly coupled (
-          <Tex>{String.raw`C\approx0.23`}</Tex>), so both circular polarizations coexist; a{" "}
-          <Tex>{String.raw`J{=}1{\to}0`}</Tex> line would be bistable.
+          fixed by the <Tex>{String.raw`J`}</Tex>-values of the lasing transition through the zero-field value of{" "}
+          <Tex>{String.raw`C`}</Tex> — no free parameters. The famous 6328&nbsp;Å He–Ne{" "}
+          <Tex>{String.raw`J{=}1{\to}2`}</Tex> line is weakly coupled (<Tex>{String.raw`C\approx0.23`}</Tex>), so both
+          circular polarizations coexist; a strongly coupled <Tex>{String.raw`J{=}2{\to}2`}</Tex> line (
+          <Tex>{String.raw`C\approx2.6`}</Tex>) would be bistable.
         </Callout>
         <Callout kind="insight" title="The Zeeman laser is a magnetometer">
           Because the beat frequency <Tex>{String.raw`\Delta\nu`}</Tex> tracks the magnetic splitting{" "}

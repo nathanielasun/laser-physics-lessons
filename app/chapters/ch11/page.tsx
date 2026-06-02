@@ -131,7 +131,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="4"
-          eq={String.raw`\dot{E}_\pm + \tfrac{1}{2}\frac{\nu}{Q_\pm}\,E_\pm = -\tfrac{1}{2}\frac{\nu}{2\varepsilon_0}\,\mathrm{Im}(\mathcal{P}_\pm)`}
+          eq={String.raw`\dot{E}_\pm + \tfrac{1}{2}\frac{\nu}{Q_\pm}\,E_\pm = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\,\mathrm{Im}(\mathcal{P}_\pm)`}
           label="Amplitude self-consistency (each direction)"
           note={
             <>
@@ -142,7 +142,7 @@ export default function Page() {
         />
         <KeyResult
           number="5"
-          eq={String.raw`\nu_\pm + \dot{\phi}_\pm = \Omega_\pm - \tfrac{1}{2}\frac{\nu}{2\varepsilon_0}\frac{\mathrm{Re}(\mathcal{P}_\pm)}{E_\pm}`}
+          eq={String.raw`\nu_\pm + \dot{\phi}_\pm = \Omega_\pm - \tfrac{1}{2}\frac{\nu}{\varepsilon_0}\frac{\mathrm{Re}(\mathcal{P}_\pm)}{E_\pm}`}
           label="Frequency self-consistency (mode pulling)"
           note={
             <>
@@ -194,10 +194,10 @@ export default function Page() {
         </Intuition>
         <p>
           The polarization component for each wave is the dipole matrix element <Tex>{String.raw`\wp`}</Tex> times the
-          off-diagonal density-matrix element <Tex>{String.raw`\rho_{ab}`}</Tex>, integrated over the atomic ensemble
-          (<Tex>{String.raw`\gamma_{ab}`}</Tex> is the dipole-coherence decay rate):
+          off-diagonal density-matrix element <Tex>{String.raw`\rho_{ab}`}</Tex>, projected onto each running wave by
+          the spatial factor <Tex>{String.raw`e^{\mp iK_\pm z}`}</Tex> and averaged over the atomic velocities:
         </p>
-        <EqBlock label="6">{String.raw`\mathcal{P}_\pm(t) = \wp \sum_a e^{\pm i\phi_\pm}\,\frac{1}{\hbar}\int_{-\infty}^{t} dt'\, e^{-\gamma_{ab}(t-t')}\!\int d\mathbf{r}\;\rho_{ab}(\mathbf{r},v,t).`}</EqBlock>
+        <EqBlock label="6">{String.raw`\mathcal{P}_\pm(t) = 2\wp\,e^{i(\nu_\pm t + \phi_\pm)}\,\frac{1}{L}\int_0^{L} dz\, e^{\mp iK_\pm z}\!\int_{-\infty}^{\infty} dv\;\rho_{ab}(z,v,t).`}</EqBlock>
         <p>
           The perturbing Hamiltonian — the electric-dipole interaction — couples both atomic levels to{" "}
           <em>both</em> running waves at once. That single fact is what makes the cross-coupling appear at third order:
@@ -218,7 +218,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="8"
-          eq={String.raw`\mathcal{P}_\pm^{(1)}(t) = -\,\wp^2 N\,(K\bar u)^{-1}\,E_\pm\,Z(\zeta_\pm),\qquad \zeta_\pm = \frac{\omega-\nu_\pm}{K\bar u} + i\frac{\gamma_{ab}}{K\bar u}.`}
+          eq={String.raw`\mathcal{P}_\pm^{(1)}(t) = -\,\wp^2 N\,(\hbar K\bar u)^{-1}\,E_\pm\,Z(\zeta_\pm),\qquad \zeta_\pm = \frac{\omega-\nu_\pm}{K\bar u} + i\frac{\gamma_{ab}}{K\bar u}.`}
           label="First-order (linear gain + pulling)"
           note={
             <>
@@ -241,7 +241,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="10"
-          eq={String.raw`\mathcal{P}_\pm^{(3)} = \tfrac{1}{8}\,\wp^4 N\,(K\bar u)^{-1}\hbar^{-2}\,E_\pm\Big\{ |E_\pm|^2\,[\,Z\text{-combination}\,] \;+\; 2\,|E_\mp|^2\,[\,Z\text{-combination}\,] \Big\}.`}
+          eq={String.raw`\mathcal{P}_\pm^{(3)} = \tfrac{1}{4}\,\wp^4 N\,(\hbar^3 K\bar u)^{-1}\,E_\pm\Big\{ |E_\pm|^2\,[\,Z\text{-combination}\,] \;+\; 2\,|E_\mp|^2\,[\,Z\text{-combination}\,] \Big\}.`}
           label="Third-order (self + cross saturation)"
           note={
             <>
@@ -304,7 +304,7 @@ export default function Page() {
         <p>
           Expand the slowly-varying coefficients about the average operating and atomic frequencies:
         </p>
-        <EqBlock label="11">{String.raw`\nu_0 = \tfrac{1}{2}(\nu_+ + \nu_-), \qquad \omega_0 = \tfrac{1}{2}\omega + \tfrac{1}{2}(\omega_+ + \omega_-).`}</EqBlock>
+        <EqBlock>{String.raw`\nu_0 = \tfrac{1}{2}(\nu_+ + \nu_-), \qquad \omega_0 = \gamma + i(\omega - \nu_0).`}</EqBlock>
         <p>
           Combining the linear and nonlinear polarizations into one expression makes the mapping onto the coefficient
           table transparent (<Tex>{String.raw`Z_i`}</Tex> is the imaginary part of <Tex>{String.raw`Z`}</Tex>;{" "}
@@ -334,13 +334,13 @@ export default function Page() {
           empty-cavity value <Tex>{String.raw`\Omega_\pm`}</Tex>, plus linear pulling <Tex>{String.raw`\sigma_\pm`}</Tex>,
           plus a self-push <Tex>{String.raw`\rho_\pm I_\pm`}</Tex> and a cross-push from the opposite wave:
         </p>
-        <EqBlock label="15">{String.raw`\nu_+ + \dot{\phi}_+ = \Omega_+ + \sigma_+ + \rho_+ I_+ + \tau_{+-}\,I_-,`}</EqBlock>
-        <EqBlock label="16">{String.raw`\nu_- + \dot{\phi}_- = \Omega_- + \sigma_- + \rho_- I_- + \tau_{-+}\,I_+.`}</EqBlock>
+        <EqBlock label="15">{String.raw`\nu_+ + \dot{\phi}_+ = \Omega_+ + \sigma_+ - \rho_+ I_+ - \tau_{+-}\,I_-,`}</EqBlock>
+        <EqBlock label="16">{String.raw`\nu_- + \dot{\phi}_- = \Omega_- + \sigma_- - \rho_- I_- - \tau_{-+}\,I_+.`}</EqBlock>
         <p>
           The difference of Eqs.&nbsp;(15)–(16) becomes the beat-note / relative-phase equation of the next section. The
           seven coefficients are collected in Table&nbsp;11-1; their leading forms are:
         </p>
-        <EqBlock label="α">{String.raw`\alpha_\pm = \exp\!\big[-(\omega-\nu_\pm)^2/(K\bar u)^2\big] - \tfrac{1}{2}\frac{\nu}{Q_\pm}\quad(\text{linear net gain: Doppler gain }-\text{ half loss}).`}</EqBlock>
+        <EqBlock label="α">{String.raw`\alpha_\pm = F_1\,\exp\!\big[-(\omega-\nu_\pm)^2/(K\bar u)^2\big] - \tfrac{1}{2}\frac{\nu}{Q_\pm}\quad(\text{linear net gain: Doppler gain }-\text{ half loss}).`}</EqBlock>
         <EqBlock label="β,θ">{String.raw`\beta_\pm = (\text{self-saturation}),\qquad \theta_{\pm\mp} = (\text{cross-saturation}) \;\approx\; 2\,\beta\ \text{near line center}.`}</EqBlock>
         <EqBlock label="σ">{String.raw`\sigma_\pm \propto \mathrm{Re}\,Z\;\;(\text{linear mode pulling, odd in detuning }\nu_\pm-\omega).`}</EqBlock>
         <EqBlock label="ρ,τ">{String.raw`\rho_\pm = (\text{self-pushing}),\qquad \tau_{\pm\mp} = (\text{cross-pushing}),`}</EqBlock>
@@ -374,7 +374,7 @@ export default function Page() {
             <Tex>{String.raw`\tau\,I_\mp`}</Tex>. That is Eqs.&nbsp;(15)–(16).
           </Step>
           <Step title="Expand about line center">
-            Define the average frequencies Eq.&nbsp;(11) and Taylor-expand the <Tex>{String.raw`Z`}</Tex> combinations
+            Define the average frequencies above and Taylor-expand the <Tex>{String.raw`Z`}</Tex> combinations
             about the average detuning. This yields Table&nbsp;11-1: a gain part (Gaussian, even in detuning) and a
             pulling part (dispersive, odd in detuning), all sharing the factor <Tex>{String.raw`F_1`}</Tex>.
           </Step>
@@ -449,16 +449,20 @@ export default function Page() {
         </p>
         <EqBlock label="18">{String.raw`\Psi = (\nu_+ - \nu_-)\,t + \phi_+ - \phi_-.`}</EqBlock>
         <p>
-          The two frequency equations, now including the backscatter terms (the{" "}
-          <Tex>{String.raw`\mathrm{Im}(\mathcal{P})`}</Tex> pieces that, through scattering, depend on the{" "}
-          <em>other</em> wave), are:
+          The amplitude equation (19) carries a backscatter term{" "}
+          <Tex>{String.raw`\mathrm{Im}[i\,g_{+-}e^{i\Psi}]E_-`}</Tex> that injects the <em>other</em> wave&rsquo;s
+          field, and the frequency equation (20) carries the dispersion term{" "}
+          <Tex>{String.raw`-\tfrac{1}{2}(\nu/\varepsilon_0)\mathrm{Re}(\mathcal{P}_+)/E_+`}</Tex> plus its own
+          backscatter coupling:
         </p>
-        <EqBlock label="19,20">{String.raw`\nu_+ + \dot\phi_+ = \Omega_+ + \sigma_+ + \tfrac{1}{2}\frac{\nu}{2\varepsilon_0}\frac{\mathrm{Im}(\mathcal{P}_+)}{E_+},\qquad \nu_- + \dot\phi_- = \Omega_- + \sigma_- + \tfrac{1}{2}\frac{\nu}{2\varepsilon_0}\frac{\mathrm{Im}(\mathcal{P}_-)}{E_-}.`}</EqBlock>
+        <EqBlock label="19">{String.raw`\dot{E}_+ + \tfrac{1}{2}\frac{\nu}{Q_+}E_+ + \mathrm{Im}[i\,g_{+-}e^{i\Psi}]E_- = -\tfrac{1}{2}\frac{\nu}{\varepsilon_0}\mathrm{Im}(\mathcal{P}_+).`}</EqBlock>
+        <EqBlock label="20">{String.raw`\nu_+ + \dot\phi_+ + \mathrm{Re}[i\,g_{+-}e^{i\Psi}]\frac{E_-}{E_+} = \Omega_+ - \tfrac{1}{2}\frac{\nu}{\varepsilon_0}\frac{\mathrm{Re}(\mathcal{P}_+)}{E_+}.`}</EqBlock>
         <p>
-          Subtract them. The empty-cavity and pulling differences collect into a constant <Tex>{String.raw`d`}</Tex>;
-          the backscatter terms inject one wave&rsquo;s field into the other, producing a{" "}
-          <Tex>{String.raw`\sin\Psi`}</Tex> term of strength <Tex>{String.raw`l`}</Tex>. The result is the heart of the
-          chapter:
+          Write Eq.&nbsp;(20) for both <Tex>{String.raw`+`}</Tex> and <Tex>{String.raw`-`}</Tex> waves and subtract the{" "}
+          <Tex>{String.raw`-`}</Tex> form from the <Tex>{String.raw`+`}</Tex> form. The empty-cavity and pulling
+          differences collect into a constant <Tex>{String.raw`d`}</Tex>; the backscatter terms inject one
+          wave&rsquo;s field into the other, producing a <Tex>{String.raw`\sin\Psi`}</Tex> term of strength{" "}
+          <Tex>{String.raw`l`}</Tex>. The result is the heart of the chapter:
         </p>
         <KeyResult
           number="21"
@@ -473,7 +477,7 @@ export default function Page() {
           }
         />
         <EqBlock label="22">{String.raw`d = \Omega_+ - \Omega_- + \sigma_+ - \sigma_- - (\rho_+ - \rho_-)I + \cdots = (\nu_+ - \nu_-)\big|_{l=0}\;\propto\;\text{rotation rate }\Omega.`}</EqBlock>
-        <EqBlock label="23">{String.raw`l = \tfrac{1}{2}\frac{\nu}{2\varepsilon_0}\left[\frac{S_-}{E_-} + \frac{S_+}{E_+}\right],`}</EqBlock>
+        <EqBlock label="23">{String.raw`l = \tfrac{1}{2}\frac{\nu}{\varepsilon_0}\left[\frac{S_-}{E_-} + \frac{S_+}{E_+}\right],`}</EqBlock>
         <p>
           where <Tex>{String.raw`d`}</Tex> is the beat frequency the two waves would have <em>without</em> backscatter
           (proportional to rotation rate for a gyroscope), and <Tex>{String.raw`l`}</Tex> is built from the scattering
@@ -483,9 +487,10 @@ export default function Page() {
 
         <Derivation title="Solve the Adler equation: locked vs. running">
           <Step title="Form the relative-phase equation">
-            Subtract Eq.&nbsp;(20) from Eq.&nbsp;(19). The cavity/pulling differences give the constant{" "}
-            <Tex>{String.raw`d`}</Tex> (Eq.&nbsp;22); the backscatter <Tex>{String.raw`\mathrm{Im}(\mathcal{P})`}</Tex>{" "}
-            terms give <Tex>{String.raw`l\sin\Psi`}</Tex> (Eq.&nbsp;23). Using Eq.&nbsp;(18) this is{" "}
+            Subtract the <Tex>{String.raw`-`}</Tex> form of frequency Eq.&nbsp;(20) from its <Tex>{String.raw`+`}</Tex>{" "}
+            form. The cavity/pulling differences give the constant <Tex>{String.raw`d`}</Tex> (Eq.&nbsp;22); the
+            backscatter <Tex>{String.raw`\mathrm{Re}[i\,g\,e^{i\Psi}]`}</Tex> terms give{" "}
+            <Tex>{String.raw`l\sin\Psi`}</Tex> (Eq.&nbsp;23). Using Eq.&nbsp;(18) this is{" "}
             <Tex>{String.raw`\dot\Psi = d + l\sin\Psi`}</Tex>.
           </Step>
           <Step title="Fixed points exist only inside the dead band">
@@ -576,11 +581,13 @@ export default function Page() {
         <EqBlock label="24">{String.raw`E(z,t) = \tfrac{1}{2}\sum_n E_n\,e^{-i(\nu_n t + \phi_n - K_n z)} + \text{c.c.}`}</EqBlock>
         <p>
           The self-saturation coefficient for a single mode is built from the Lorentzian denominator{" "}
-          <Tex>{String.raw`\mathscr{D}(\nu_n-\omega)`}</Tex>. Its structure is the unidirectional limit of the
-          standing-wave coefficient — but <em>without</em> the factor-of-<Tex>{String.raw`\tfrac12`}</Tex>{" "}
-          spatial-hole-burning enhancement, because a traveling wave has no nodes:
+          <Tex>{String.raw`\mathscr{D}(\nu_n-\omega)`}</Tex>. The ring self-saturation is{" "}
+          <strong>one-quarter the standing-wave (Table&nbsp;10-2) value</strong>, and it lacks the complex denominator
+          that produced the Lamb dip — a single traveling wave has uniform intensity and burns no population grating,
+          so it carries neither the spatial-grating contribution nor the velocity-class structure of the standing-wave
+          coefficient:
         </p>
-        <EqBlock label="25">{String.raw`\beta_{nnnn} = i\Big(\frac{4\wp^2}{\hbar}\Big)^{2}\Big[\mathscr{D}(\nu_n-\omega)+\cdots\Big]\big(1 + \cdots\big)\quad(\text{no }\tfrac12\text{ hole-burning factor}).`}</EqBlock>
+        <EqBlock label="25">{String.raw`\beta_{nnnn} = i\Big(\tfrac{1}{2}\frac{\wp}{\hbar}\Big)^{2}\Big[\mathscr{D}(\nu_n-\omega)+\cdots\Big]\big(1 + \cdots\big)\quad(\text{one-quarter the Table 10-2 value; no grating term}).`}</EqBlock>
         <p>
           The cross-saturation coefficient between modes <Tex>{String.raw`n`}</Tex> and <Tex>{String.raw`m`}</Tex> is
           the striking one. Unlike the standing-wave <Tex>{String.raw`\theta`}</Tex> of Table&nbsp;10-2, this one is{" "}
@@ -589,7 +596,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="26"
-          eq={String.raw`\theta_{nm} = \frac{2\wp^4 N\gamma}{\hbar^3}\,\mathrm{Im}\{\phi_{1233}+\phi_{2133}\}\quad(\text{independent of detuning } \omega-\nu).`}
+          eq={String.raw`\theta_{nm} = \frac{2\wp^4 N\gamma}{\hbar^3}\,\mathrm{Im}\{\phi\text{-combination}\}\quad(\text{independent of detuning } \omega-\nu).`}
           label="Cross-saturation, unidirectional ring"
           note={
             <>
@@ -632,8 +639,9 @@ export default function Page() {
             </li>
             <li>
               <strong>Traveling waves have no spatial hole burning and no single-direction Lamb dip.</strong> They
-              sample all velocity groups equally — which is why ring self-saturation lacks the{" "}
-              <Tex>{String.raw`\tfrac12`}</Tex> enhancement and ring cross-saturation is detuning-independent.
+              sample all velocity groups equally — which is why ring self-saturation is one-quarter the standing-wave
+              (Table&nbsp;10-2) value (it lacks both the grating contribution and the complex denominator) and ring
+              cross-saturation is detuning-independent.
             </li>
             <li>
               <strong>Cross- vs. self-saturation drives all competition.</strong> The dimensionless{" "}

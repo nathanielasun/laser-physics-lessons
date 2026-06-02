@@ -124,12 +124,23 @@ export default function Ch14Sim() {
       lo.push([sim.ts[i], sim.pLo[i]]);
       ww.push([sim.ts[i], sim.pWW[i]]);
     }
+    const continuum = mode === "continuum";
     const out: Series[] = [
-      { data: up, color: "#e11d48", width: 2.6, label: "P_upper = cos²" },
-      { data: lo, color: "#0891b2", width: 2, label: "P_lower = sin²" },
+      {
+        data: up,
+        color: continuum ? "#f6a8be" : "#e11d48",
+        width: continuum ? 1.6 : 2.6,
+        label: continuum ? "single-mode reference (reversible)" : "P_upper = cos²",
+      },
+      {
+        data: lo,
+        color: continuum ? "#a5d8e6" : "#0891b2",
+        width: continuum ? 1.4 : 2,
+        label: continuum ? "single-mode lower (reference)" : "P_lower = sin²",
+      },
     ];
-    if (mode === "continuum") {
-      out.push({ data: ww, color: "#7c3aed", width: 2.2, dashed: true, label: "e^{−γ_a t} (WW)" });
+    if (continuum) {
+      out.push({ data: ww, color: "#7c3aed", width: 2.6, dashed: true, label: "P_upper (continuum) = e^{−γ_a t}" });
     }
     return out;
   }, [sim, mode]);
@@ -150,7 +161,7 @@ export default function Ch14Sim() {
         ys.push(pref * s * s);
       }
     }
-    return [{ x: xs, y: ys, color: "#d97706", width: 2.4, label: "P_upper (Eq.75)", fill: true }];
+    return [{ x: xs, y: ys, color: "#d97706", width: 2.4, label: "lineshape, arb. (Eq.75)", fill: true }];
   }, [g, n, tLine]);
   // headline value of the detuned first-order probability at the chosen detuning
   const lineMax = g * g * (n + 1) * tLine * tLine; // peak (Ω−ω → 0): g²(n+1)t²
@@ -323,13 +334,16 @@ export default function Ch14Sim() {
           <div style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 4 }}>
             Detuning lineshape (Eq. 75, perturbative)
           </div>
+          <div style={{ fontSize: "0.72rem", color: "#64748b", marginBottom: 4 }}>
+            Relative (unnormalized) lineshape — valid only while g√(n+1) t ≪ 1; outside that the true probability saturates.
+          </div>
           <Plot
             width={320}
             height={220}
             xRange={[-12, 12]}
             yRange={[0, Math.max(0.2, lineMax * 1.15)]}
             xLabel="Ω − ω"
-            yLabel="P_upper"
+            yLabel="transition rate, arb."
             lines={lineShape}
             markers={[{ x: det, color: "#e11d48" }]}
           />
@@ -410,12 +424,12 @@ export default function Ch14Sim() {
           value={mode === "single" ? "reversible (energy returns)" : "irreversible (energy escapes)"}
         />
         <Readout
-          label={String.raw`P_{\text{upper}}^{(\text{Eq.75})}\big|_{\Omega-\omega=0}`}
+          label={String.raw`\text{lineshape (Eq.75, arb.)}\big|_{\Omega-\omega=0}`}
           tex
           value={lineMax.toFixed(3)}
         />
         <Readout
-          label={String.raw`P_{\text{upper}}^{(\text{Eq.75})}\big|_{\text{marker }\Omega-\omega}`}
+          label={String.raw`\text{lineshape (Eq.75, arb.)}\big|_{\text{marker }\Omega-\omega}`}
           tex
           value={lineAtDet.toFixed(3)}
         />
