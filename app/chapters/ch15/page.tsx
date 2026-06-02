@@ -48,7 +48,7 @@ export default function Page() {
           Because the field operators do not commute, their fluctuations obey an uncertainty product with a nonzero
           floor; a state sitting at that floor is the most classical-looking compromise the field can make:
         </p>
-        <EqBlock label="1">{String.raw`\Delta E\,\Delta H \geq \tfrac{1}{2}\left|\left\langle \frac{\partial H}{\partial t}\right\rangle\right|`}</EqBlock>
+        <EqBlock label="1">{String.raw`\Delta E\,\Delta H \geq \tfrac{1}{2}\hbar\left(\frac{2\Omega^{2}}{VK}\right)`}</EqBlock>
         <p>
           In oscillator language this is the familiar statement for position and momentum of the mode. Equality defines
           a minimum-uncertainty wave packet — and coherent states achieve equality for <em>all</em> time:
@@ -128,7 +128,7 @@ export default function Page() {
           Carrying the ground-state shape <Tex>{String.raw`\phi_0`}</Tex> with a complex displacement that rotates as{" "}
           <Tex>{String.raw`\alpha e^{-i\Omega t}`}</Tex>, the wave function is
         </p>
-        <EqBlock label="5">{String.raw`\psi(q,t) = \exp\!\big[\tfrac{1}{2}(\alpha e^{-i\Omega t})^{2} - \tfrac{1}{2}|\alpha|^{2}\big]\,\phi_{0}(\xi), \qquad \langle\xi\rangle = \sqrt{2}\,\alpha e^{-i\Omega t}`}</EqBlock>
+        <EqBlock label="5">{String.raw`\psi(q,t) = \exp\!\big[\tfrac{1}{2}(\alpha e^{-i\Omega t})^{2} - \tfrac{1}{2}|\alpha|^{2}\big]\,\phi_{0}\big(\xi - \sqrt{2}\,\alpha e^{-i\Omega t}\big)`}</EqBlock>
         <p>
           The complex label can be read straight off the dimensional position and momentum (mass{" "}
           <Tex>{String.raw`M`}</Tex>, mode frequency <Tex>{String.raw`\Omega`}</Tex>); its real part tracks{" "}
@@ -144,13 +144,13 @@ export default function Page() {
           spreading&rdquo; picture, with the polar label{" "}
           <Tex>{String.raw`\alpha = |\alpha|\exp(-i\phi)`}</Tex>:
         </p>
-        <EqBlock label="8">{String.raw`\psi(q,t) \propto \phi_{0}\big[\xi - \sqrt{2}\,|\alpha|\cos(\Omega t + \phi)\big], \qquad \alpha = |\alpha|\exp(-i\phi)`}</EqBlock>
+        <EqBlock label="8">{String.raw`\psi^{*}\psi = \big\{\phi_{0}\big[\xi - \sqrt{2}\,|\alpha|\cos(\Omega t + \phi)\big]\big\}^{2}, \qquad \alpha = |\alpha|\exp(-i\phi)`}</EqBlock>
         <p>
           Expressed in the electric-field variable, the same packet is a Gaussian of constant spread whose centroid
-          oscillates with constant amplitude <Tex>{String.raw`\sqrt{2}\,|\alpha|`}</Tex> at frequency{" "}
-          <Tex>{String.raw`2\Omega`}</Tex>. Reading off the center recovers exactly the classical field cosine:
+          oscillates with constant amplitude <Tex>{String.raw`\sqrt{2}\,|\alpha|`}</Tex> at the mode frequency{" "}
+          <Tex>{String.raw`\Omega`}</Tex>. Reading off the center recovers exactly the classical field cosine:
         </p>
-        <EqBlock label="9">{String.raw`|\psi(E,t)|^{2} = (\sqrt{2\pi}\,E')^{-1}\exp\!\Big[-\big(\tfrac{1}{\sqrt{2}}E'\big)^{2}\big(E - \sqrt{2}\,|\alpha|\cos(\Omega t + \phi)\big)^{2}\Big]`}</EqBlock>
+        <EqBlock label="9">{String.raw`|\psi(E,t)|^{2} = (\sqrt{2\pi}\,E')^{-1}\exp\!\Big[-\big((\sqrt{2}\,E')^{-1}E - \sqrt{2}\,|\alpha|\cos(\Omega t + \phi)\big)^{2}\Big]`}</EqBlock>
 
         <Callout kind="warning" title="Keep Ω and ω straight">
           The radiation-field mode frequency is <Tex>{String.raw`\Omega`}</Tex> (it appears in the field packet
@@ -241,7 +241,7 @@ export default function Page() {
               <Tex>{String.raw`n=0`}</Tex>. Turn on the thermal overlay and raise <Tex>{String.raw`T`}</Tex> — the
               Bose–Einstein curve is broad and monotonically falling, the chaotic-light contrast of Fig.&nbsp;15-4. Note
               that the field panel runs at <Tex>{String.raw`\Omega`}</Tex> so the dot stays locked to the packet center;
-              the field-variable form Eq.&nbsp;(9) carries an extra factor <Tex>{String.raw`2\Omega`}</Tex>.
+              both the packet center and the field oscillate at <Tex>{String.raw`\Omega`}</Tex>.
             </>
           }
         >
@@ -257,8 +257,8 @@ export default function Page() {
           </Step>
           <Step title="Field-variable form and the classical cosine">
             Re-express the packet in the electric-field variable (Eq.&nbsp;9). The density is a constant-spread Gaussian
-            whose centroid oscillates as <Tex>{String.raw`\sqrt2\,|\alpha|\cos(\Omega t+\phi)`}</Tex> at frequency{" "}
-            <Tex>{String.raw`2\Omega`}</Tex>. Reading off the center recovers exactly the classical field cosine.
+            whose centroid oscillates as <Tex>{String.raw`\sqrt2\,|\alpha|\cos(\Omega t+\phi)`}</Tex>. Reading off the
+            center recovers exactly the classical field cosine.
           </Step>
           <Step title="Derive a|α⟩ = α|α⟩">
             Apply <Tex>{String.raw`a`}</Tex> to the number expansion Eq.&nbsp;(11). Using{" "}
@@ -417,7 +417,7 @@ export default function Page() {
           Build the interaction from the mode expansion of the vector-potential operator and couple it to the classical
           current:
         </p>
-        <EqBlock label="27">{String.raw`\mathbf{A}(\mathbf{r},t) = c\sum_{k}\left(\frac{2\pi\hbar}{\Omega_{k}}\right)^{1/2}\big[\mathbf{u}_{k}(\mathbf{r})\,a_{k}\,e^{-i\Omega_{k}t} + \text{adjoint}\big]`}</EqBlock>
+        <EqBlock label="27">{String.raw`\mathbf{A}(\mathbf{r},t) = c\sum_{k}\left(\frac{\hbar}{2\Omega_{k}}\right)^{1/2}\big[\mathbf{u}_{k}(\mathbf{r})\,a_{k}\,e^{-i\Omega_{k}t} + \text{adjoint}\big]`}</EqBlock>
         <KeyResult
           number="28"
           eq={String.raw`\mathcal{V}'(t) = -\frac{1}{c}\int \mathbf{J}(\mathbf{r},t)\cdot \mathbf{A}(\mathbf{r},t)\,d^{3}r`}
@@ -572,7 +572,7 @@ export default function Page() {
           For a thermal mode at temperature <Tex>{String.raw`T`}</Tex> the density matrix is diagonal, with Boltzmann
           weights:
         </p>
-        <EqBlock label="38">{String.raw`\rho_{nm} = \frac{\exp(-\hbar\Omega/k_{B}T)\,\delta_{nm}}{\mathrm{Tr}[\exp(-\hbar\Omega\,a^{\dagger}a/k_{B}T)]}`}</EqBlock>
+        <EqBlock label="38">{String.raw`\rho = \frac{\exp(-\hbar\Omega\, a^{\dagger}a/k_{B}T)}{\mathrm{Tr}\{\exp(-\hbar\Omega\, a^{\dagger}a/k_{B}T)\}}`}</EqBlock>
         <EqBlock label="39">{String.raw`\rho_{nm} = \exp(-n\hbar\Omega/k_{B}T)\,\big[1 - \exp(-\hbar\Omega/k_{B}T)\big]\,\delta_{nm}`}</EqBlock>
         <p>so the thermal <Tex>{String.raw`R`}</Tex>-function sums to a clean exponential in <Tex>{String.raw`\alpha^{*}\beta`}</Tex>:</p>
         <EqBlock label="40">{String.raw`R(\alpha^{*},\beta) = \big[1 - e^{-\hbar\Omega/k_{B}T}\big]\sum_{n}\frac{(\alpha^{*}\beta)^{n}}{n!}e^{-n\hbar\Omega/k_{B}T} = \big[1 - e^{-\hbar\Omega/k_{B}T}\big]\exp\!\big[\alpha^{*}\beta\,e^{-\hbar\Omega/k_{B}T}\big]`}</EqBlock>
@@ -598,13 +598,13 @@ export default function Page() {
           label="Normally-ordered averages go classical"
         />
         <p>The normal-ordering notation makes the recipe &ldquo;replace <Tex>{String.raw`a\to\alpha,\ a^{\dagger}\to\alpha^{*}`}</Tex>&rdquo; precise:</p>
-        <EqBlock label="43–44">{String.raw`\mathscr{O}^{(n)}(\alpha) = \langle\alpha|\mathscr{O}|\alpha\rangle, \qquad \rho^{(n)}(a,a^{\dagger}) = \sum_{n}\sum_{m}\rho_{nm}^{(n)}\,a^{\dagger n}a^{m}`}</EqBlock>
-        <EqBlock label="45">{String.raw`\langle\mathscr{O}\rangle = \mathrm{Tr}\Big(\sum_{n}\sum_{m}\rho_{nm}^{(n)}a^{\dagger n}a^{m}\Big) = \int d^{2}\alpha\,\sum_{n}\sum_{m}\rho_{nm}^{(n)}(\alpha^{*})^{n}\alpha^{m}\,P(\alpha) = \int d^{2}\alpha\,P(\alpha)\,\mathscr{O}(\alpha)`}</EqBlock>
+        <EqBlock label="43–44">{String.raw`\rho^{(a)}(a,a^{\dagger}) = \sum_{i}\sum_{j}\rho_{ij}^{(a)}\,a^{i}(a^{\dagger})^{j}, \qquad \mathscr{O}^{(n)}(a,a^{\dagger}) = \sum_{l}\sum_{m}\mathscr{O}_{lm}^{(n)}\,(a^{\dagger})^{l}a^{m}`}</EqBlock>
+        <EqBlock label="45">{String.raw`\langle\mathscr{O}\rangle = \mathrm{Tr}\Big(\rho\sum_{n}\sum_{m}\mathscr{O}_{nm}^{(n)}a^{\dagger n}a^{m}\Big) = \int d^{2}\alpha\,P(\alpha)\sum_{n}\sum_{m}\mathscr{O}_{nm}^{(n)}(\alpha^{*})^{n}\alpha^{m} = \int d^{2}\alpha\,P(\alpha)\,\mathscr{O}(\alpha)`}</EqBlock>
         <p>
           Formally inverting, <Tex>{String.raw`P(\alpha)`}</Tex> is the normally-ordered density operator with operators
           replaced by c-numbers:
         </p>
-        <EqBlock label="46">{String.raw`P(\alpha) = \sum_{n}\sum_{m}\rho_{nm}^{(n)}\,\alpha^{n}\alpha^{*m} = \rho^{(n)}(\alpha,\alpha^{*})`}</EqBlock>
+        <EqBlock label="46">{String.raw`P(\alpha) = \sum_{i}\sum_{j}\rho_{ij}^{(a)}\,\alpha^{i}(\alpha^{*})^{j} = \rho^{(a)}(\alpha,\alpha^{*})`}</EqBlock>
         <p>
           More usefully, the diagonal matrix element <Tex>{String.raw`\langle\alpha|\rho|\alpha\rangle`}</Tex> is the{" "}
           <em>convolution</em> of <Tex>{String.raw`P`}</Tex> with the Gaussian overlap (Eq.&nbsp;22):
@@ -629,7 +629,7 @@ export default function Page() {
         <p>so the diagonal element becomes a normalized Gaussian whose width grows with <Tex>{String.raw`\langle n\rangle`}</Tex>:</p>
         <EqBlock>{String.raw`\langle\alpha|\rho|\alpha\rangle = (\langle n\rangle + 1)^{-1}\exp\!\big[-|\alpha|^{2}/(\langle n\rangle + 1)\big]`}</EqBlock>
         <p>Fourier transform it, divide by the kernel transform, and invert:</p>
-        <EqBlock label="53">{String.raw`\mathscr{F}\{\langle\alpha|\rho|\alpha\rangle\} = (\langle n\rangle + 1)^{-1}\,\pi\,\exp\!\big[-\tfrac{1}{4}k^{2}(\langle n\rangle + 1)\big], \quad |\alpha|^{2} = \mathrm{Re}(\alpha)^{2} + \mathrm{Im}(\alpha)^{2}`}</EqBlock>
+        <EqBlock label="53">{String.raw`\mathscr{F}\{\langle\alpha|\rho|\alpha\rangle\} = \pi\,\exp\!\big[-\tfrac{1}{4}k^{2}(\langle n\rangle + 1)\big]`}</EqBlock>
         <EqBlock label="54">{String.raw`\mathscr{F}\{\exp(-|\alpha|^{2})\} = \pi\exp\!\big(-\tfrac{1}{4}k^{2}\big)`}</EqBlock>
         <KeyResult
           number="55"
@@ -768,7 +768,7 @@ export default function Page() {
           </ul>
           The end-of-chapter problems extend these tools toward coherence theory — positive/negative-frequency field
           parts and the correlation functions <Tex>{String.raw`G^{(n)}`}</Tex>, the displacement-operator generating
-          function, the thermal average <Tex>{String.raw`\langle D(\alpha)\rangle=\exp(-\alpha^{*}\alpha\langle n\rangle)`}</Tex>,
+          function, the thermal average <Tex>{String.raw`\langle D(\alpha)\rangle=\exp[-|\alpha|^{2}(\langle n\rangle+\tfrac12)]`}</Tex>,
           and the harmonic-oscillator thermal density matrix in coordinate space — building toward the quantum laser
           theory of the chapters ahead.
         </Callout>

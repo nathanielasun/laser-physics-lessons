@@ -245,7 +245,7 @@ export default function Page() {
           <Step title="Form the per-atom density-matrix change">
             Build <Tex>{String.raw`\rho_{nn} = |C_{b,n}|^2 + |C_{a,n}|^2`}</Tex> and collect the surviving second-order
             terms (Eqs. 18–20). For a lower-level atom this gives
-            <EqBlock label="21">{String.raw`(\delta\rho_{nn})_{b\text{-atoms}} = -\mathcal{B}\big[n\,\rho_{nn} - (n+1)\,\rho_{n+1,n+1}\big],`}</EqBlock>
+            <EqBlock label="21">{String.raw`\dot{\rho}_{nn}\big|_{b\text{-atoms}} = -\mathcal{B}\big[n\,\rho_{nn} - (n+1)\,\rho_{n+1,n+1}\big],`}</EqBlock>
             and similarly for an upper-level atom (Eq. 23).
           </Step>
           <Step title="Assemble emission + absorption">
@@ -285,11 +285,12 @@ export default function Page() {
         />
 
         <p>
-          Multiplying Eq. 26 by <Tex>{String.raw`n`}</Tex> and summing produces a moment hierarchy. Written out, the
-          full moment equation is the unwieldy
+          Because the birth–death rates are linear in <Tex>{String.raw`n`}</Tex>, the first-moment equation closes{" "}
+          <em>exactly</em> — no higher moment ever survives. Multiplying Eq. 26 by <Tex>{String.raw`n`}</Tex> and
+          summing, the <Tex>{String.raw`\langle n^2\rangle`}</Tex> pieces from the bosonic factors cancel identically:
         </p>
-        <EqBlock label="33">{String.raw`\frac{d}{dt}\langle n\rangle = -\mathcal{B}\langle n^2\rangle + \langle n\rangle\Big[-\mathcal{B}\langle n\rangle + 3\mathcal{B}\!\sum_n (m^2-m)\rho_{nn} + \mathcal{B}\!\sum_n (2m+1)\rho_{nn}\Big] + (\mathcal{A}-\mathcal{B})\langle n\rangle + \mathcal{B},`}</EqBlock>
-        <p>but the higher moments cancel and it collapses to the clean linear relaxation</p>
+        <EqBlock label="33">{String.raw`\frac{d}{dt}\langle n\rangle = -\mathcal{A}\big[\langle n^2\rangle + \langle n\rangle\big] - \mathcal{B}\langle n^2\rangle + \mathcal{B}\!\sum_{m=1}^{\infty}(m^2-m)\rho_{mm} + \mathcal{A}\!\sum_{m=0}^{\infty}(m^2+2m+1)\rho_{mm} = (\mathcal{A}-\mathcal{B})\langle n\rangle + \mathcal{A},`}</EqBlock>
+        <p>which is precisely <Tex>{String.raw`\mathcal{A}\langle n+1\rangle - \mathcal{B}\langle n\rangle`}</Tex>, the clean linear relaxation</p>
         <KeyResult
           number="34"
           eq={String.raw`\frac{d}{dt}\langle n\rangle = -(\mathcal{B}-\mathcal{A})\,\langle n\rangle + \mathcal{A}.`}
@@ -337,10 +338,11 @@ export default function Page() {
         />
 
         <Derivation title="Mean-photon-number relaxation and cavity Q" defaultOpen={false}>
-          <Step title="Collapse the moment hierarchy">
-            Multiply Eq. 26 by <Tex>{String.raw`n`}</Tex> and sum; the higher moments in Eq. 33 cancel, leaving the
-            linear Eq. 34. Identify <Tex>{String.raw`\mathcal{B}-\mathcal{A}`}</Tex> with{" "}
-            <Tex>{String.raw`\nu/Q`}</Tex>.
+          <Step title="The first moment closes exactly">
+            Multiply Eq. 26 by <Tex>{String.raw`n`}</Tex> and sum. Because the rates are linear in{" "}
+            <Tex>{String.raw`n`}</Tex>, the <Tex>{String.raw`\langle n^2\rangle`}</Tex> pieces cancel identically (not by
+            luck) — the equation closes at first moment, giving the linear Eq. 34. Identify{" "}
+            <Tex>{String.raw`\mathcal{B}-\mathcal{A}`}</Tex> with <Tex>{String.raw`\nu/Q`}</Tex>.
             <EqBlock>{String.raw`\frac{d}{dt}\langle n\rangle = -\frac{\nu}{Q}\langle n\rangle + \frac{\nu}{Q}\,\bar n.`}</EqBlock>
           </Step>
           <Step title="Solve">
@@ -437,13 +439,13 @@ export default function Page() {
         <p>and the interaction is the rotating-wave Jaynes–Cummings coupling,</p>
         <EqBlock label="46">{String.raw`\mathscr{V} = \hbar g\,\sigma a^{\dagger} + \text{adjoint} = \hbar g\begin{pmatrix} 0 & a \\ a^{\dagger} & 0\end{pmatrix}.`}</EqBlock>
         <p>The surviving second-order result is a double commutator traced over the atom:</p>
-        <EqBlock label="47">{String.raw`\rho(t+\tau) = \rho(t) - \frac{1}{\hbar^2}\Big(\frac{\tau}{2}\Big)^{2}\mathrm{Tr}_{\text{atom}}\big[\mathscr{V},[\mathscr{V},\rho_{b\text{-}a}(t)]\big].`}</EqBlock>
+        <EqBlock label="47">{String.raw`\rho(t+\tau) = \rho(t) - \tfrac{1}{2}\Big(\frac{\tau}{\hbar}\Big)^{2}\mathrm{Tr}_{\text{atom}}\big[\mathscr{V},[\mathscr{V},\rho_{b\text{-}a}(t)]\big].`}</EqBlock>
 
         <p>
           Summing the upper- and lower-level contributions assembles the coarse-grained operator master equation
           (structurally Eq. 50),
         </p>
-        <EqBlock label="50">{String.raw`\dot{\rho}(t) = r_a\,\rho_{aa}(t) - r_b\,\rho_{bb}(t) \equiv \dot{\rho}\big|_a + \dot{\rho}\big|_b,`}</EqBlock>
+        <EqBlock label="50">{String.raw`\dot{\rho}(t) = r\big[\rho(t+\tau) - \rho(t)\big], \qquad r_a = r\rho_{aa},\; r_b = r\rho_{bb},`}</EqBlock>
         <p>which, evaluated, gives the operator (Lindblad-form) master equation — language (a) of the chapter:</p>
         <KeyResult
           number="51"
@@ -485,7 +487,7 @@ export default function Page() {
           with the shorthand <Tex>{String.raw`\hat{a}_{\alpha} = \partial/\partial\alpha`}</Tex> (Eq. 56). These rules are
           verified using the coherent state as a displaced vacuum,
         </p>
-        <EqBlock label="57">{String.raw`|\alpha\rangle = e^{-\alpha\alpha^{*}}\,e^{q\,a^{\dagger}}|0\rangle = e^{-\alpha\alpha^{*}}\,e^{\alpha a^{\dagger}}|0\rangle \quad (q=\alpha),`}</EqBlock>
+        <EqBlock label="57">{String.raw`|\alpha\rangle\langle\alpha| = e^{-\alpha\alpha^{*}}\,e^{\alpha a^{\dagger}}|0\rangle\langle 0|\,e^{\alpha^{*}a}.`}</EqBlock>
         <p>and extended to operator products (then moved onto <Tex>{String.raw`P`}</Tex> by integration by parts, Eq. 60, with vanishing boundary terms):</p>
         <EqBlock label="58-60">{String.raw`a^{\dagger}|\alpha\rangle\langle\alpha| = \Big(\alpha^{*}+\frac{\partial}{\partial\alpha}\Big)|\alpha\rangle\langle\alpha|, \qquad aa^{\dagger}|\alpha\rangle\langle\alpha| = \Big(\alpha\alpha^{*}+\alpha\frac{\partial}{\partial\alpha}\Big)|\alpha\rangle\langle\alpha| + |\alpha\rangle\langle\alpha|.`}</EqBlock>
 
@@ -665,7 +667,7 @@ export default function Page() {
         <p>Keeping only the leading (second-order) source,</p>
         <EqBlock label="100">{String.raw`i\hbar\,\dot{\rho}_c(t) = \big[\mathscr{V}'(t),\rho_A(t)\otimes\rho_B(t)\big],`}</EqBlock>
         <p>and formally integrating gives the correlation as the accumulated memory of past interactions:</p>
-        <EqBlock label="101">{String.raw`\rho_c(t) = -\frac{i}{\hbar}\int_{t_0}^{t}dt'\;\mathrm{Tr}_B\big\{[\mathscr{V}'(t'),\rho_A(t')\otimes\rho_B(t')]\big\}.`}</EqBlock>
+        <EqBlock label="101">{String.raw`\rho_c(t) = -\frac{i}{\hbar}\int_{t_0}^{t}dt'\;\big[\mathscr{V}'(t'),\rho_A(t')\otimes\rho_B(t')\big].`}</EqBlock>
 
         <p>The reservoir is so large its state barely changes (it stays in its initial thermal state):</p>
         <EqBlock label="102">{String.raw`\frac{d}{dt}\rho_B(t) \approx 0.`}</EqBlock>
@@ -742,7 +744,7 @@ export default function Page() {
           the Markoff step — a memory integral over bath-mode phases, with emission (
           <Tex>{String.raw`\bar n+1`}</Tex>) and absorption (<Tex>{String.raw`\bar n`}</Tex>) contributions:
         </p>
-        <EqBlock label="111">{String.raw`\begin{aligned}\dot{\rho}_A(t) = -\int_{t_0}^{t}dt'\sum_j g_j^2\Big\{\ &(\bar n_j+1)\big[a^{\dagger}a\rho_A - a\rho_A a^{\dagger}\big]e^{\,i(\Omega-\omega_j)(t-t')} \\ &+ \bar n_j\big[aa^{\dagger}\rho_A - a^{\dagger}\rho_A a\big]e^{-i(\Omega-\omega_j)(t-t')} \\ &- (\bar n_j+1)\,a^{\dagger}\rho_A(t')a\;e^{-i(\Omega-\omega_j)(t-t')} \\ &- \bar n_j\,a\rho_A(t')a^{\dagger}\;e^{\,i(\Omega-\omega_j)(t-t')}\Big\} + \text{adjoint}.\end{aligned}`}</EqBlock>
+        <EqBlock label="111">{String.raw`\begin{aligned}\dot{\rho}_A(t) = -\int_{t_0}^{t}dt'\sum_j g_j^2\Big\{\ &(\bar n_j+1)\big[a^{\dagger}a\rho_A - a^{\dagger}\rho_A a\big]e^{\,i(\Omega-\omega_j)(t-t')} \\ &+ \bar n_j\big[aa^{\dagger}\rho_A - a\rho_A a^{\dagger}\big]e^{-i(\Omega-\omega_j)(t-t')}\Big\} + \text{adjoint}.\end{aligned}`}</EqBlock>
 
         <p>The continuum limit replaces the mode sum by a density-of-states integral — and this is what makes decay irreversible:</p>
         <EqBlock label="112">{String.raw`\sum_j g_j^2 \;\to\; \int_0^{\infty} d\omega\;\mathscr{D}(\omega)\,g^2(\omega).`}</EqBlock>
@@ -756,7 +758,7 @@ export default function Page() {
         />
         <p>where the rate is Fermi&rsquo;s golden rule, derived:</p>
         <KeyResult
-          eq={String.raw`\gamma_a = 2\pi\,\wp^2\,\frac{\omega_0}{\hbar}\,|g(\Omega)|^2\,\mathscr{D}(\Omega).`}
+          eq={String.raw`\gamma_a = 2\pi\,\mathscr{D}(\Omega)\,g^{2}(\Omega).`}
           label="Weisskopf–Wigner / golden-rule decay rate"
           note={
             <>
@@ -769,9 +771,9 @@ export default function Page() {
 
         <p>
           For a two-level <em>atom</em>, replace the oscillator operators <Tex>{String.raw`a,a^{\dagger}`}</Tex> by the
-          atomic lowering/raising operators <Tex>{String.raw`\sigma^{-},\sigma^{+}`}</Tex>:
+          atomic lowering/raising operators <Tex>{String.raw`\sigma,\sigma^{\dagger}`}</Tex>:
         </p>
-        <EqBlock label="115">{String.raw`\dot{\rho}_{a\to a}(t) = -\tfrac{1}{2}\gamma_a\big[(\bar n+1)\rho_{aa} - \sigma^{-}\rho_{bb}\sigma^{+}\big] + (\bar n+1)\big[\sigma^{-}\rho_{aa}\sigma^{+} - \sigma^{+}\sigma^{-}\rho_{aa}\big] + \text{adjoint}.`}</EqBlock>
+        <EqBlock label="115">{String.raw`\dot{\rho}_{\text{atom}}(t) = -\tfrac{1}{2}\gamma_a\Big\{\bar n\big[\sigma\sigma^{\dagger}\rho_{\text{atom}} - \sigma^{\dagger}\rho_{\text{atom}}\sigma\big] + (\bar n+1)\big[\sigma^{\dagger}\sigma\rho_{\text{atom}} - \sigma\rho_{\text{atom}}\sigma^{\dagger}\big]\Big\} + \text{adjoint}.`}</EqBlock>
         <p>At zero temperature (<Tex>{String.raw`\bar n=0`}</Tex>) an initially excited atom decays exponentially — irreversible spontaneous emission:</p>
         <KeyResult
           number="116"
@@ -806,7 +808,7 @@ export default function Page() {
         </Derivation>
 
         <Callout kind="insight" title="Fermi's golden rule, derived">
-          <Tex>{String.raw`\gamma = 2\pi\,\wp^2\,(\omega_0/\hbar)\,|g(\Omega)|^2\,\mathscr{D}(\Omega)`}</Tex>: decay rate{" "}
+          <Tex>{String.raw`\gamma_a = 2\pi\,\mathscr{D}(\Omega)\,g^{2}(\Omega)`}</Tex>: decay rate{" "}
           <Tex>{String.raw`= 2\pi\times|\text{matrix element}|^2\times`}</Tex> density of final states. The reservoir
           master equation reproduces the most-used formula in spectroscopy.
         </Callout>
@@ -866,7 +868,7 @@ export default function Page() {
             </li>
             <li>
               <strong>The Weisskopf–Wigner rate</strong>{" "}
-              <Tex>{String.raw`\gamma = 2\pi\wp^2(\omega_0/\hbar)|g(\Omega)|^2\mathscr{D}(\Omega)`}</Tex> IS Fermi&rsquo;s
+              <Tex>{String.raw`\gamma_a = 2\pi\,\mathscr{D}(\Omega)\,g^{2}(\Omega)`}</Tex> IS Fermi&rsquo;s
               golden rule; spontaneous emission and natural linewidth are reservoir-damping effects, and irreversibility
               comes from coupling to a <em>continuum</em>.
             </li>

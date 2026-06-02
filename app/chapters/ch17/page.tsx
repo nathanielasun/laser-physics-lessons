@@ -73,12 +73,12 @@ export default function Page() {
           entering (by collision or by spontaneous decay to a non-lasing level), with an exponential probability
           distribution. Averaging the per-atom field change against it gives
         </p>
-        <EqBlock label="3">{String.raw`\delta\rho_{nm}^{(\mathrm{c})}(t) = \gamma\int_0^\infty d\tau\,P(\tau)\,\delta\rho_{nm}^{\mathrm{atom}}(t),\qquad P(\tau) = \gamma\,e^{-\gamma\tau},`}</EqBlock>
+        <EqBlock label="3">{String.raw`\delta\rho_{nm}^{(\mathrm{c})}(t) = \int_0^\infty d\tau\,P(\tau)\,\delta\rho_{nm}^{\mathrm{atom}}(t),\qquad P(\tau) = \gamma\,e^{-\gamma\tau},`}</EqBlock>
         <p>
           with <Tex>{String.raw`\gamma=\gamma_a=\gamma_b`}</Tex> the (equal) upper- and lower-level decay rates. Tracing
           over the irrelevant atomic states <Tex>{String.raw`\mu`}</Tex> gives the object we evaluate:
         </p>
-        <EqBlock label="4">{String.raw`\overline{\delta\rho}_{nm} = r\int_0^\infty d\tau\,e^{-\gamma\tau}\Big(\sum_\mu \rho_{nm;\,\mu\mu}(t+\tau) - \rho_{nm}\Big).`}</EqBlock>
+        <EqBlock label="4">{String.raw`\overline{\delta\rho}_{nm} = r\int_0^\infty d\tau\,\gamma e^{-\gamma\tau}\Big(\sum_\mu \rho_{nm;\,\mu\mu}(t+\tau) - \rho_{nm}\Big).`}</EqBlock>
         <Callout kind="insight" title="Why average over τ">
           The exponential weight <Tex>{String.raw`\gamma e^{-\gamma\tau}`}</Tex> is the probability the atom has lived a
           time <Tex>{String.raw`\tau`}</Tex> before being knocked out. Integrating the coherent Rabi oscillation{" "}
@@ -128,20 +128,22 @@ export default function Page() {
           To fourth order in the coupling, with the geometric series of saturation orders resummed, the per-atom gain
           contribution carries <em>saturated denominators</em> that prevent runaway gain:
         </p>
-        <EqBlock label="12">{String.raw`\overline{\delta\rho}_{nm} = -\,\frac{\mathscr{A}\,\mathscr{N}'_{nm}}{1+\mathscr{N}'_{nm}\,\mathscr{B}/\mathscr{A}}\,\rho_{nm} + \frac{\sqrt{nm}\;\mathscr{A}}{1+\mathscr{N}_{n-1,m-1}\,\mathscr{B}/\mathscr{A}}\,\rho_{n-1,m-1}.`}</EqBlock>
+        <EqBlock label="12">{String.raw`\overline{\delta\rho}_{nm} = -\,\frac{\mathscr{N}'_{nm}\,\mathscr{A}}{1+\mathscr{N}_{nm}\,\mathscr{B}/\mathscr{A}}\,\rho_{nm} + \frac{\sqrt{nm}\;\mathscr{A}}{1+\mathscr{N}_{n-1,m-1}\,\mathscr{B}/\mathscr{A}}\,\rho_{n-1,m-1}.`}</EqBlock>
         <p>
           The leading order gives the gain coefficient; the next gives self-saturation (note{" "}
           <Tex>{String.raw`\mathscr{B}\propto\mathscr{A}`}</Tex>, so{" "}
-          <Tex>{String.raw`\mathscr{B}/\mathscr{A}=4(\wp/\gamma)^2`}</Tex> is the saturation per photon):
+          <Tex>{String.raw`\mathscr{B}/\mathscr{A}=4(g/\gamma)^2`}</Tex> is the saturation per photon):
         </p>
-        <EqBlock label="13">{String.raw`\mathscr{A} = 2r\Big(\frac{\wp}{\gamma}\Big)^2,`}</EqBlock>
-        <EqBlock label="14">{String.raw`\mathscr{B} = 4\Big(\frac{\wp}{\gamma}\Big)^2\mathscr{A}.`}</EqBlock>
+        <EqBlock label="13">{String.raw`\mathscr{A} = 2r_a\Big(\frac{g}{\gamma}\Big)^2,`}</EqBlock>
+        <EqBlock label="14">{String.raw`\mathscr{B} = 4\Big(\frac{g}{\gamma}\Big)^2\mathscr{A}.`}</EqBlock>
         <p>
-          The dimensionless saturation numerators differ only off-diagonal, by the sign of a coherence term; on the
-          diagonal both reduce to <Tex>{String.raw`n+1`}</Tex>:
+          The dimensionless saturation numerators differ only off-diagonal, by the coefficient of the{" "}
+          <Tex>{String.raw`(n-m)^2`}</Tex> coherence term — <Tex>{String.raw`1/8`}</Tex> for{" "}
+          <Tex>{String.raw`\mathscr{N}'`}</Tex> versus <Tex>{String.raw`1/16`}</Tex> for{" "}
+          <Tex>{String.raw`\mathscr{N}`}</Tex>; on the diagonal both reduce to <Tex>{String.raw`n+1`}</Tex>:
         </p>
-        <EqBlock label="15a">{String.raw`\mathscr{N}'_{nm} = \tfrac{1}{2}\big[(n+1)+(m+1)\big] + \tfrac{1}{2}\,\frac{(n-m)^2}{\mathscr{A}},`}</EqBlock>
-        <EqBlock label="15b">{String.raw`\mathscr{N}_{nm} = \tfrac{1}{2}\big[(n+1)+(m+1)\big] - \tfrac{1}{2}\,\frac{(n-m)^2}{\mathscr{A}}.`}</EqBlock>
+        <EqBlock label="15a">{String.raw`\mathscr{N}'_{nm} = \tfrac{1}{2}\big[(n+1)+(m+1)\big] + \frac{\tfrac{1}{8}(n-m)^2\mathscr{B}}{\mathscr{A}},`}</EqBlock>
+        <EqBlock label="15b">{String.raw`\mathscr{N}_{nm} = \tfrac{1}{2}\big[(n+1)+(m+1)\big] + \frac{\tfrac{1}{16}(n-m)^2\mathscr{B}}{\mathscr{A}}.`}</EqBlock>
         <p>
           Appending the cavity-loss reservoir from Sec. 16-1 (with zero thermal photons,{" "}
           <Tex>{String.raw`\bar n=0`}</Tex>) completes the chapter&rsquo;s basic result — gain feeds the diagonal from
@@ -149,7 +151,7 @@ export default function Page() {
         </p>
         <KeyResult
           number="16"
-          eq={String.raw`\dot\rho_{nm} = -\frac{\mathscr{A}\,\mathscr{N}'_{nm}}{1+\mathscr{N}'_{nm}\mathscr{B}/\mathscr{A}}\rho_{nm} + \frac{\sqrt{nm}\;\mathscr{A}}{1+\mathscr{N}_{n-1,m-1}\mathscr{B}/\mathscr{A}}\rho_{n-1,m-1} - \tfrac{1}{2}\frac{\nu}{Q}(n+m)\rho_{nm} + \frac{\nu}{Q}\sqrt{(n+1)(m+1)}\,\rho_{n+1,m+1}.`}
+          eq={String.raw`\dot\rho_{nm} = -\frac{\mathscr{N}'_{nm}\,\mathscr{A}}{1+\mathscr{N}_{nm}\mathscr{B}/\mathscr{A}}\rho_{nm} + \frac{\sqrt{nm}\;\mathscr{A}}{1+\mathscr{N}_{n-1,m-1}\mathscr{B}/\mathscr{A}}\rho_{n-1,m-1} - \tfrac{1}{2}\frac{\nu}{Q}(n+m)\rho_{nm} + \frac{\nu}{Q}\sqrt{(n+1)(m+1)}\,\rho_{n+1,m+1}.`}
           label="Coarse-grained density-matrix equation (one of the basic results)"
         />
         <p>Set <Tex>{String.raw`n=m`}</Tex> (so <Tex>{String.raw`\mathscr{N}\to n+1`}</Tex>): the diagonal is a birth–death rate equation for <Tex>{String.raw`p(n)=\rho_{nn}`}</Tex>.</p>
@@ -221,8 +223,8 @@ export default function Page() {
         <EqBlock label="18">{String.raw`\dot\rho_{nm} \simeq -\big[\mathscr{A}-(n+1)\mathscr{B}\big](n+1)\rho_{nm} + \big(\mathscr{A}-n\mathscr{B}\big)\sqrt{nm}\,\rho_{n-1,m-1} - \tfrac{1}{2}\frac{\nu}{Q}(n+m)\rho_{nm} + \frac{\nu}{Q}(n+1)\rho_{n+1,m+1}.`}</EqBlock>
 
         <Callout kind="warning" title="Exact (16/17) vs expanded (18) — do not conflate the coefficients">
-          <Tex>{String.raw`\mathscr{A}=2r(\wp/\gamma)^2`}</Tex> is the linear gain;{" "}
-          <Tex>{String.raw`\mathscr{B}=4(\wp/\gamma)^2\mathscr{A}`}</Tex> the self-saturation;{" "}
+          <Tex>{String.raw`\mathscr{A}=2r_a(g/\gamma)^2`}</Tex> is the linear gain;{" "}
+          <Tex>{String.raw`\mathscr{B}=4(g/\gamma)^2\mathscr{A}`}</Tex> the self-saturation;{" "}
           <Tex>{String.raw`\mathscr{N},\mathscr{N}'`}</Tex> the dimensionless saturation numerators (equal to{" "}
           <Tex>{String.raw`n+1`}</Tex> on the diagonal); <Tex>{String.raw`\nu/Q`}</Tex> the cavity loss; threshold is{" "}
           <Tex>{String.raw`\mathscr{A}=\nu/Q`}</Tex>. Eqs. (16)/(17) carry the <em>full</em> saturated denominators and
@@ -238,15 +240,15 @@ export default function Page() {
           Multiplying Eq. (18) by <Tex>{String.raw`n`}</Tex> and summing gives its equation of motion: a net
           stimulated-gain-minus-loss term, a bare spontaneous-emission source, and saturation,
         </p>
-        <EqBlock label="20">{String.raw`\frac{d}{dt}\langle n(t)\rangle = \Big(\mathscr{A}-\frac{\nu}{Q}\Big)\langle n\rangle + \mathscr{A} - \mathscr{B}\big\langle (n+1)^2 + 2n + 1\big\rangle.`}</EqBlock>
+        <EqBlock label="20">{String.raw`\frac{d}{dt}\langle n(t)\rangle = \Big(\mathscr{A}-\frac{\nu}{Q}\Big)\langle n\rangle + \mathscr{A} - \mathscr{B}\big[\langle n^2\rangle + 2\langle n\rangle + 1\big].`}</EqBlock>
         <p>
           Written for the dimensionless intensity <Tex>{String.raw`I_n`}</Tex>, this is exactly the semiclassical
           single-mode intensity equation (Eq. 8-51),
         </p>
-        <EqBlock label="21">{String.raw`I_n = 2I_0\big(\alpha_n - \beta_n I_n\big),`}</EqBlock>
+        <EqBlock label="21">{String.raw`\dot I_n = 2I_n\big(\alpha_n - \beta_n I_n\big),`}</EqBlock>
         <p>with the net linear-gain and self-saturation coefficients read off as</p>
         <EqBlock label="22">{String.raw`\alpha_n = \tfrac{1}{2}\Big(\mathscr{A}-\frac{\nu}{Q}\Big),`}</EqBlock>
-        <EqBlock label="23">{String.raw`\beta_n = \mathscr{B}\Big(\frac{8\hbar\nu}{\varepsilon_0 V}\Big)^{-1}.`}</EqBlock>
+        <EqBlock label="23">{String.raw`\beta_n = \mathscr{B}\Big(\frac{8\hbar\nu}{\varepsilon_0 V}\Big).`}</EqBlock>
         <Callout kind="insight" title="The quantum theory contains the classical one">
           The <Tex>{String.raw`(\mathscr{A}-\nu/Q)\langle n\rangle`}</Tex> term is the classical net gain; the threshold
           condition <Tex>{String.raw`\mathscr{A}=\nu/Q`}</Tex> and the gain coefficient{" "}
@@ -259,12 +261,12 @@ export default function Page() {
           The same physics can be written basis-independently, as a reduced density-<em>operator</em> equation to fourth
           order in the interaction (equivalent to Eq. 16 without choosing the number basis):
         </p>
-        <EqBlock label="24">{String.raw`\dot\rho = -\tfrac{1}{2}\alpha\big(\rho\,aa^\dagger - a^\dagger\rho a\big) + \tfrac{1}{2}\frac{\nu}{Q}\big(\rho\,a^\dagger a - a^\dagger a\,\rho\big) + \tfrac{1}{2}\mathscr{B}\big(\rho\,(a^\dagger)^2 a^2 + 3\,aa^\dagger\rho\,aa^\dagger - 4\,a^\dagger\rho\,a\,aa^\dagger\big) + \text{adjoint}.`}</EqBlock>
+        <EqBlock label="24">{String.raw`\dot\rho = -\tfrac{1}{2}\mathscr{A}\big(\rho\,aa^\dagger - a^\dagger\rho a\big) - \tfrac{1}{2}\frac{\nu}{Q}\big(\rho\,a^\dagger a - a\rho a^\dagger\big) + \tfrac{1}{8}\mathscr{B}\big(\rho\,(aa^\dagger)^2 + 3\,aa^\dagger\rho\,aa^\dagger - 4\,a^\dagger\rho\,aa^\dagger a\big) + \text{adjoint}.`}</EqBlock>
         <p>
           Or, in the coherent-state representation, as a Fokker–Planck equation for the field quasi-probability — drift
           sets the intensity, the diffusion term is spontaneous-emission noise:
         </p>
-        <EqBlock label="25">{String.raw`\frac{\partial}{\partial t}P(a,t) = -\frac{1}{2}\frac{\partial}{\partial a}\Big\{\Big[\mathscr{A}-\frac{\nu}{Q}-\mathscr{B}\,|a|^2\Big]a\,P\Big\} + \text{c.c.} + \mathscr{A}\,\frac{\partial^2}{\partial a\,\partial a^*}P.`}</EqBlock>
+        <EqBlock label="25">{String.raw`\frac{\partial}{\partial t}P(a,t) = -\frac{1}{2}\Big\{\frac{\partial}{\partial a}\Big[\Big(\mathscr{A}-\frac{\nu}{Q}-\mathscr{B}\,|a|^2\Big)a\,P\Big] + \text{c.c.}\Big\} + \mathscr{A}\,\frac{\partial^2}{\partial a\,\partial a^*}P.`}</EqBlock>
         <Intuition title="Drift vs diffusion in the Fokker–Planck">
           The first-derivative (drift) term pushes the amplitude to its steady value and dies once the laser is
           established — it does <em>not</em> fix the phase. Only the{" "}
@@ -279,7 +281,7 @@ export default function Page() {
             gain <Tex>{String.raw`\propto\mathscr{A}(n+1)`}</Tex> (Eq. 13); the next is saturation{" "}
             <Tex>{String.raw`\propto\mathscr{B}`}</Tex> (Eq. 14). Resumming the geometric series of these orders gives
             the saturated denominators:
-            <EqBlock>{String.raw`1+\mathscr{N}\,\frac{\mathscr{B}}{\mathscr{A}} = 1 + \mathscr{N}\cdot 4(\wp/\gamma)^2.`}</EqBlock>
+            <EqBlock>{String.raw`1+\mathscr{N}\,\frac{\mathscr{B}}{\mathscr{A}} = 1 + \mathscr{N}\cdot 4(g/\gamma)^2.`}</EqBlock>
           </Step>
           <Step title="Add the cavity-loss reservoir">
             Append the loss term from Sec. 16-1 (Eq. 16-10), with{" "}
@@ -359,7 +361,7 @@ export default function Page() {
         </Callout>
 
         <p>The strong-signal steady-state distribution from the full saturated equation is (schematically, as printed)</p>
-        <EqBlock label="34">{String.raw`\rho_{nn} = \mathscr{N}_s^{-1}\left[\frac{\big(\mathscr{A}/(\nu/Q)\big)\big/\big(\mathscr{B}/(\nu/Q)\big)}{\big(n+\mathscr{A}/\mathscr{B}\big)!}\right]^{\,n+\mathscr{A}/\mathscr{B}},`}</EqBlock>
+        <EqBlock label="34">{String.raw`\rho_{nn} = \mathscr{N}_s^{-1}\left\{\frac{\left[\dfrac{\mathscr{A}^2}{\mathscr{B}(\nu/Q)}\right]^{\,n+\mathscr{A}/\mathscr{B}}}{\big[n+\mathscr{A}/\mathscr{B}\big]!}\right\},`}</EqBlock>
         <p>
           with the more accurate large-<Tex>{String.raw`n`}</Tex> mean, which reduces to{" "}
           <Tex>{String.raw`(\mathscr{A}-\nu/Q)/\mathscr{B}`}</Tex> near threshold but is the correct strong-signal value:
@@ -418,10 +420,14 @@ export default function Page() {
         </Derivation>
 
         <Callout kind="insight" title="A laser is near-coherent but noisier than ideal">
-          Far above threshold the statistics are Poissonian (Eq. 37) — the coherent-state signature. But the
-          fluctuations exceed the naive value by a factor <Tex>{String.raw`\sim\mathscr{A}/(\nu/Q)`}</Tex> (Eq. 36):
-          residual spontaneous emission keeps the laser super-Poissonian, never a <em>perfect</em> coherent state. Watch
-          the Fano factor in the simulation fall toward 1 — but stay above it — as you crank the pump.
+          The laser is super-Poissonian (Fano <Tex>{String.raw`>1`}</Tex>), <em>most</em> strongly near threshold, and
+          approaches Poisson (Fano <Tex>{String.raw`\to 1`}</Tex> from above) far above threshold as it becomes coherent
+          (Eq. 37). Residual spontaneous emission keeps it from ever being a <em>perfect</em> coherent state. As a
+          quantitative companion, the <em>mean</em> grows large far above threshold,{" "}
+          <Tex>{String.raw`\langle n\rangle = (\mathscr{A}/\mathscr{B})\cdot\mathscr{A}/(\nu/Q)`}</Tex> (Eq. 36),
+          exceeding the near-threshold <Tex>{String.raw`\mathscr{A}/\mathscr{B}`}</Tex> estimate by the factor{" "}
+          <Tex>{String.raw`\mathscr{A}/(\nu/Q)`}</Tex>. Watch the Fano factor in the simulation fall toward 1 — but stay
+          above it — as you crank the pump.
         </Callout>
 
         <SimFrame
@@ -474,28 +480,28 @@ export default function Page() {
         </p>
         <EqBlock label="39">{String.raw`\frac{1}{1+\mathscr{N}'_{n,n+1}\mathscr{B}/\mathscr{A}} \simeq 1 - \frac{\mathscr{N}'_{n,n+1}\mathscr{B}}{\mathscr{A}},`}</EqBlock>
         <p>the off-diagonal coherence obeys, with its own saturation and the cavity-loss couplings to its neighbors,</p>
-        <EqBlock label="40">{String.raw`\dot\rho_{n,n+1} = -\Big\{\big[\mathscr{A}-\mathscr{B}(n+\tfrac{3}{2})\big](n+\tfrac{3}{2}) - \tfrac{1}{2}\mathscr{B} - \frac{\nu}{Q}(n+\tfrac{3}{2})\Big\}\rho_{n,n+1} + \big[\mathscr{A}-\mathscr{B}(n+\tfrac{1}{2})\big]\sqrt{n(n+1)}\,\rho_{n-1,n} + \frac{\nu}{Q}\sqrt{(n+1)(n+2)}\,\rho_{n+1,n+2}.`}</EqBlock>
+        <EqBlock label="40">{String.raw`\dot\rho_{n,n+1} = -\Big\{\big[\mathscr{A}-\mathscr{B}(n+\tfrac{3}{2})\big](n+\tfrac{3}{2}) - \tfrac{1}{8}\mathscr{B} - \frac{\nu}{Q}(n+\tfrac{1}{2})\Big\}\rho_{n,n+1} + \big[\mathscr{A}-\mathscr{B}(n+\tfrac{1}{2})\big]\sqrt{n(n+1)}\,\rho_{n-1,n} + \frac{\nu}{Q}\sqrt{(n+1)(n+2)}\,\rho_{n+1,n+2}.`}</EqBlock>
         <p>
           Far enough above threshold the coherence decays exponentially at a rate <Tex>{String.raw`\mu_1`}</Tex>, with a
           steady amplitude profile (the square-root of the diagonal product):
         </p>
-        <EqBlock label="41">{String.raw`\rho_{n,n+1}(t) = \mathscr{N}_1\Big[\prod_{i=1}^{n}\frac{\mathscr{A}-\mathscr{B}i}{\nu/Q}\Big]\prod_{m}\Big[\frac{\mathscr{A}-\mathscr{B}m}{\nu/Q}\Big]^{1/2}\,e^{-\mu_1 t}.`}</EqBlock>
+        <EqBlock label="41">{String.raw`\rho_{n,n+1}(t) = \mathscr{N}_1\Big(\prod_{l=1}^{n}\frac{\mathscr{A}-\mathscr{B}l}{\nu/Q}\;\prod_{m=1}^{n+1}\frac{\mathscr{A}-\mathscr{B}m}{\nu/Q}\Big)^{1/2}e^{-\mu_1 t}.`}</EqBlock>
         <p>The constant-profile approximation closes the recursion via the neighbor relations</p>
-        <EqBlock label="42">{String.raw`\rho_{n-1,n} \simeq \frac{\nu}{Q}\big[\mathscr{A}-\mathscr{B}n\big]^{-1/2}\rho_{n,n+1},`}</EqBlock>
-        <EqBlock label="43">{String.raw`\rho_{n+1,n+2} \simeq \big[\mathscr{A}-\mathscr{B}(n+1)\big]\frac{Q}{\nu}\,\rho_{n,n+1}.`}</EqBlock>
+        <EqBlock label="42">{String.raw`\rho_{n-1,n} \simeq \frac{\nu}{Q}\big[\mathscr{A}-\mathscr{B}(n+\tfrac{1}{2})\big]^{-1}\rho_{n,n+1},`}</EqBlock>
+        <EqBlock label="43">{String.raw`\rho_{n+1,n+2} \simeq \big[\mathscr{A}-\mathscr{B}(n+\tfrac{3}{2})\big]\frac{Q}{\nu}\,\rho_{n,n+1}.`}</EqBlock>
         <p>
           Expanding the square roots for large <Tex>{String.raw`n`}</Tex> exposes a near-cancellation between the large
           gain and loss terms:
         </p>
         <EqBlock label="44">{String.raw`\big[n(n+1)\big]^{1/2} \simeq n + \tfrac{1}{2} - \tfrac{1}{8}n^{-1},`}</EqBlock>
-        <EqBlock label="45">{String.raw`\big[(n+1)(n+2)\big]^{1/2} \simeq n + 1 + \tfrac{1}{2}(n+1)^{-1}.`}</EqBlock>
+        <EqBlock label="45">{String.raw`\big[(n+1)(n+2)\big]^{1/2} \simeq n + 1 + \tfrac{1}{2} - \tfrac{1}{8}(n+1)^{-1}.`}</EqBlock>
         <p>After the cancellation only a small residual decay remains — the phase-diffusion rate:</p>
-        <EqBlock label="46">{String.raw`\dot\rho_{n,n+1} \simeq -\frac{1}{2}\Big[\frac{\mathscr{A}}{n+1} + \frac{\nu/Q}{2n+1}\Big]\rho_{n,n+1}.`}</EqBlock>
+        <EqBlock label="46">{String.raw`\dot\rho_{n,n+1} = -\tfrac{1}{8}\Big(\frac{\mathscr{A}}{n+1} + \frac{\nu/Q}{n} - \tfrac{1}{2}\frac{\mathscr{B}}{n+1} + \varepsilon\Big)\rho_{n,n+1}.`}</EqBlock>
         <p>
           The truncation is justified because the corrections are of order{" "}
           <Tex>{String.raw`(\mathscr{B}/\mathscr{A})^2`}</Tex>, negligible well above threshold:
         </p>
-        <EqBlock label="47">{String.raw`|\varepsilon| = \frac{(\nu/Q)(\mathscr{B}/\mathscr{A})^2}{\big[\mathscr{A}-\mathscr{B}n-(\mathscr{B}/\mathscr{A})\big]\,\mathscr{B}} \ll 1.`}</EqBlock>
+        <EqBlock label="47">{String.raw`|\varepsilon| \approx \frac{[(\nu/Q)\mathscr{B}]^{1/2}}{\bar n_{ss}}\Big(\frac{\mathscr{B}\,\bar n_{ss}}{\nu/Q}\Big)^2 < \frac{[(\nu/Q)\mathscr{B}]^{1/2}}{\bar n_{ss}} \ll \frac{\nu/Q}{\bar n_{ss}}.`}</EqBlock>
         <p>The net decay rate is the phase-diffusion constant:</p>
         <KeyResult
           number="48"
@@ -613,11 +619,10 @@ export default function Page() {
           That free phase diffusion, not amplitude noise, is what limits the spectral purity of every laser.
         </Intuition>
         <Callout kind="warning" title="Half-width vs full-width bookkeeping">
-          The Lorentzian in Eq. (51) has half-width at half maximum <Tex>{String.raw`\tfrac12 D`}</Tex>, so the FWHM in{" "}
-          <Tex>{String.raw`\omega`}</Tex> is <Tex>{String.raw`D`}</Tex> for the field-amplitude correlation. The
-          book&rsquo;s &ldquo;linewidth <Tex>{String.raw`=2D`}</Tex>&rdquo; refers to a different
-          correlation/definition (intensity / field-vector). State the convention explicitly when quoting a number; the
-          robust, unambiguous content is the <em>scaling</em> <Tex>{String.raw`D\propto 1/\langle n\rangle`}</Tex>.
+          The Lorentzian of Eq. (51) has half-width at half maximum <Tex>{String.raw`\tfrac12 D`}</Tex>, so the full
+          width at half maximum is <Tex>{String.raw`D`}</Tex> — exactly the book&rsquo;s stated linewidth (full width at
+          half maximum <Tex>{String.raw`=D`}</Tex>, Fig. 17-6). The robust, unambiguous content is the <em>scaling</em>{" "}
+          <Tex>{String.raw`D\propto 1/\langle n\rangle`}</Tex>.
         </Callout>
         <Callout kind="insight" title="Linewidth ∝ 1/⟨n⟩ (Schawlow–Townes)">
           <Tex>{String.raw`D\approx\tfrac12\mathscr{A}/\hat n_{ss}`}</Tex>. Because{" "}
@@ -637,7 +642,7 @@ export default function Page() {
           emission.
         </Intuition>
         <p>The polar form of the Fokker–Planck equation has a clean radial drift that pins the amplitude:</p>
-        <EqBlock label="52">{String.raw`\frac{\partial}{\partial t}P(r,\theta,t) = -\frac{1}{2}\frac{1}{r}\frac{\partial}{\partial r}\Big\{r\Big[\mathscr{A}-\frac{\nu}{Q}-\mathscr{B}r^2\Big]P\Big\} + \frac{1}{4}\mathscr{A}\,\frac{\partial^2}{\partial r^2}P + \ldots`}</EqBlock>
+        <EqBlock label="52">{String.raw`\frac{\partial}{\partial t}P(r,\theta,t) = -\frac{1}{2}\frac{1}{r}\frac{\partial}{\partial r}\Big[r^2\Big(\mathscr{A}-\frac{\nu}{Q}-\mathscr{B}r^2\Big)P\Big] + \frac{1}{4}\mathscr{A}\,\frac{\partial^2}{\partial\theta^2}P.`}</EqBlock>
         <p>
           Above threshold the radial drift has a stable fixed point <Tex>{String.raw`r_{ss}`}</Tex> with{" "}
           <Tex>{String.raw`r_{ss}^2=\hat n_{ss}`}</Tex>; amplitude fluctuations relax fast and are set to steady state.
@@ -645,29 +650,34 @@ export default function Page() {
         </p>
         <KeyResult
           number="53"
-          eq={String.raw`\frac{\partial}{\partial t}P(\theta,t) = \frac{1}{4}\,\frac{\mathscr{A}}{r_{ss}^2}\,\frac{\partial^2}{\partial\theta^2}P(\theta,t).`}
+          eq={String.raw`\frac{\partial}{\partial t}P(\theta,t) = D_\theta\,\frac{\partial^2}{\partial\theta^2}P(\theta,t),\qquad D_\theta = \frac{1}{4}\,\frac{\mathscr{A}}{r_{ss}^2}.`}
           label="Phase-diffusion equation"
           note={
             <>
-              A one-dimensional diffusion of the phase, with diffusion constant{" "}
-              <Tex>{String.raw`D=\tfrac14\mathscr{A}/r_{ss}^2`}</Tex> — the same Brownian-motion mathematics as a
-              particle diffusing on a ring.
+              A one-dimensional diffusion of the phase, with the diffusion coefficient of the Fokker–Planck equation{" "}
+              <Tex>{String.raw`D_\theta=\tfrac14\mathscr{A}/r_{ss}^2`}</Tex> — the same Brownian-motion mathematics as a
+              particle diffusing on a ring. The spectral linewidth is <em>twice</em> this:{" "}
+              <Tex>{String.raw`D=2D_\theta=\tfrac12\mathscr{A}/n_{ss}`}</Tex>, because the field-amplitude correlation{" "}
+              <Tex>{String.raw`\langle E(t)\rangle\sim e^{-\frac{1}{2}Dt}`}</Tex> (Eq. 50) decays at half the FWHM rate
+              while the phase variance accumulates at <Tex>{String.raw`2D_\theta`}</Tex>.
             </>
           }
         />
         <p>
-          Using <Tex>{String.raw`\mathscr{A}\approx\nu/Q`}</Tex> at threshold and{" "}
-          <Tex>{String.raw`r_{ss}^2=\hat n_{ss}`}</Tex>, the diffusion constant / linewidth is the Schawlow–Townes
-          result:
+          Comparison of Eq. (53) with the reservoir results (16.66) and (16.74) shows that the spectral linewidth is
+          twice the Fokker–Planck diffusion coefficient, <Tex>{String.raw`D=2D_\theta=\tfrac12\mathscr{A}/n_{ss}`}</Tex>.
+          Using <Tex>{String.raw`r_{ss}^2=\hat n_{ss}`}</Tex> — and <Tex>{String.raw`\mathscr{A}\approx\nu/Q`}</Tex> near
+          threshold — gives the Schawlow–Townes result:
         </p>
         <KeyResult
           number="54"
-          eq={String.raw`D = \frac{1}{2}\,\frac{\nu/Q}{\hat n_{ss}}.`}
+          eq={String.raw`D = \frac{1}{2}\,\frac{\mathscr{A}}{\hat n_{ss}} \;\simeq\; \frac{1}{2}\,\frac{\nu/Q}{\hat n_{ss}}\quad(\mathscr{A}\approx\nu/Q).`}
           label="Schawlow–Townes linewidth (1/⟨n⟩ narrowing)"
           note={
             <>
               The headline prediction: linewidth <Tex>{String.raw`\propto 1/\langle n\rangle`}</Tex>, falling as the
-              laser is pumped harder. This agrees with the off-diagonal route, Eq. (48).
+              laser is pumped harder. This is <em>twice</em> the Fokker–Planck diffusion coefficient{" "}
+              <Tex>{String.raw`D_\theta`}</Tex> of Eq. (53), and agrees with the off-diagonal route, Eq. (48).
             </>
           }
         />
@@ -678,18 +688,21 @@ export default function Page() {
             drift now has a clean radial piece <Tex>{String.raw`[\mathscr{A}-\nu/Q-\mathscr{B}r^2]r`}</Tex> driving{" "}
             <Tex>{String.raw`r`}</Tex> toward steady state, plus a spontaneous-emission diffusion split between radial
             and angular directions:
-            <EqBlock>{String.raw`\partial_t P = -\tfrac{1}{2}\tfrac{1}{r}\partial_r\Big\{r\big[\mathscr{A}-\tfrac{\nu}{Q}-\mathscr{B}r^2\big]P\Big\} + \tfrac{1}{4}\mathscr{A}(\ldots).`}</EqBlock>
+            <EqBlock>{String.raw`\partial_t P = -\tfrac{1}{2}\tfrac{1}{r}\partial_r\Big[r^2\big(\mathscr{A}-\tfrac{\nu}{Q}-\mathscr{B}r^2\big)P\Big] + \tfrac{1}{4}\mathscr{A}(\ldots).`}</EqBlock>
           </Step>
           <Step title="Freeze the amplitude above threshold">
             With <Tex>{String.raw`r`}</Tex> locked at <Tex>{String.raw`r_{ss}`}</Tex>, only the angular diffusion
-            remains, giving the pure phase-diffusion equation:
-            <EqBlock>{String.raw`\partial_t P(\theta,t) = \tfrac{1}{4}\frac{\mathscr{A}}{r_{ss}^2}\,\partial_\theta^2 P(\theta,t).`}</EqBlock>
+            remains, giving the pure phase-diffusion equation with Fokker–Planck coefficient{" "}
+            <Tex>{String.raw`D_\theta`}</Tex>:
+            <EqBlock>{String.raw`\partial_t P(\theta,t) = D_\theta\,\partial_\theta^2 P(\theta,t),\qquad D_\theta = \tfrac{1}{4}\frac{\mathscr{A}}{r_{ss}^2}.`}</EqBlock>
           </Step>
           <Step title="Read off the linewidth">
-            The diffusion constant is <Tex>{String.raw`D=\tfrac14\mathscr{A}/r_{ss}^2`}</Tex>. Using{" "}
-            <Tex>{String.raw`\mathscr{A}\approx\nu/Q`}</Tex> and <Tex>{String.raw`r_{ss}^2=\hat n_{ss}`}</Tex> gives Eq.
-            (54) — the same <Tex>{String.raw`1/\langle n\rangle`}</Tex> narrowing as Eq. (48):
-            <EqBlock>{String.raw`D = \tfrac{1}{2}\frac{\nu/Q}{\hat n_{ss}}.`}</EqBlock>
+            The Fokker–Planck diffusion coefficient is <Tex>{String.raw`D_\theta=\tfrac14\mathscr{A}/r_{ss}^2`}</Tex>;
+            the spectral linewidth is twice it, <Tex>{String.raw`D=2D_\theta=\tfrac12\mathscr{A}/n_{ss}`}</Tex> (the
+            field correlation decays at half the FWHM rate, Eq. 50). Using <Tex>{String.raw`r_{ss}^2=\hat n_{ss}`}</Tex>{" "}
+            and <Tex>{String.raw`\mathscr{A}\approx\nu/Q`}</Tex> near threshold gives Eq. (54) — the same{" "}
+            <Tex>{String.raw`1/\langle n\rangle`}</Tex> narrowing as Eq. (48):
+            <EqBlock>{String.raw`D = \tfrac{1}{2}\frac{\mathscr{A}}{\hat n_{ss}} \simeq \tfrac{1}{2}\frac{\nu/Q}{\hat n_{ss}}.`}</EqBlock>
           </Step>
         </Derivation>
 
@@ -733,8 +746,8 @@ export default function Page() {
             </li>
             <li>
               <strong>Three coefficients, kept distinct forever:</strong>{" "}
-              <Tex>{String.raw`\mathscr{A}=2r(\wp/\gamma)^2`}</Tex> (gain),{" "}
-              <Tex>{String.raw`\mathscr{B}=4(\wp/\gamma)^2\mathscr{A}`}</Tex> (saturation),{" "}
+              <Tex>{String.raw`\mathscr{A}=2r_a(g/\gamma)^2`}</Tex> (gain),{" "}
+              <Tex>{String.raw`\mathscr{B}=4(g/\gamma)^2\mathscr{A}`}</Tex> (saturation),{" "}
               <Tex>{String.raw`\nu/Q`}</Tex> (loss). Threshold is <Tex>{String.raw`\mathscr{A}=\nu/Q`}</Tex>; net gain{" "}
               <Tex>{String.raw`\alpha_n=\tfrac12(\mathscr{A}-\nu/Q)`}</Tex>.
             </li>

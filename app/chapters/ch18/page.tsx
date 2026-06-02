@@ -230,8 +230,10 @@ export default function Page() {
         </Derivation>
         <Callout kind="insight" title="Photoelectron statistics ≠ photon statistics">
           The detector reports a Bernoulli-thinned distribution. Only at <Tex>{String.raw`\eta=1`}</Tex> do they
-          coincide (Eq. 18.6). For <Tex>{String.raw`\eta<1`}</Tex> the measured distribution is broadened and
-          pushed toward Poisson — a real, not merely technical, distinction.
+          coincide (Eq. 18.6). For <Tex>{String.raw`\eta<1`}</Tex> thinning drives the Fano factor toward 1
+          (<Tex>{String.raw`\mathrm{Fano}(m)=1+\eta[\mathrm{Fano}(n)-1]`}</Tex>): sub-Poissonian (nonclassical)
+          light broadens, coherent light stays Poisson, and super-Poissonian light (thermal, laser near
+          threshold) narrows — a real, not merely technical, distinction.
         </Callout>
         <Callout kind="note" title="Why the fully-quantum Pₘ is preferred">
           Eq. (18.1) is exact for all <Tex>{String.raw`\eta\in[0,1]`}</Tex>; the older semiclassical Mandel
@@ -295,8 +297,11 @@ export default function Page() {
             Well above threshold (<Tex>{String.raw`\mathscr{A}\gg\mathscr{C}`}</Tex>),{" "}
             <Tex>{String.raw`\rho_{nn}`}</Tex> is coherent/Poisson and <Tex>{String.raw`P_m`}</Tex> is narrow;
             near threshold it broadens (super-Poissonian). At every operating point{" "}
-            <Tex>{String.raw`\eta<1`}</Tex> thins and broadens <Tex>{String.raw`P_m`}</Tex> relative to{" "}
-            <Tex>{String.raw`\rho_{mm}`}</Tex>.
+            <Tex>{String.raw`\eta<1`}</Tex> thinning drives the Fano factor of{" "}
+            <Tex>{String.raw`P_m`}</Tex> toward 1 relative to <Tex>{String.raw`\rho_{mm}`}</Tex>{" "}
+            (<Tex>{String.raw`\mathrm{Fano}(m)=1+\eta[\mathrm{Fano}(n)-1]`}</Tex>): the super-Poissonian
+            near-threshold laser <em>narrows</em> in Fano factor, while a well-above-threshold Poisson field
+            stays Poisson.
           </Step>
         </Derivation>
         <Callout kind="insight" title="One formula, the whole laser">
@@ -496,11 +501,35 @@ export default function Page() {
           <Tex>{String.raw`\hbar=1`}</Tex>); do not silently normalize Eq. (18.19) to match — read each as
           printed.
         </Callout>
-        <Callout kind="warning" title="Sign of the decay term flips between coherence and its integral">
-          Eq. (18.19) has <Tex>{String.raw`-(i\nu-i\omega-\tfrac12 D)`}</Tex> on the left-hand drive while the
-          integrated kernels in Eqs. (18.22)/(18.23) carry <Tex>{String.raw`+\tfrac12 D`}</Tex> inside{" "}
-          <Tex>{String.raw`\exp[-(\cdots+\tfrac12 D)(t'-t'')]`}</Tex>. This is consistent: the exponential decays
-          in <Tex>{String.raw`(t'-t'')`}</Tex>. Track the sign carefully through the integration.
+        <Callout kind="warning" title="Probable source sign typo in Eq. (18.19)">
+          The physics fixes the sign: the off-diagonal coherence <em>must</em> decay (phase diffusion), so the
+          correct integrated first-order form is Eq. (18.22) with the decaying kernel{" "}
+          <Tex>{String.raw`\exp[-(i\nu-i\omega+\tfrac12 D)(t'-t'')]`}</Tex> — real exponent{" "}
+          <Tex>{String.raw`-\tfrac12 D(t'-t'')`}</Tex>, which dies away as required. Eq. (18.19) as printed carries
+          the homogeneous coefficient <Tex>{String.raw`-(i\nu-i\omega-\tfrac12 D)`}</Tex>, whose real part is{" "}
+          <Tex>{String.raw`+\tfrac12 D`}</Tex>; taken literally that gives <Tex>{String.raw`e^{+Dt/2}`}</Tex>{" "}
+          <em>growth</em>, almost certainly a sign typo in the source (the consistent, decaying form is{" "}
+          <Tex>{String.raw`-(i\nu-i\omega+\tfrac12 D)`}</Tex>, as in Eq. 18.22). As with the{" "}
+          <Tex>{String.raw`\hbar`}</Tex> bookkeeping above:
+          read each equation as printed, but note that the physical coherence decays.
+        </Callout>
+        <Callout kind="warning" title="Probable source sign typo in Eq. (18.24)">
+          A separate defect from the kernel-sign issue above: the integral form of Eq. (18.24) as printed carries
+          a leading minus in front of the bracket,{" "}
+          <Tex>{String.raw`\rho_{22}(\omega)=-\big[g^2\sum_n n\,\rho_{nn}\big]\int\!\int\exp[\cdots]+\text{c.c.}`}</Tex>
+          That leading minus is almost certainly a source typo. Eq. (18.23) one line above has{" "}
+          <em>no</em> leading minus, and the integration chain forbids one: Eq. (18.21) supplies a{" "}
+          <Tex>{String.raw`+i`}</Tex> and Eq. (18.22) a <Tex>{String.raw`-i`}</Tex>, so{" "}
+          <Tex>{String.raw`i\cdot(-i)=+1`}</Tex> and no global minus can legitimately appear. With the decaying
+          kernel and an all-nonnegative prefactor (<Tex>{String.raw`g^2`}</Tex>, <Tex>{String.raw`n`}</Tex>,{" "}
+          <Tex>{String.raw`\rho_{nn}\ge 0`}</Tex>), the double-time integral{" "}
+          <Tex>{String.raw`+\text{c.c.}`}</Tex> evaluates to{" "}
+          <Tex>{String.raw`+\tau D/[(\omega-\nu)^2+(D/2)^2]>0`}</Tex>. Taken literally, the printed minus would make{" "}
+          <Tex>{String.raw`\rho_{22}`}</Tex> <em>negative</em> — impossible for a population, and in direct
+          contradiction with the positive Lorentzian it is set equal to in the KeyResult. The physically consistent
+          form carries <em>no</em> leading minus, so <Tex>{String.raw`\rho_{22}`}</Tex> is a positive population
+          that matches the positive Lorentzian. Read the equation as printed for source fidelity, but note that
+          the population is positive.
         </Callout>
       </Section>
 
@@ -528,7 +557,7 @@ export default function Page() {
           <Tex>{String.raw`\mathrm{Tr}_R`}</Tex>:
         </p>
         <EqBlock label="18.27">{String.raw`g(t) = \mathrm{Tr}\big[a^{\dagger}(t)a(0)\rho(0)_{\text{total}}\big]`}</EqBlock>
-        <EqBlock label="18.28">{String.raw`g(t) = \mathrm{Tr}_{\rho}\mathrm{Tr}_{R}\big\{[U^{\dagger}(t)a^{\dagger}(0)U(t)]\,R(0)\rho(0)\big\} = \mathrm{Tr}_{\rho}\big\{ \mathrm{Tr}_{R}[U^{\dagger}(t)a(0)U(t)R(0)]\,a^{\dagger}(0)\rho(0)\big\}`}</EqBlock>
+        <EqBlock label="18.28">{String.raw`g(t) = \mathrm{Tr}_{\rho}\mathrm{Tr}_{R}\big\{[U^{\dagger}(t)a^{\dagger}(0)U(t)a(0)]\,R(0)\rho(0)\big\} = \mathrm{Tr}_{\rho}\big\{ \mathrm{Tr}_{R}[U^{\dagger}(t)a(0)U(t)R(0)]\,a^{\dagger}(0)\rho(0)\big\}`}</EqBlock>
         <p>
           Absorb the reservoir trace into a reduced operator <Tex>{String.raw`\mathscr{A}(t)`}</Tex>, so the
           correlation becomes a clean field-only trace:

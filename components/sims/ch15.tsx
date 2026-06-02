@@ -15,7 +15,7 @@
  *   PANEL B (the classical field).  ⟨E⟩(t) = √2 |α| cos(Ωt + φ) scrolls as a cosine
  *     with a moving dot at the present instant — the packet center IS the classical
  *     field. We animate it at the mode frequency Ω so the dot stays locked to Panel A's
- *     center; the field-variable form (Eq. 9) carries an extra factor 2Ω, noted in prose.
+ *     center; both the packet center and the field oscillate at Ω.
  *
  *   PANEL C (statistics).  A stem/bar plot of the Poisson photon distribution
  *         P_n = e^{-|α|²} |α|^{2n} / n!,    ⟨n⟩ = |α|²,  Δn = |α|   (Eqs. 13-14)

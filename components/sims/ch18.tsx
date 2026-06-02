@@ -17,8 +17,12 @@
  * The student chooses an input field rho_nn — coherent/Poisson, thermal/Bose-
  * Einstein, a number state |n0>, or the fully-quantized laser distribution of
  * Eq. (17.34)/(18.9) — then drags eta from 1 down to 0 and watches the solid
- * P_m bars slide their peak from <n> to eta<n> and broaden toward Poisson while
- * the faint reference bars (the true rho_nn) hold still.
+ * P_m bars slide their peak from <n> to eta<n> while the faint reference bars
+ * (the true rho_nn) hold still. Thinning drives the Fano factor toward 1
+ * (Fano(m) = 1 + eta*(Fano(n) - 1)): sub-Poissonian light broadens, coherent
+ * stays Poisson, super-Poissonian light (thermal, laser near threshold) narrows.
+ * Note this is a Fano-factor statement, not a shape claim — thinned thermal stays
+ * exactly geometric/thermal; only the Fano factor moves toward 1.
  *
  * Numerics (all in log space off ONE precomputed log-factorial array to avoid
  * overflow at large n and underflow of the binomial weights near eta=1):
@@ -432,7 +436,8 @@ export default function Ch18Sim() {
         Showing the {stateName} field. The faint bars are the prepared photon statistics ρ_nn; the solid
         indigo bars are what the detector reports, P_m, computed by directly summing Eq. (18.1). Drag η from
         1 down: at η = 1 the bars coincide (Eq. 18.6, residual ≈ 0); as η drops, the peak slides from ⟨n⟩ to
-        η⟨n⟩ and the shape broadens toward Poisson.
+        η⟨n⟩ and the Fano factor moves toward 1 (Fano(m) = 1 + η[Fano(n) − 1]): sub-Poissonian light broadens,
+        coherent stays Poisson, super-Poissonian light (thermal, laser near threshold) narrows.
         {isLaser
           ? " For the laser, A/C > 1 is above threshold (narrow, near-Poisson) and A/C < 1 is below threshold (broad, super-Poissonian)."
           : ""}
