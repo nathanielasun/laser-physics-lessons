@@ -156,8 +156,10 @@ export default function Page() {
           <Step title="Standing vs. traveling">
             A two-mirror mode <Tex>{String.raw`\sin Kz`}</Tex> has nodes; it interacts preferentially with atoms near
             antinodes and, via the Doppler effect, with the <Tex>{String.raw`v=0`}</Tex> group — hence the Lamb dip. A
-            ring mode <Tex>{String.raw`e^{\pm iKz}`}</Tex> has uniform <Tex>{String.raw`|E|`}</Tex>, so it samples{" "}
-            <em>all</em> velocity groups equally and shows no dip on its own. Two such waves with opposite{" "}
+            ring mode <Tex>{String.raw`e^{\pm iKz}`}</Tex> has uniform <Tex>{String.raw`|E|`}</Tex> in space, so it burns
+            no spatial grating. It still burns just <em>one</em> Bennett hole, at the single velocity class satisfying{" "}
+            <Tex>{String.raw`\omega - Kv = \nu`}</Tex> — only one velocity ensemble contributes gain, so no resonance
+            sits at <Tex>{String.raw`v=0`}</Tex> and there is no dip on its own. Two such waves with opposite{" "}
             <Tex>{String.raw`K`}</Tex> can coexist — that is the whole new degree of freedom.
           </Step>
           <Step title="Project Maxwell onto each running wave">
@@ -212,13 +214,14 @@ export default function Page() {
         <EqBlock label="6′">{String.raw`\rho_{ab}^{(1)}(t) = -\tfrac{i}{2}\frac{\wp}{\hbar}N\Big[ E_+\,e^{-i(\nu_+ t + \phi_+ - K_+ z)}\!\!\int_{-\infty}^{t}\!\! dt'\,e^{-(i(\omega-\nu_+)+\gamma_{ab})(t-t')} + E_-\,e^{-i(\nu_- t + \phi_- + K_- z)}\!\!\int_{-\infty}^{t}\!\! dt'\,e^{-(i(\omega-\nu_-)+\gamma_{ab})(t-t')} \Big].`}</EqBlock>
         <p>
           Averaging the velocity integral over the Maxwellian distribution turns this into the complex{" "}
-          <strong>plasma dispersion function</strong> <Tex>{String.raw`Z(\zeta)`}</Tex>, evaluated at the
-          Doppler-scaled detuning <Tex>{String.raw`\zeta = (\omega-\nu_\pm)/K\bar u + i\gamma_{ab}/K\bar u`}</Tex>,
-          where <Tex>{String.raw`K\bar u`}</Tex> is the Doppler width:
+          <strong>plasma dispersion function</strong> <Tex>{String.raw`Z`}</Tex>, evaluated at the complex argument{" "}
+          <Tex>{String.raw`\gamma + i(\omega-\nu_\pm)`}</Tex> — the decay rate <Tex>{String.raw`\gamma`}</Tex> as the real
+          part, the detuning <Tex>{String.raw`\omega-\nu_\pm`}</Tex> as the imaginary part, with{" "}
+          <Tex>{String.raw`K\bar u`}</Tex> the Doppler width appearing only in the prefactor:
         </p>
         <KeyResult
           number="8"
-          eq={String.raw`\mathcal{P}_\pm^{(1)}(t) = -\,\wp^2 N\,(\hbar K\bar u)^{-1}\,E_\pm\,Z(\zeta_\pm),\qquad \zeta_\pm = \frac{\omega-\nu_\pm}{K\bar u} + i\frac{\gamma_{ab}}{K\bar u}.`}
+          eq={String.raw`\mathcal{P}_\pm^{(1)}(t) = -\,\wp^2\bar N\,(\hbar K\bar u)^{-1}\,E_\pm\,Z[\gamma + i(\omega-\nu_\pm)].`}
           label="First-order (linear gain + pulling)"
           note={
             <>
@@ -237,17 +240,19 @@ export default function Page() {
           Carrying out the velocity and position integrals and keeping only the resonant combinations, the third-order
           polarization for each wave splits into a <strong>self-saturation</strong> term{" "}
           <Tex>{String.raw`\propto |E_\pm|^2`}</Tex> and a <strong>cross-saturation</strong> term{" "}
-          <Tex>{String.raw`\propto 2|E_\mp|^2`}</Tex>. Note the factor of <Tex>{String.raw`2`}</Tex> on the cross term:
+          <Tex>{String.raw`\propto |E_\mp|^2`}</Tex>. The two enter with <em>equal weight</em>: at exact line center the
+          opposite wave saturates the shared inversion exactly as strongly as the wave saturates itself — no more:
         </p>
         <KeyResult
           number="10"
-          eq={String.raw`\mathcal{P}_\pm^{(3)} = \tfrac{1}{4}\,\wp^4 N\,(\hbar^3 K\bar u)^{-1}\,E_\pm\Big\{ |E_\pm|^2\,[\,Z\text{-combination}\,] \;+\; 2\,|E_\mp|^2\,[\,Z\text{-combination}\,] \Big\}.`}
+          eq={String.raw`\mathcal{P}_\pm^{(3)} = \tfrac{1}{4}\,\wp^4 N\,(\hbar^3 K\bar u)^{-1}\,E_\pm\Big\{ |E_\pm|^2\,[\,Z\text{-combination}\,] \;+\; |E_\mp|^2\,[\,Z\text{-combination}\,] \Big\}.`}
           label="Third-order (self + cross saturation)"
           note={
             <>
               Self-saturation: each wave depletes the inversion it itself uses. Cross-saturation: the{" "}
-              <em>opposite</em> wave also depletes the shared inversion — and twice as strongly, in the simplest limit.
-              That factor of 2 is the seed of mode competition.
+              <em>opposite</em> wave also depletes the shared inversion. The cross term reaches the self term only at
+              central tuning, where it equals it — it never exceeds it. That marginal equality is the seed of mode
+              competition.
             </>
           }
         />
@@ -266,22 +271,24 @@ export default function Page() {
             <Tex>{String.raw`K\bar u`}</Tex> enters.
           </Step>
           <Step title="Extract gain and pulling (first order)">
-            The single-interaction term gives <Tex>{String.raw`\mathcal{P}_\pm^{(1)}\propto Z(\zeta_\pm)`}</Tex>{" "}
+            The single-interaction term gives <Tex>{String.raw`\mathcal{P}_\pm^{(1)}\propto Z[\gamma + i(\omega-\nu_\pm)]`}</Tex>{" "}
             (Eq.&nbsp;8). <Tex>{String.raw`\mathrm{Im}\,Z`}</Tex> is the gain lineshape; <Tex>{String.raw`\mathrm{Re}\,Z`}</Tex>{" "}
             the pulling. Each wave gets its own copy at its own detuning <Tex>{String.raw`\omega-\nu_\pm`}</Tex>.
           </Step>
           <Step title="Extract self and cross saturation (third order)">
             The triple-interaction term gives a self piece <Tex>{String.raw`\sim E_\pm|E_\pm|^2`}</Tex> and a cross
-            piece <Tex>{String.raw`\sim 2\,E_\pm|E_\mp|^2`}</Tex> (Eq.&nbsp;10). Getting the cross factor of 2 right is
-            what makes the competition physics correct.
+            piece <Tex>{String.raw`\sim E_\pm|E_\mp|^2`}</Tex> (Eq.&nbsp;10), entering with equal weight. Getting that
+            equal weighting right — cross approaching self at line center, never overtaking it — is what makes the
+            competition physics correct.
           </Step>
         </Derivation>
 
         <Callout kind="warning" title="Keep only the resonant terms">
           The book explicitly drops terms whose exponentials oscillate rapidly — they average to zero — leaving the
           slowly-varying combinations. The retained third-order terms are precisely self-saturation{" "}
-          <Tex>{String.raw`(|E_\pm|^2)`}</Tex> and cross-saturation <Tex>{String.raw`(|E_\mp|^2)`}</Tex>. The
-          factor-of-2 on the cross term is not a detail; it is the threshold of strong competition.
+          <Tex>{String.raw`(|E_\pm|^2)`}</Tex> and cross-saturation <Tex>{String.raw`(|E_\mp|^2)`}</Tex>, weighted{" "}
+          <em>equally</em>. The cross term rises to match the self term at line center but never beyond it; that
+          marginal equality, not any factor of 2, sets the edge of strong competition.
         </Callout>
         <Callout kind="insight" title="Z is the plasma dispersion function">
           <Tex>{String.raw`Z(\zeta)`}</Tex> packages the Doppler-broadened complex susceptibility. Its imaginary part is
@@ -306,12 +313,13 @@ export default function Page() {
         </p>
         <EqBlock>{String.raw`\nu_0 = \tfrac{1}{2}(\nu_+ + \nu_-), \qquad \omega_0 = \gamma + i(\omega - \nu_0).`}</EqBlock>
         <p>
-          Combining the linear and nonlinear polarizations into one expression makes the mapping onto the coefficient
-          table transparent (<Tex>{String.raw`Z_i`}</Tex> is the imaginary part of <Tex>{String.raw`Z`}</Tex>;{" "}
-          <Tex>{String.raw`\Sigma`}</Tex> and <Tex>{String.raw`\Theta`}</Tex> are the self- and cross-saturation
-          contributions):
+          In the strong-Doppler limit the third-order polarization for each wave takes its compact book form. Inside the
+          bracket the wave&rsquo;s own intensity <Tex>{String.raw`E_\pm^2`}</Tex> (self-saturation) and the opposite
+          wave&rsquo;s intensity <Tex>{String.raw`E_\mp^2`}</Tex> (cross-saturation, carrying the factor{" "}
+          <Tex>{String.raw`\gamma\,\mathscr{D}(\omega-\nu_0)`}</Tex>) appear with <em>equal weight</em> — the cross
+          term reduces to the self term only at line center:
         </p>
-        <EqBlock label="12">{String.raw`\mathcal{P}_\pm = \tfrac{i}{2}\sqrt{\pi}\,\wp^2 N\,(\hbar K\bar u)^{-1}\,E_\pm\,Z_i(\zeta_\pm) \;-\; E_\pm\big[\,\Sigma_\pm + E_\mp^2\,\Theta\,\big].`}</EqBlock>
+        <EqBlock label="12">{String.raw`\mathcal{P}_\pm^{(3)} = \tfrac{1}{2}i\sqrt{\pi}\,\wp^4\bar N\gamma_{ab}\,(\hbar^3 K\bar u\,\gamma\gamma_a\gamma_b)^{-1}\,E_\pm\big[\,E_\pm^2 + E_\mp^2\,\gamma\,\mathscr{D}(\omega-\nu_0)\,\big].`}</EqBlock>
 
         <KeyResult
           number="13"
@@ -341,17 +349,17 @@ export default function Page() {
           seven coefficients are collected in Table&nbsp;11-1; their leading forms are:
         </p>
         <EqBlock label="α">{String.raw`\alpha_\pm = F_1\,\exp\!\big[-(\omega-\nu_\pm)^2/(K\bar u)^2\big] - \tfrac{1}{2}\frac{\nu}{Q_\pm}\quad(\text{linear net gain: Doppler gain }-\text{ half loss}).`}</EqBlock>
-        <EqBlock label="β,θ">{String.raw`\beta_\pm = (\text{self-saturation}),\qquad \theta_{\pm\mp} = (\text{cross-saturation}) \;\approx\; 2\,\beta\ \text{near line center}.`}</EqBlock>
+        <EqBlock label="β,θ">{String.raw`\beta_\pm = (\text{self-saturation}),\qquad \theta_{\pm\mp} = \beta_\pm\,\mathscr{L}(\omega-\nu_0)\ \approx\ \beta_\pm\ \text{near line center}.`}</EqBlock>
         <EqBlock label="σ">{String.raw`\sigma_\pm \propto \mathrm{Re}\,Z\;\;(\text{linear mode pulling, odd in detuning }\nu_\pm-\omega).`}</EqBlock>
         <EqBlock label="ρ,τ">{String.raw`\rho_\pm = (\text{self-pushing}),\qquad \tau_{\pm\mp} = (\text{cross-pushing}),`}</EqBlock>
         <KeyResult
           number="F₁"
-          eq={String.raw`F_1 = \tfrac{1}{2}\sqrt{\pi}\,\wp^2 N\,(K\bar u\,\varepsilon_0\hbar)^{-1}`}
+          eq={String.raw`F_1 = \tfrac{1}{2}\,\nu\,\sqrt{\pi}\,\wp^2 \bar N\,(\hbar K\bar u\,\varepsilon_0)^{-1}`}
           label="Common first-order factor"
           note={
             <>
               The dimensional prefactor shared by all the coefficients — it sets the overall scale of gain and
-              saturation in terms of <Tex>{String.raw`\wp`}</Tex>, <Tex>{String.raw`N`}</Tex>, and the Doppler width{" "}
+              saturation in terms of <Tex>{String.raw`\wp`}</Tex>, <Tex>{String.raw`\bar N`}</Tex>, and the Doppler width{" "}
               <Tex>{String.raw`K\bar u`}</Tex>.
             </>
           }
@@ -361,9 +369,10 @@ export default function Page() {
           <Step title="Amplitude → intensity">
             Multiply Eq.&nbsp;(4) by <Tex>{String.raw`E_\pm`}</Tex>. Since{" "}
             <Tex>{String.raw`I_\pm\propto E_\pm^2`}</Tex>, we have{" "}
-            <Tex>{String.raw`\dot I_\pm = 2E_\pm\dot E_\pm`}</Tex>. Substituting the combined polarization Eq.&nbsp;(12):
-            the linear <Tex>{String.raw`\mathrm{Im}\,Z`}</Tex> term gives <Tex>{String.raw`\alpha_\pm I_\pm`}</Tex>, the
-            self third-order term gives <Tex>{String.raw`-\beta_\pm I_\pm^2`}</Tex>, and the cross term gives{" "}
+            <Tex>{String.raw`\dot I_\pm = 2E_\pm\dot E_\pm`}</Tex>. Substituting the first-order polarization Eq.&nbsp;(8)
+            and the third-order polarization Eq.&nbsp;(12): the linear <Tex>{String.raw`\mathrm{Im}\,Z`}</Tex> term gives{" "}
+            <Tex>{String.raw`\alpha_\pm I_\pm`}</Tex>, the self third-order term gives{" "}
+            <Tex>{String.raw`-\beta_\pm I_\pm^2`}</Tex>, and the equally-weighted cross term gives{" "}
             <Tex>{String.raw`-\theta\,I_\pm I_\mp`}</Tex>. The leading factor 2 comes straight from{" "}
             <Tex>{String.raw`I\propto E^2`}</Tex>. That is Eqs.&nbsp;(13)–(14).
           </Step>
@@ -401,10 +410,12 @@ export default function Page() {
 
       <Section title="Competition (the coupling parameter) and locking (the Adler equation)">
         <Intuition>
-          Now the two punchlines. First, the <strong>intensities</strong>: the two waves coexist only if the coupling
-          parameter <Tex>{String.raw`\mathcal{C}`}</Tex> is below 1 (weak coupling). Above 1 (strong coupling),
-          coexistence is unstable and one wave grows at the other&rsquo;s expense — unidirectional, bistable operation.
-          Second, the <strong>frequencies</strong>: even when both waves run, mirror backscatter couples them.
+          Now the two punchlines. First, the <strong>intensities</strong>: two waves coexist stably whenever the
+          coupling parameter <Tex>{String.raw`\mathcal{C}`}</Tex> is below 1 (weak coupling); if it could exceed 1
+          (strong coupling) coexistence would be unstable and one wave would grow at the other&rsquo;s expense. For this
+          ring, <Tex>{String.raw`\mathcal{C} = \mathscr{L}^2(\omega-\nu_0)\le 1`}</Tex> always, touching 1 only at exact
+          line center — so the two waves coexist at every tuning, most marginally at line center. Second, the{" "}
+          <strong>frequencies</strong>: even when both waves run, mirror backscatter couples them.
           Subtracting the frequency equations gives the Adler equation for the relative phase{" "}
           <Tex>{String.raw`\Psi`}</Tex>. If the rotation-induced splitting <Tex>{String.raw`d`}</Tex> exceeds the
           backscatter coupling <Tex>{String.raw`l`}</Tex>, the phase runs and there is a finite beat note — the
@@ -425,10 +436,13 @@ export default function Page() {
           }
         />
         <p>
-          As a function of tuning, <Tex>{String.raw`\mathcal{C}`}</Tex> peaks sharply near line center — strong
-          competition there — and falls below 1 in the wings, where both waves run:
+          For the ring laser the cross- and self-saturation coefficients are tied together by{" "}
+          <Tex>{String.raw`\theta_{\pm\mp} = \beta_\pm\mathscr{L}(\omega-\nu_0)`}</Tex> (Table&nbsp;11-1), so{" "}
+          <Tex>{String.raw`\mathcal{C}`}</Tex> is the square of a Lorentzian that <em>never exceeds 1</em>. It reaches
+          its maximum value of exactly 1 only at central tuning, where competition is strongest (marginal coexistence),
+          and falls below 1 at every other tuning, where both waves comfortably run:
         </p>
-        <EqBlock label="17′">{String.raw`\mathcal{C} = \mathcal{C}(\omega-\omega_0): \quad \mathcal{C}>1\ \text{near line center}\ (\nu\to\omega),\qquad \mathcal{C}<1\ \text{in the wings}.`}</EqBlock>
+        <EqBlock label="17′">{String.raw`\mathcal{C} = \mathscr{L}^2(\omega-\nu_0)\le 1,\qquad \mathcal{C}=1\ \text{only at}\ \nu_+=\nu_-=\omega,\qquad \mathcal{C}<1\ \text{otherwise}.`}</EqBlock>
 
         <Derivation title="Steady-state intensities and the coexistence condition" defaultOpen={false}>
           <Step title="Set the time derivatives to zero">
@@ -477,11 +491,13 @@ export default function Page() {
           }
         />
         <EqBlock label="22">{String.raw`d = \Omega_+ - \Omega_- + \sigma_+ - \sigma_- - (\rho_+ - \rho_-)I + \cdots = (\nu_+ - \nu_-)\big|_{l=0}\;\propto\;\text{rotation rate }\Omega.`}</EqBlock>
-        <EqBlock label="23">{String.raw`l = \tfrac{1}{2}\frac{\nu}{\varepsilon_0}\left[\frac{S_-}{E_-} + \frac{S_+}{E_+}\right],`}</EqBlock>
+        <EqBlock label="23">{String.raw`l = g_{+-}\left(\frac{E_-}{E_+} + \frac{E_+}{E_-}\right),`}</EqBlock>
         <p>
           where <Tex>{String.raw`d`}</Tex> is the beat frequency the two waves would have <em>without</em> backscatter
-          (proportional to rotation rate for a gyroscope), and <Tex>{String.raw`l`}</Tex> is built from the scattering
-          amplitudes <Tex>{String.raw`S_\pm`}</Tex> that couple each wave into the other. It sets the half-width{" "}
+          (proportional to rotation rate for a gyroscope), and <Tex>{String.raw`l`}</Tex> is built from the
+          backscatter coupling <Tex>{String.raw`g_{+-}`}</Tex> — the same mirror matrix element that appears in
+          Eqs.&nbsp;(19)–(20) — times the symmetric field-amplitude ratio{" "}
+          <Tex>{String.raw`E_-/E_+ + E_+/E_-`}</Tex> that injects each wave into the other. It sets the half-width{" "}
           <Tex>{String.raw`|d|<l`}</Tex> of the locking dead band.
         </p>
 
@@ -568,8 +584,8 @@ export default function Page() {
 
       <Section title="Unidirectional multimode operation and combination tones">
         <Intuition>
-          Finally, drop the two-wave picture and consider a strong-coupling ring running <strong>unidirectionally</strong>{" "}
-          (one direction has won) but with several longitudinal modes in that one direction. This is the cleanest case
+          Finally, drop the two-wave picture and consider a ring forced to run <strong>unidirectionally</strong>{" "}
+          (only one circulation sense lasing) but with several longitudinal modes in that one direction. This is the cleanest case
           for multimode physics: with only one direction lasing, the cross-saturation that complicates the
           standing-wave theory is gone — the modes interact only through the gain they share. The new feature is{" "}
           <strong>combination tones</strong>: third-order beating among modes produces polarization at a sum/difference
@@ -583,20 +599,24 @@ export default function Page() {
           The self-saturation coefficient for a single mode is built from the Lorentzian denominator{" "}
           <Tex>{String.raw`\mathscr{D}(\nu_n-\omega)`}</Tex>. The ring self-saturation is{" "}
           <strong>one-quarter the standing-wave (Table&nbsp;10-2) value</strong>, and it lacks the complex denominator
-          that produced the Lamb dip — a single traveling wave has uniform intensity and burns no population grating,
-          so it carries neither the spatial-grating contribution nor the velocity-class structure of the standing-wave
-          coefficient:
+          that produced the Lamb dip — because a single traveling wave draws gain from only one velocity ensemble, there
+          is no <Tex>{String.raw`v=0`}</Tex> resonance to tune through. It is also uniform in intensity <em>in space</em>,
+          so it burns no population grating and carries none of the spatial-hole-burning contribution that enhances the
+          standing-wave coefficient:
         </p>
         <EqBlock label="25">{String.raw`\beta_{nnnn} = i\Big(\tfrac{1}{2}\frac{\wp}{\hbar}\Big)^{2}\Big[\mathscr{D}(\nu_n-\omega)+\cdots\Big]\big(1 + \cdots\big)\quad(\text{one-quarter the Table 10-2 value; no grating term}).`}</EqBlock>
         <p>
           The cross-saturation coefficient between modes <Tex>{String.raw`n`}</Tex> and <Tex>{String.raw`m`}</Tex> is
           the striking one. Unlike the standing-wave <Tex>{String.raw`\theta`}</Tex> of Table&nbsp;10-2, this one is{" "}
-          <strong>independent of detuning</strong> <Tex>{String.raw`(\omega-\nu)`}</Tex> — because a traveling-wave
-          mode samples all velocity classes equally:
+          <strong>independent of the absolute detuning</strong> <Tex>{String.raw`(\omega-\nu)`}</Tex> from line center.
+          For two co-propagating modes the cross-coupling depends only on their mode <em>spacing</em>{" "}
+          <Tex>{String.raw`\nu_n-\nu_m`}</Tex>; the velocity-selective tuning structure of the standing-wave theory came
+          from the counter-running <Tex>{String.raw`v=0`}</Tex> resonance, which is simply absent when both modes travel
+          the same way:
         </p>
         <KeyResult
           number="26"
-          eq={String.raw`\theta_{nm} = \frac{2\wp^4 N\gamma}{\hbar^3}\,\mathrm{Im}\{\phi\text{-combination}\}\quad(\text{independent of detuning } \omega-\nu).`}
+          eq={String.raw`\theta_{nm} = \frac{2\hbar^2\gamma_a\gamma_b}{\wp^2}\,\mathrm{Im}\{\vartheta_{1122}+\vartheta_{1221}\}\quad(\text{independent of detuning } \omega-\nu_1).`}
           label="Cross-saturation, unidirectional ring"
           note={
             <>
@@ -623,9 +643,12 @@ export default function Page() {
 
         <Callout kind="insight" title="Traveling waves erase spatial hole burning">
           The recurring theme: a traveling wave has uniform <Tex>{String.raw`|E|`}</Tex>, so it saturates the gain
-          uniformly in space and over all velocity groups. That removes the spatial-hole-burning enhancement of
-          self-saturation <em>and</em> the detuning dependence of cross-saturation that characterize the standing-wave
-          laser. Unidirectional ring multimode physics is therefore &ldquo;cleaner.&rdquo;
+          uniformly in space (it still burns a single Bennett hole, not a grating). That removes the
+          spatial-hole-burning enhancement of self-saturation that characterizes the standing-wave laser. The
+          absolute-detuning dependence of cross-saturation, by contrast, is lost for a separate reason: a single
+          traveling wave draws gain from only one velocity ensemble, so there is no counter-running{" "}
+          <Tex>{String.raw`v=0`}</Tex> resonance to tune through. Unidirectional ring multimode physics is therefore
+          &ldquo;cleaner.&rdquo;
         </Callout>
       </Section>
 
@@ -638,10 +661,15 @@ export default function Page() {
               The ring laser just applies it to two counter-propagating running waves instead of one standing wave.
             </li>
             <li>
-              <strong>Traveling waves have no spatial hole burning and no single-direction Lamb dip.</strong> They
-              sample all velocity groups equally — which is why ring self-saturation is one-quarter the standing-wave
-              (Table&nbsp;10-2) value (it lacks both the grating contribution and the complex denominator) and ring
-              cross-saturation is detuning-independent.
+              <strong>Traveling waves have no spatial hole burning and no single-direction Lamb dip.</strong> A single
+              ring wave is uniform in space (no grating) yet still burns one Bennett hole at one Doppler-shifted
+              velocity class, so only one velocity ensemble contributes gain and no resonance lands at{" "}
+              <Tex>{String.raw`v=0`}</Tex>. Because only that single velocity ensemble contributes gain regardless of
+              tuning, the self-saturation loses the complex denominator that produced the Lamb dip. That same single
+              velocity ensemble — the absence of the counter-running <Tex>{String.raw`v=0`}</Tex> resonance — is also why
+              unidirectional ring cross-saturation depends only on mode spacing, not absolute detuning. Spatial
+              uniformity is a separate effect: it removes the population grating, leaving ring self-saturation at
+              one-quarter the standing-wave (Table&nbsp;10-2) value.
             </li>
             <li>
               <strong>Cross- vs. self-saturation drives all competition.</strong> The dimensionless{" "}

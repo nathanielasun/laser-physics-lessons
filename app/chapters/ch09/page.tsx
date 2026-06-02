@@ -20,10 +20,13 @@ export default function Page() {
       <Lede>
         A single-mode laser is a clean story: one frequency, one intensity, settle and done. But a real cavity supports
         many longitudinal modes, and once two or more of them lase they stop being independent — they share the same
-        atoms. Every pair of oscillating modes <em>beats</em> together, and that beat note shakes the atomic populations
-        at the difference frequency: a <strong>population pulsation</strong>. Those pulsations are a moving grating that
-        scatters one mode&rsquo;s light into the other, so the modes become coupled oscillators competing for the same
-        inversion. This chapter is the physics of that competition and coupling — from quiet steady multimode output
+        atoms. Sharing the inversion couples the modes through two distinct mechanisms: <strong>spatial hole burning</strong>{" "}
+        (their standing-wave patterns burn overlapping holes in the gain) and <strong>population pulsation</strong> (each
+        pair of modes <em>beats</em>, and that beat note shakes the atomic populations at the difference frequency, a
+        moving grating that scatters one mode&rsquo;s light into the other). Which one dominates is set by the cavity
+        geometry and by the beat-to-decay-rate ratio; for the standing-wave two-mirror laser hole burning dominates and
+        pulsations are a correction, while pulsations rule the phase-locking physics. This chapter is the physics of that
+        competition and coupling — from quiet steady multimode output
         (weak coupling), to winner-take-all bistability (strong coupling), to the spectacular regime where the modes
         phase-lock into a comb and the output collapses into a train of ultrashort pulses (<strong>mode locking</strong>),
         the foundation of all ultrafast optics.
@@ -73,8 +76,11 @@ export default function Page() {
         </Derivation>
 
         <Intuition title="The one idea to hold">
-          Two modes beat; the beat shakes the atoms at the difference frequency; the shaken atoms scatter light between
-          the modes. <strong>Mode coupling IS population pulsation.</strong>
+          Two modes share the same atoms, so they compete and couple. <strong>Mode coupling has two sources — spatial
+          hole burning and population pulsation — and the beat between modes is what activates the second.</strong> For a
+          standing-wave two-mode laser, hole burning dominates and pulsations are a small correction (their beat{" "}
+          <Tex>{String.raw`c/2L \gg \gamma_a`}</Tex>); pulsations come into their own in the combination-tone locking of
+          §9-3 and §9-4.
         </Intuition>
       </Section>
 
@@ -84,14 +90,19 @@ export default function Page() {
           off-diagonal coherence <Tex>{String.raw`\rho_{ab}`}</Tex>, then the diagonal populations. The crucial result:
           when the field carries several frequencies, the population difference picks up oscillating terms at the
           intermode beat frequencies <Tex>{String.raw`\nu_\mu - \nu_\rho`}</Tex> — the population pulsations. A recurring
-          complex Lorentzian denominator <Tex>{String.raw`\mathscr{D}`}</Tex> weights how strongly each beat survives,
-          and the pulsations are <em>largest</em> when the beat frequency is small compared to the population decay rate
-          (true for closely spaced longitudinal modes, where the beat is <Tex>{String.raw`\sim c/2L`}</Tex>). Feeding the
-          pulsating populations back into the polarization to third order yields the macroscopic polarization, whose
-          imaginary part gives gain/saturation and whose real part gives frequency pulling. Collecting terms produces the{" "}
-          <strong>self-saturation</strong> coefficients <Tex>{String.raw`\beta_n`}</Tex> (a mode saturating itself) and
-          the <strong>cross-saturation</strong> coefficients <Tex>{String.raw`\theta_{nm}`}</Tex> (a mode saturated by
-          another) — the numbers that decide the competition.
+          complex Lorentzian denominator <Tex>{String.raw`\mathscr{D}`}</Tex> weights how strongly each beat survives; the
+          pulsation contribution is resonant (largest) only when the beat is small compared to the population decay rate{" "}
+          <Tex>{String.raw`\gamma_a`}</Tex>. For a standing-wave two-mirror laser the adjacent-mode beat is the axial
+          spacing <Tex>{String.raw`\sim c/2L`}</Tex>, which is far <em>larger</em> than <Tex>{String.raw`\gamma_a`}</Tex>,
+          so the pulsation Lorentzian sits off-resonant for adjacent modes — and the dominant coupling there is{" "}
+          <em>spatial hole burning</em>, not pulsation (this is the book&rsquo;s limit <Tex>{String.raw`\nu_2-\nu_3\gg\gamma_a`}</Tex>,
+          §9-2; pulsations take over only for beats <Tex>{String.raw`\lesssim\gamma_a`}</Tex>, as in §9-3). Feeding the
+          (slightly) pulsating populations back into the polarization to third order yields the macroscopic polarization,
+          whose imaginary part gives gain/saturation and whose real part gives frequency pulling. Collecting terms produces
+          the <strong>self-saturation</strong> coefficients <Tex>{String.raw`\beta_n`}</Tex> (a mode saturating itself)
+          and the <strong>cross-saturation</strong> coefficients <Tex>{String.raw`\theta_{nm}`}</Tex> (a mode saturated by
+          another) — each split into a spatial hole-burning part and a population-pulsation part (Table 9-1), the numbers
+          that decide the competition.
         </Intuition>
 
         <p>
@@ -119,12 +130,20 @@ export default function Page() {
               <Tex>{String.raw`x = a, b`}</Tex>, or the coherence rate <Tex>{String.raw`\gamma_\perp`}</Tex>). With{" "}
               <Tex>{String.raw`\gamma_\perp`}</Tex> and the line-center detuning <Tex>{String.raw`\omega - \nu`}</Tex> it is
               the <em>gain/dispersion lineshape</em>: real part gives absorption/gain, imaginary part the
-              dispersion/pulling. The strong coupling of adjacent longitudinal modes is a <em>separate</em> resonance —
-              the population-pulsation Lorentzian <Tex>{String.raw`\mathscr{D}_a(\nu_\rho - \nu_\sigma)`}</Tex> whose width
-              is the population decay rate <Tex>{String.raw`\gamma_a`}</Tex> and whose argument is the intermode{" "}
-              <em>beat</em> frequency. It is large (resonant) when the beat is small compared to{" "}
-              <Tex>{String.raw`\gamma_a`}</Tex>, which is why closely spaced modes pulse the populations — and couple —
-              most strongly.
+              dispersion/pulling. Population pulsations bring in a <em>separate</em> Lorentzian{" "}
+              <Tex>{String.raw`\mathscr{D}_a(\nu_\rho - \nu_\sigma)`}</Tex> whose width is the population decay rate{" "}
+              <Tex>{String.raw`\gamma_a`}</Tex> and whose argument is the intermode <em>beat</em> frequency. As an
+              abstract property it is resonant (large) only when the beat is small compared to{" "}
+              <Tex>{String.raw`\gamma_a`}</Tex>. But for a standing-wave two-mirror laser the adjacent-mode beat is the
+              axial spacing <Tex>{String.raw`c/2L`}</Tex> (<Tex>{String.raw`\sim10^9\,\mathrm{s}^{-1}`}</Tex>), far{" "}
+              <em>larger</em> than <Tex>{String.raw`\gamma_a`}</Tex> (<Tex>{String.raw`\sim10^7\!-\!10^8\,\mathrm{s}^{-1}`}</Tex>{" "}
+              for He–Ne, only <Tex>{String.raw`\sim6\times10^3\,\mathrm{s}^{-1}`}</Tex> for ruby). So this is the book&rsquo;s
+              limit <Tex>{String.raw`\nu_2 - \nu_3 \gg \gamma_a`}</Tex>: the pulsation Lorentzian sits{" "}
+              <em>off-resonant</em> and suppressed for adjacent modes, and the dominant two-mode coupling is{" "}
+              <strong>spatial hole burning</strong> (weak coupling, <Tex>{String.raw`C<1`}</Tex>; §9-2). Among mode pairs
+              the closest pair pulses the populations most, but pulsations become genuinely resonant and dominant only
+              when a beat is <Tex>{String.raw`\lesssim\gamma_a`}</Tex> — the combination-tone self-locking of §9-3, or
+              media with large <Tex>{String.raw`\gamma_a`}</Tex>.
             </>
           }
         />
@@ -176,7 +195,7 @@ export default function Page() {
           The relative phase angle for a mode combination — stationary (and so contributing a steady drive) only when its
           frequency sum vanishes, otherwise averaging away (the <em>free-running approximation</em>) — is
         </p>
-        <EqBlock label="15">{String.raw`\Psi_{\rho\sigma n n'} = (\nu_\sigma - \nu_\rho + \nu_{n'} - \nu_n)t + \phi_\sigma - \phi_\rho + \phi_{n'} - \phi_n`}</EqBlock>
+        <EqBlock label="15">{String.raw`\Psi_{\rho\sigma n n'} = (\nu_n - \nu_{n'} + \nu_\rho - \nu_\sigma)t + \phi_n - \phi_{n'} + \phi_\rho - \phi_\sigma`}</EqBlock>
 
         <p>Matching the total polarization to the cavity gives the general self-consistent equations of motion. The amplitude equation:</p>
         <KeyResult
@@ -210,9 +229,12 @@ export default function Page() {
           <Step title="Second-order populations: find the pulsations">
             Feed <Tex>{String.raw`\rho_{ab}`}</Tex> back into the diagonal equations and integrate again. The DC term is
             ordinary saturation; the cross terms <Tex>{String.raw`\rho\neq\sigma`}</Tex> oscillate at the beat frequency{" "}
-            <Tex>{String.raw`\nu_\sigma - \nu_\rho`}</Tex> — Eq.&nbsp;(7). The pulsation amplitude is large when{" "}
-            <Tex>{String.raw`|\nu_\sigma - \nu_\rho| \ll \gamma`}</Tex>, the physical reason adjacent modes couple
-            strongly.
+            <Tex>{String.raw`\nu_\sigma - \nu_\rho`}</Tex> — Eq.&nbsp;(7). The pulsation amplitude is large only when{" "}
+            <Tex>{String.raw`|\nu_\sigma - \nu_\rho| \ll \gamma`}</Tex>; for a standing-wave two-mirror laser the
+            adjacent-mode beat <Tex>{String.raw`c/2L`}</Tex> is instead <em>much larger</em> than{" "}
+            <Tex>{String.raw`\gamma`}</Tex>, so these pulsations are off-resonant and the dominant adjacent-mode coupling
+            is spatial hole burning (weak coupling — §9-2). Pulsations dominate only when a beat is{" "}
+            <Tex>{String.raw`\lesssim\gamma`}</Tex>, as in the combination-tone locking of §9-3.
           </Step>
           <Step title="Build the third-order polarization">
             The pulsating populations re-drive the dipole, giving <Tex>{String.raw`\rho_{ab}^{(3)}`}</Tex> (Eqs.&nbsp;10–11)
@@ -272,10 +294,13 @@ export default function Page() {
         <EqBlock label="20">{String.raw`\dot{E}_1 = E_1(\alpha_1 - \beta_1 I_1 - \theta_{12} I_2)`}</EqBlock>
         <EqBlock label="21">{String.raw`\dot{E}_2 = E_2(\alpha_2 - \beta_2 I_2 - \theta_{21} I_1)`}</EqBlock>
         <p>
-          The natural dynamical variables are the dimensionless intensities (with{" "}
-          <Tex>{String.raw`\alpha_n`}</Tex> the scaling constant of Eq.&nbsp;8.16):
+          The natural dynamical variables are the dimensionless intensities (Ch.&nbsp;8, Eq.&nbsp;45 /
+          Table&nbsp;8-1), scaled by the fixed positive constant{" "}
+          <Tex>{String.raw`\wp^2/\hbar^2\gamma_a\gamma_b`}</Tex> built from the dipole matrix element and the
+          level decay rates; here <Tex>{String.raw`\alpha_n`}</Tex> is the linear net gain, not the scaling
+          constant:
         </p>
-        <EqBlock label="8.16">{String.raw`I_n = \alpha_n |E_n|^2`}</EqBlock>
+        <EqBlock label="Ch. 8, Eq. 45">{String.raw`I_n = \frac{\wp^2}{\hbar^2\gamma_a\gamma_b}\,|E_n|^2`}</EqBlock>
         <p>
           Since <Tex>{String.raw`I\sim E^2`}</Tex> implies <Tex>{String.raw`\dot I = 2 E\dot E`}</Tex>, the working form
           for the competition is the pair of intensity equations:
@@ -374,7 +399,8 @@ export default function Page() {
             Eqs.&nbsp;(20)–(21).
           </Step>
           <Step title="Pass to intensities">
-            Multiply by <Tex>{String.raw`2E_n`}</Tex> and use <Tex>{String.raw`I_n\sim\alpha_n|E_n|^2`}</Tex> so{" "}
+            Multiply by <Tex>{String.raw`2E_n`}</Tex> and use{" "}
+            <Tex>{String.raw`I_n = \frac{\wp^2}{\hbar^2\gamma_a\gamma_b}|E_n|^2`}</Tex> so{" "}
             <Tex>{String.raw`\dot I = 2I(\text{gain} - \text{saturation})`}</Tex> — Eqs.&nbsp;(24)–(25).
           </Step>
           <Step title="Find the fixed points">
@@ -893,9 +919,12 @@ export default function Page() {
         <Callout kind="note" title="What you keep from this chapter">
           <ul>
             <li>
-              <strong>Mode coupling originates in population pulsations</strong>: when two modes beat, the atomic
-              populations oscillate at the difference frequency, a moving grating that scatters light between modes. This
-              is the microscopic source of every coupling/saturation coefficient in later laser theory.
+              <strong>Mode coupling has two microscopic sources</strong>: spatial hole burning (overlapping standing-wave
+              patterns burning the same atoms) and population pulsation (two modes beat, the populations oscillate at the
+              difference frequency, a moving grating that scatters light between modes). Each cross-saturation
+              coefficient splits into a hole-burning part plus a pulsation part (Table 9-1). For a standing-wave
+              two-mirror laser hole burning dominates and pulsations are a small correction (their beat{" "}
+              <Tex>{String.raw`c/2L \gg \gamma_a`}</Tex>); pulsations dominate the phase-locking physics of §9-3/§9-4.
             </li>
             <li>
               <strong>Two coefficients</strong>: self-saturation <Tex>{String.raw`\beta_n`}</Tex> (a mode depleting its
