@@ -22,10 +22,7 @@ adversarially checked against the scans by a separate verification pass.
 > chapters (IX, XI) taking several repair rounds to converge.
 
 The goal: take a famously rigorous derivation-heavy book and teach it to people
-who are **new to laser physics but mathematically prepared**. Every lesson leads
-with the physical picture, keeps the full derivations (collapsible, step by
-step), renders every relevant formula, and pairs the core result with a **live
-interactive simulation** so the equations move.
+who are **new to laser physics but mathematically prepared**.
 
 > **Source material is not redistributed.** This repo contains original
 > explanatory writing, derivations re-typeset in LaTeX, and original
